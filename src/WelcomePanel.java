@@ -1,31 +1,37 @@
 import theme.SButton;
+import theme.SLabel;
 import theme.SPanel;
 import theme.Theme;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class WelcomePanel extends SPanel
 {
+    static final String WELCOME_TEXT = "<html><center>" +
+            "CONGRESS NAME 2018\n" +
+            "<h1>~Une belle citation courte~</h1>\n" +
+            "</center></html>";
 
     public WelcomePanel()
     {
-        setLayout(null);
+        setLayout(new GridLayout(2,1, 30, 0));
+        setBorder(new EmptyBorder(50, 100, 50, 100));
 
-        JLabel welcomeText = new JLabel("<html>" +
-                "<center>" +
-                "{NOM CONGRES}<br>" +
-                "~~citation~~" +
-                "</center>" +
-                "<html>");
-        welcomeText.setBounds(370, 100, Theme.WINDOW_WIDTH, 100);
+        SPanel textPanel = new SPanel();
+        textPanel.setLayout(new FlowLayout());
+        SLabel welcomeText = new SLabel(WELCOME_TEXT);
         welcomeText.setFont(Theme.FONT_DEFAULT_BIG);
-        welcomeText.setForeground(Theme.FONT_DEFAULT_COLOR);
 
-        add(welcomeText);
+        textPanel.add(welcomeText);
+        add(textPanel);
 
+        SPanel btnPanel = new SPanel();
+        btnPanel.setLayout(new FlowLayout());
         SButton openAppButton = new SButton("Open App");
         openAppButton.addActionListener(new ActionListener() {
             @Override
@@ -34,8 +40,9 @@ public class WelcomePanel extends SPanel
                 MainFrame.getInstance().switchToPanel(new PublicMainMenu());
             }
         });
+        openAppButton.setSize(Theme.BTN_DEFAULT_WIDTH,Theme.BTN_DEFAULT_HEIGHT);
 
-        openAppButton.setBounds(470,300,Theme.BTN_DEFAULT_WIDTH,Theme.BTN_DEFAULT_HEIGHT);
-        add(openAppButton);
+        btnPanel.add(openAppButton);
+        add(btnPanel);
     }
 }

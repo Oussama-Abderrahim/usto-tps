@@ -11,7 +11,7 @@ public class SLabel extends JLabel
 
     public SLabel(String text) {
         super(text);
-        setFont(Theme.FONT_DEFAULT_LARGE);
+        setFont(Theme.FONT_DEFAULT_BIG);
         setForeground(Theme.FONT_DEFAULT_COLOR);
 
     }

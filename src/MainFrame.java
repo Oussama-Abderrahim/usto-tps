@@ -90,6 +90,7 @@ public class MainFrame extends JFrame
         setTitle("Application Gestion Congres");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setBounds(100, 100, Theme.WINDOW_WIDTH, Theme.WINDOW_HEIGHT);
+        setMinimumSize(new Dimension(Theme.WINDOW_WIDTH, Theme.WINDOW_HEIGHT));
 
         contentPane = new SPanel();
         contentPane.setLayout(new BorderLayout(5,5));
@@ -103,7 +104,7 @@ public class MainFrame extends JFrame
 
         backButton = new SButton("");
         backButton.setSize(Theme.BTN_DEFAULT_WIDTH/2, Theme.BTN_DEFAULT_HEIGHT/2);
-        backButton.setIcon(FileManager.loadImage("back-icon", 32,32));
+        backButton.setIcon(FileManager.loadImage("back-icon", 48,48));
 
         backButton.addActionListener(new ActionListener() {
             @Override

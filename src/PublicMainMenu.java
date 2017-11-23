@@ -15,12 +15,11 @@ import java.awt.event.ActionListener;
 
 public class PublicMainMenu extends SPanel
 {
-    private static final
-            String INFO_TEXT = "<html>" +
-            "<h1>INFORMATION GENERALE</h1><br>" +
-            "<h2>DATE ET LIEU</h2><br>" +
+    static final String INFO_TEXT = "<html><center>" +
+            "<h1>INFORMATION GENERALE</h1>\n" +
+            "<h2>DATE ET LIEU</h2>\n" +
             "Some long text<br>" +
-            "</html>";
+            "</center></html>";
 
     private SButton planningButton;
     private SButton guideButton;

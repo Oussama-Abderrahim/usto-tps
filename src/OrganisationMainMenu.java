@@ -14,12 +14,6 @@ import java.awt.event.ActionListener;
 
 public class OrganisationMainMenu extends SPanel
 {
-    private static final String INFO_TEXT = "<html>" +
-            "<h1>INFORMATION GENERALE</h1><br>" +
-            "<h2>DATE ET LIEU</h2><br>" +
-            "Some long text<br>" +
-            "</html>";
-
     private SButton conferencierButton;
     private SButton planningButton;
     private SButton informationButton;
@@ -48,7 +42,7 @@ public class OrganisationMainMenu extends SPanel
         add(centerPanel, BorderLayout.CENTER);
 
         SLabel informationLabel = new SLabel("");
-        informationLabel.setText(INFO_TEXT);
+        informationLabel.setText(PublicMainMenu.INFO_TEXT);
 
         SPanel textPanel = new SPanel();
         textPanel.setLayout(new FlowLayout());

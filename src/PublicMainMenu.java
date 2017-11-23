@@ -16,8 +16,8 @@ import java.awt.event.ActionListener;
 public class PublicMainMenu extends SPanel
 {
     static final String INFO_TEXT = "<html><center>" +
-            "<h1>INFORMATION GENERALE</h1>\n" +
-            "<h2>DATE ET LIEU</h2>\n" +
+            "INFORMATION GENERALE\n" +
+            "<h1>DATE ET LIEU\n</h1>" +
             "Some long text<br>" +
             "</center></html>";
 

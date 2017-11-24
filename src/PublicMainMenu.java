@@ -30,6 +30,7 @@ public class PublicMainMenu extends SPanel
         setLayout(new BorderLayout(0,0));
 
         SButton organisationButton = new SButton("Espace Organisateur");
+        organisationButton.setSize(Theme.BTN_DEFAULT_WIDTH*3/2, Theme.BTN_DEFAULT_HEIGHT);
         organisationButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

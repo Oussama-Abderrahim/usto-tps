@@ -4,6 +4,7 @@ import theme.SPanel;
 import theme.Theme;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -103,7 +104,7 @@ public class MainFrame extends JFrame
         topBarPanel.setLayout(new BorderLayout(0,0));
 
         backButton = new SButton("");
-        backButton.setSize(Theme.BTN_DEFAULT_WIDTH/2, Theme.BTN_DEFAULT_HEIGHT/2);
+        backButton.setSize(Theme.BTN_DEFAULT_WIDTH/4, Theme.BTN_DEFAULT_HEIGHT*3/4);
         backButton.setIcon(FileManager.loadImage("back-icon", 48,48));
 
         backButton.addActionListener(new ActionListener() {
@@ -119,7 +120,7 @@ public class MainFrame extends JFrame
     private SPanel initFooterPanel()
     {
         SPanel footerPanel = new SPanel();
-        footerPanel.setLayout(new BorderLayout(0,0));
+        footerPanel.setLayout(new BorderLayout(20,0));
 
         SButton adminButton = new SButton("Admin");
         adminButton.setSize(Theme.BTN_DEFAULT_WIDTH/2, Theme.BTN_DEFAULT_HEIGHT/2);
@@ -132,11 +133,17 @@ public class MainFrame extends JFrame
         });
         footerPanel.add(adminButton, BorderLayout.WEST);
 
-        SPanel copyrightPanel = new SPanel();
-        copyrightPanel.setLayout(new FlowLayout());
-        JLabel copyright = new JLabel("Congress 2018 All right reserved");
-        copyrightPanel.add(copyright);
-        footerPanel.add(copyrightPanel, BorderLayout.CENTER);
+//        SPanel copyrightPanel = new SPanel();
+//        copyrightPanel.setLayout(new GridLayout(0,1));
+//        copyrightPanel.setBorder(new LineBorder(Color.WHITE,1, false));
+
+        JLabel copyrightText = new JLabel("Congress 2018 All right reserved");
+        copyrightText.setFont(Theme.FONT_DEFAULT_SMALL);
+        copyrightText.setForeground(Theme.FONT_DEFAULT_COLOR);
+        copyrightText.setHorizontalAlignment(JLabel.CENTER);
+
+//        copyrightPanel.add(copyrightText);
+        footerPanel.add(copyrightText, BorderLayout.CENTER);
 
         return footerPanel;
     }

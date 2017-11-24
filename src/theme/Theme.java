@@ -12,12 +12,15 @@ public class Theme
     public static final Font FONT_DEFAULT_SMALL     = new Font("Cambria", Font.PLAIN, 12);
     public static final Font FONT_DEFAULT_MEDIUM    = new Font("Cambria", Font.PLAIN, 18);
     public static final Font FONT_DEFAULT_LARGE     = new Font("Cambria", Font.PLAIN, 32);
-    public static final Font FONT_DEFAULT_BIG       = new Font("Cambria", Font.PLAIN, 48);
+    public static final Font FONT_DEFAULT_BIG       = new Font("Cambria", Font.PLAIN, 42);
 
     // Custom Colors
-    public static final Color BACKGROUND_COLOR = new Color(10, 10, 10);
     public static final Color CHIBHBLACK = new Color(33, 33, 33);
     public static final Color GREEN_EMERALD = new Color(39, 174, 96);
+    public static final Color MIDNIGHT_BLUE = new Color(44, 62, 80);
+    public static final Color SILVER = new Color(189, 195, 199);
+
+    public static final Color BACKGROUND_COLOR = new Color(10, 10, 25);
 
 
 
@@ -34,13 +37,14 @@ public class Theme
 
     // Custom Button properties
     public static final Font BTN_DEFAULT_FONT = FONT_DEFAULT;
-    public static final Color BTN_DEFAULT_COLOR = GREEN_EMERALD;
+    public static final Color BTN_DEFAULT_COLOR = SILVER;
     public static final Color BTN_DEFAULT_TEXT_COLOR = FONT_INPUT_COLOR;
+    public static final Color BTN_DEFAULT_TEXT_HOVER_COLOR = FONT_INPUT_COLOR;
     public static final int BTN_DEFAULT_HEIGHT = 28;
     public static final int BTN_DEFAULT_WIDTH = 150;
 
-    public static final int BORDER_PLUS = 4;// border color
-    public static final int HOVER_PLUS = 8; // color change when hovering
+    public static final int BORDER_PLUS = 4;// border color difference
+    public static final int HOVER_PLUS = 20; // color change when hovering
 
     // TextInputs
     public static final Font INPUT_TEXT_FONT = FONT_DEFAULT_MEDIUM;

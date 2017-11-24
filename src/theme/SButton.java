@@ -28,7 +28,7 @@ public class SButton extends JButton{
         setFocusPainted(false);
         setFont(Theme.BTN_DEFAULT_FONT);
 
-        /*
+
         this.setBgColor(this.bg);
 
         this.setBorder(new CompoundBorder(BorderFactory.createLineBorder(borderColor),
@@ -56,28 +56,30 @@ public class SButton extends JButton{
             @Override
             public void mouseEntered(MouseEvent me) {
                 self.setBackground(hoverBg);
+                self.setForeground(Theme.BTN_DEFAULT_TEXT_HOVER_COLOR);
             }
 
             @Override
             public void mouseExited(MouseEvent me) {
                 self.setBackground(bg);
+                self.setForeground(Theme.BTN_DEFAULT_TEXT_COLOR);
             }
         });
-        */
+
     }
 
     @Override
     public void setSize(int width, int height) {
         super.setSize(width, height);
         this.setPreferredSize(new Dimension(
-                width, height)
-        );
+                width, height
+        ));
         this.setMinimumSize(new Dimension(
-                width, height)
-        );
+                width, height
+        ));
         this.setMaximumSize(new Dimension(
-                width*2, height)
-        );
+                width*2, height
+        ));
     }
 
     public void setIcon(ImageIcon img)

@@ -24,6 +24,7 @@ public class MainFrame extends JFrame
     private String sourceCode = "";
 
     private LexicalEngine lexicalEngine;
+    private SyntaxEngine syntaxEngine;
 
     public MainFrame getInstance()
     {
@@ -35,6 +36,7 @@ public class MainFrame extends JFrame
     private MainFrame()
     {
         lexicalEngine = new LexicalEngine();
+        syntaxEngine = new SyntaxEngine();
 
         initWindow();
 
@@ -68,8 +70,8 @@ public class MainFrame extends JFrame
         outLabel.setForeground(Theme.FONT_DEFAULT_COLOR);
         outputPanel.add(outLabel, BorderLayout.NORTH);
 
-        outputPanel.add(this.outputTextArea, BorderLayout.CENTER);
-
+        JScrollPane scrollPane = new JScrollPane(outputTextArea);
+        outputPanel.add(scrollPane, BorderLayout.CENTER);
         return outputPanel;
     }
 
@@ -114,7 +116,8 @@ public class MainFrame extends JFrame
         syntaxButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                syntaxEngine.setTokenSource(lexicalEngine.getTokenSource());
+                showSyntaxResult(syntaxEngine.getResult());
             }
         });
         SymanticButton.addActionListener(new ActionListener() {
@@ -136,12 +139,48 @@ public class MainFrame extends JFrame
         return controlPanel;
     }
 
+    private void showSyntaxResult(ArrayList<String> result)
+    {
+        outputTextArea.setText("");
+        for(String s : result)
+        {
+            outputTextArea.appendtext(s);
+        }
+    }
+
     private void showLexicalResult(ArrayList<Token> tokenSource)
     {
         outputTextArea.setText("");
         for(Token t : tokenSource)
         {
-            outputTextArea.appendtext(t.getText() + " : id\n");
+            switch (t.getType())
+            {
+                case DATA:
+                    outputTextArea.appendtext(t.getText() + " : Donnée\n");
+                    break;
+                case ID:
+                    outputTextArea.appendtext(t.getText() + " : Identificateur\n");
+                    break;
+                case TYPE:
+                    outputTextArea.appendtext(t.getText() + " : Type variable\n");
+                    break;
+                case SYMBOL:
+                    outputTextArea.appendtext(t.getText() + " : Symbol clé\n");
+                    break;
+                case KEYWORD:
+                    outputTextArea.appendtext(t.getText() + " : Mot clé\n");
+                    break;
+                case ARITHMETIC:
+                    outputTextArea.appendtext(t.getText() + " : Operateur arithmetic\n");
+                    break;
+                case LOGICAL:
+                    outputTextArea.appendtext(t.getText() + " : Operateur logique\n");
+                    break;
+                case EOF:
+                    break;
+                default:
+                    outputTextArea.appendtext(t.getText() + " : ???\n");
+            }
         }
     }
 

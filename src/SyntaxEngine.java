@@ -7,9 +7,10 @@ import java.util.ArrayList;
 public class SyntaxEngine
 {
     private ArrayList<Token> tokenSource;
-    private ArrayList<String> result;
+    private ArrayList<String> result = new ArrayList<>();
+    private ArrayList<Token> buffer = new ArrayList<>();
 
-    private int positionTeteLecture = -1;
+    private int positionTeteLecture = 0;
 
     public SyntaxEngine()
     {
@@ -18,8 +19,8 @@ public class SyntaxEngine
 
     private Token nextToken()
     {
+        buffer.add(currentToken());
         positionTeteLecture++;
-
         return currentToken();
     }
 
@@ -44,7 +45,7 @@ public class SyntaxEngine
 
     private void performAnalysis()
     {
-        if(S())
+        if(checkStartEnd())
         {
             System.out.println("Reconnu ! ");
         }
@@ -54,19 +55,24 @@ public class SyntaxEngine
         }
     }
 
-    private boolean S()
+    private boolean checkStartEnd()
     {
-        if(nextToken().equals(KeywordToken.START_PROGRAM))
+        if(currentToken().equals(KeywordToken.START_PROGRAM))
         {
             nextToken();
-            Si();
+            validSyntax("Debut programme");
+            followedByBlockInstruction();
+
             if(currentToken().equals(KeywordToken.END_PROGRAM))
+            {
+                validSyntax("Fin programme correctement");
                 return true;
+            }
         }
         return false;
     }
 
-    private boolean Si()
+    private boolean followedByBlockInstruction()
     {
         Token c = currentToken();
 
@@ -84,14 +90,14 @@ public class SyntaxEngine
                         c = nextToken();
                         if(c.equals(KeywordToken.SEMI_COLON))
                         {
-                            System.out.println("Affectation valeur a variable");
                             c = nextToken();
-                            return Si();// next instruction
+                            validSyntax("Donner valeur à variable");
+                            return followedByBlockInstruction();// next instruction
                         }
                     }
                 }
             }
-            return error();
+            return logError();
         }
         else if(c.equals(KeywordToken.AFFECT))
         {
@@ -107,15 +113,15 @@ public class SyntaxEngine
                         c = nextToken();
                         if(c.equals(KeywordToken.SEMI_COLON))
                         {
-                            System.out.println("Affect variable a variable");
                             c = nextToken();
-                            return Si();// next instruction
+                            validSyntax("Affect variable a variable");
+                            return followedByBlockInstruction();// next instruction
                         }
                     }
                 }
 
             }
-            return error();
+            return logError();
         }
         else if(c.equals(KeywordToken.SHOW_MESSAGE))
         {
@@ -128,13 +134,13 @@ public class SyntaxEngine
                     c = nextToken();
                     if(c.equals(KeywordToken.SEMI_COLON))
                     {
-                        System.out.println("Affichage message");
                         c = nextToken();
-                        return Si();  // next instruction
+                        validSyntax("Affichage message");
+                        return followedByBlockInstruction();  // next instruction
                     }
                 }
             }
-            return error();
+            return logError();
         }
         else if(c.equals(KeywordToken.SHOW_VAL))
         {
@@ -147,13 +153,13 @@ public class SyntaxEngine
                     c = nextToken();
                     if(c.equals(KeywordToken.SEMI_COLON))
                     {
-                        System.out.println("Affichage Valeur");
                         c = nextToken();
-                        return Si();  // next instruction
+                        validSyntax("Affichage Valeur");
+                        return followedByBlockInstruction();  // next instruction
                     }
                 }
             }
-            return error();
+            return logError();
         }
         else if(c.equals(KeywordToken.IF))
         {
@@ -161,19 +167,18 @@ public class SyntaxEngine
             if(c.equals(SymbolToken.DOUBLE_DASH))
             {
                 c = nextToken();
-                System.out.print("Should find a condition here... ");
-                if(C()) // condition
+                if(followedByCondition()) // condition
                 {
-                    System.out.println("YES !");
                     c = currentToken();
                     if( c.equals(SymbolToken.DOUBLE_DASH))
                     {
                         c = nextToken();
-                        return D();
+                        validSyntax("If statement");
+                        return followedByStartFinishBlock();
                     }
                 }
             }
-            return error();
+            return logError();
         }
         else if(c instanceof VarTypeToken)
         {
@@ -181,18 +186,18 @@ public class SyntaxEngine
             if(c.equals(SymbolToken.COLUMN))
             {
                 c = nextToken();
-                if(I())
+                if(followedByIdentifiers())
                 {
                     c = currentToken();
                     if(c.equals(KeywordToken.SEMI_COLON))
                     {
-                        System.out.println("Declaration variable");
                         c = nextToken();
-                        return Si();  // next instruction
+                        validSyntax("Declaration variable");
+                        return followedByBlockInstruction();  // next instruction
                     }
                 }
             }
-            return error();
+            return logError();
         }
         else
         {
@@ -200,7 +205,7 @@ public class SyntaxEngine
         }
     }
 
-    private boolean I()
+    private boolean followedByIdentifiers()
     {
         if(currentToken() instanceof IdToken)
         {
@@ -208,23 +213,23 @@ public class SyntaxEngine
             if(c.equals(SymbolToken.COMMA))
             {
                 c = nextToken();
-                return I();
+                return followedByIdentifiers();
             }
             else return true; // id seulment
         }
-        return error();
+        return logError();
     }
 
-    private boolean C()
+    private boolean followedByCondition()
     {
         Token c;
         if(currentToken().equals(LogicalToken.NOT))
         {
             c = nextToken();
-            if(C())
+            if(followedByCondition())
             {
                 c = nextToken();
-                return C2();
+                return followedByCondition2();
             }
         }
         else if(currentToken() instanceof IdToken)
@@ -236,23 +241,23 @@ public class SyntaxEngine
                 if(c instanceof IdToken)
                 {
                     c = nextToken();
-                    return C2();
+                    return followedByCondition2();
                 }
             }
         }
 
-        return error();
+        return logError();
     }
 
-    private boolean C2()
+    private boolean followedByCondition2()
     {
         if(currentToken() instanceof LogicalToken)
         {
             Token c = nextToken();
-            if(C())
+            if(followedByCondition())
             {
                 c = currentToken();
-                if(C())
+                if(followedByCondition())
                 {
                     return true;
                 }
@@ -263,39 +268,39 @@ public class SyntaxEngine
             return true; // mot vide
         }
 
-        return error();
+        return logError();
     }
 
-    private boolean D()
+    private boolean followedByStartFinishBlock()
     {
         Token c = currentToken();
         if(c.equals(KeywordToken.START))
         {
             c = nextToken();
-            if(Si())
+            validSyntax("Debut block instr");
+            if(followedByBlockInstruction())
             {
                 c = currentToken();
                 if (c.equals(KeywordToken.FINISH))
                 {
-                    System.out.println("Finish");
                     c = nextToken();
-                    return E();
+                    validSyntax("Fin block instr");
+                    return followedByElseStatement();
                 }
             }
         }
-        return error();
+        return logError();
     }
 
-
-    private boolean E()
+    private boolean followedByElseStatement()
     {
         Token c = currentToken();
 
         if(c.equals(KeywordToken.ELSE))
         {
-            System.out.println("Else");
             c = nextToken();
-            if(D())
+            validSyntax("Else");
+            if(followedByStartFinishBlock())
             {
                 return true;
             }
@@ -304,9 +309,29 @@ public class SyntaxEngine
         return true;
     }
 
-    private boolean error()
+
+    private void validSyntax(String s)
     {
-        System.out.println("ERROR");
+        String instr = "";
+        for(Token t : buffer)
+        {
+            instr = instr + t.getText() + " ";
+        }
+
+        result.add(instr + "\t-->  " + s);
+        buffer.clear();
+    }
+
+    private boolean logError()
+    {
+        String instr = "";
+        for(Token t : buffer)
+        {
+            instr = instr + t.getText() + " ";
+        }
+
+        System.out.println("ERROR ! instruction non valide : " + instr);
+        buffer.clear();
         return false;
     }
 
@@ -374,5 +399,10 @@ public class SyntaxEngine
         syntaxEngine.setTokenSource(tokenSource);
 
         syntaxEngine.performAnalysis();
+
+        for (String s : syntaxEngine.result)
+        {
+            System.out.println(s);
+        }
     }
 }

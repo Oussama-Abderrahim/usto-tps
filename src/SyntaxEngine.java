@@ -43,8 +43,16 @@ public class SyntaxEngine
         return result;
     }
 
+    private void clear()
+    {
+        result.clear();
+        buffer.clear();
+        positionTeteLecture = 0;
+    }
+
     private void performAnalysis()
     {
+        clear();
         if(checkStartEnd())
         {
             System.out.println("Reconnu ! ");

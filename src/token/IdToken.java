@@ -7,7 +7,7 @@ public class IdToken extends Token {
 
     public IdToken(String text)
     {
-        super(text);
+        super(text, TokenType.ID);
     }
 
 }

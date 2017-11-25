@@ -23,13 +23,34 @@ public class LexicalEngine
             "Finish",
             ";;"
     };
+
+    private final String[] symbols = {
+            ":",
+            ".",
+            ","
+    };
     private String sourceCode;
     private ArrayList<Token> tokenSource;
+
+    private int positionTeteLecture = 0;
 
     public LexicalEngine()
     {
         sourceCode = "";
         tokenSource = new ArrayList<Token>();
+    }
+
+    private char nextChar()
+    {
+        positionTeteLecture++;
+        return currentChar();
+    }
+
+    private char currentChar()
+    {
+        if(positionTeteLecture >= sourceCode.length())
+            return '$';
+        return sourceCode.charAt(positionTeteLecture);
     }
 
     public void setSourceCode(String src)
@@ -55,6 +76,7 @@ public class LexicalEngine
 
     private ArrayList<String> reconstructLines(String sourceCode)
     {
+        // divise en lignes et ignore les commentaires, if needed
         String[] lines = sourceCode.split("\\n");
 
         ArrayList<String> linesList = new ArrayList<>();
@@ -70,15 +92,7 @@ public class LexicalEngine
     {
         System.out.println("Performing lexical analysis");
 
-        Pattern stringPattern = Pattern.compile("\".*\"");
-        Pattern idPattern = Pattern.compile("([a-z]|[A-Z])([a-z]|[A-Z]|[0-9])*");
-
-        ArrayList<String> lines = reconstructLines(sourceCode);
-
-        for(String line : lines)
-        {
-            // traiter chaque ligne lettre par lettre
-        }
+        char c = currentChar();
 
         System.out.println("Found " + tokenSource.size() + " tokens");
     }

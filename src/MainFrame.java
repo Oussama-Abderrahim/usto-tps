@@ -133,16 +133,11 @@ public class MainFrame extends JFrame
         });
         footerPanel.add(adminButton, BorderLayout.WEST);
 
-//        SPanel copyrightPanel = new SPanel();
-//        copyrightPanel.setLayout(new GridLayout(0,1));
-//        copyrightPanel.setBorder(new LineBorder(Color.WHITE,1, false));
-
         JLabel copyrightText = new JLabel("Congress 2018 All right reserved");
         copyrightText.setFont(Theme.FONT_DEFAULT_SMALL);
         copyrightText.setForeground(Theme.FONT_DEFAULT_COLOR);
         copyrightText.setHorizontalAlignment(JLabel.CENTER);
 
-//        copyrightPanel.add(copyrightText);
         footerPanel.add(copyrightText, BorderLayout.CENTER);
 
         return footerPanel;

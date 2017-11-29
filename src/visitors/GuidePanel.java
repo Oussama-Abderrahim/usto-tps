@@ -26,7 +26,7 @@ public class GuidePanel extends SPanel
         tabPane.setBorder(new EmptyBorder(20, 50, 20, 50));
 
         tabPane.add("A propos", new AboutPanel());
-        tabPane.add("Conférenciers", new AboutPanel());
+        tabPane.add("Conférenciers", new ConferenciersPanel());
         tabPane.add("Hebergement et voyage", new AboutPanel());
 
         add(tabPane, BorderLayout.CENTER);

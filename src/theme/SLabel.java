@@ -1,6 +1,7 @@
 package theme;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class SLabel extends JLabel
 {
@@ -10,9 +11,12 @@ public class SLabel extends JLabel
     }
 
     public SLabel(String text) {
+        this(text, Theme.FONT_DEFAULT_BIG);
+    }
+    public SLabel(String text, Font font) {
         super(text);
-        setFont(Theme.FONT_DEFAULT_BIG);
+        setFont(font);
         setForeground(Theme.FONT_DEFAULT_COLOR);
-
+        
     }
 }

@@ -14,6 +14,8 @@ public class MainFrame extends JFrame
 {
     public static MainFrame instance = null;
 
+    private DatabaseManager dbManager;
+
     /*Objets pour gerer les differentes panel*/
     private Stack<String> panelStack;
     private SButton backButton;
@@ -35,6 +37,7 @@ public class MainFrame extends JFrame
     private MainFrame()
     {
         initWindow();
+        dbManager = DatabaseManager.getInstance();
 
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);

@@ -51,9 +51,12 @@ public class DatabaseManager
         String confQuery = "CREATE TABLE IF NOT EXISTS \"Conference\" (\"id\" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL , \"Title\" VARCHAR, \"Day\" INTEGER DEFAULT 0, \"Time\" VARCHAR, \"Speaker\"  INTEGER NOT NULL ,\n" +
                 "FOREIGN KEY (Speaker) REFERENCES Speaker(id))";
 
+        String congressQuery = "CREATE TABLE IF NOT EXISTS \"Congres\" (\"Nom\" VARCHAR NOT NULL , \"Date_Debut\" DATETIME, \"Date_Fin\" DATETIME, \"Date_Fin_Inscription\" DATETIME, \"Lieu\" VARCHAR, \"Citation\" VARCHAR)";
+
         executeUpdate(attandantQuery);
         executeUpdate(speakerQuery);
         executeUpdate(confQuery);
+        executeUpdate(congressQuery);
     }
 
     public ResultSet executeQuery(String query)

@@ -11,6 +11,8 @@ import java.awt.*;
 
 public class PlanningPanel extends SPanel
 {
+    private static final int NBR_JOURS = 4;
+
     public PlanningPanel()
     {
         setLayout(new BorderLayout(0, 20));
@@ -26,9 +28,10 @@ public class PlanningPanel extends SPanel
         tabPane.setBorder(new EmptyBorder(20, 50, 20, 50));
         tabPane.setFont(Theme.FONT_DEFAULT);
 
-        tabPane.add("Jour 1", new SchedulePlanningPanel());
-        tabPane.add("Jour 2", new SchedulePlanningPanel());
-        tabPane.add("Jour 3", new SchedulePlanningPanel());
+        for(int i = 1; i <= NBR_JOURS; i++)
+        {
+            tabPane.add("Jour "+i, new SchedulePlanningPanel(i));
+        }
 
         add(tabPane, BorderLayout.CENTER);
     }

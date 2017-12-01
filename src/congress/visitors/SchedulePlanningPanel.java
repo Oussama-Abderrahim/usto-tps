@@ -14,7 +14,7 @@ import java.sql.SQLException;
 
 public class SchedulePlanningPanel extends SPanel
 {
-    public SchedulePlanningPanel()
+    public SchedulePlanningPanel(int jour)
     {
 
         SPanel content = new SPanel();
@@ -27,7 +27,7 @@ public class SchedulePlanningPanel extends SPanel
         try
         {
             ResultSet conferences = null;
-            conferences = DatabaseManager.getInstance().fetchConferences(1);
+            conferences = DatabaseManager.getInstance().fetchConferences(jour);
 
             while (conferences != null && conferences.next())
             {

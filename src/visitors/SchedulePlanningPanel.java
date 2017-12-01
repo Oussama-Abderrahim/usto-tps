@@ -10,13 +10,17 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 
 
-public class SchedulePlanningPanel extends SPanel {
-    public SchedulePlanningPanel() {
+public class SchedulePlanningPanel extends SPanel
+{
+    public SchedulePlanningPanel()
+    {
+
         SPanel content = new SPanel();
 
         content.setLayout(new GridLayout(0, 1, 0, 20));
         content.setBorder(new EmptyBorder(20, 50, 20, 50));
 
+        /// TODO : Add from database
         for (int i = 0; i < 10; i++)
         {
             SPanel conferencePanel = new SPanel();

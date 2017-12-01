@@ -2,6 +2,7 @@ package visitors;
 
 import theme.SLabel;
 import theme.SPanel;
+import theme.Theme;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -24,6 +25,7 @@ public class GuidePanel extends SPanel
         JTabbedPane tabPane = new JTabbedPane();
 
         tabPane.setBorder(new EmptyBorder(20, 50, 20, 50));
+        tabPane.setFont(Theme.FONT_DEFAULT);
 
         tabPane.add("A propos", new AboutPanel());
         tabPane.add("Conférenciers", new ConferenciersPanel());

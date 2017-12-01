@@ -17,10 +17,12 @@ public class WelcomePanel extends SPanel
             "<h1>~Une belle citation courte~</h1>\n" +
             "</center></html>";
 
+    /// TODO add text from Database
+
     public WelcomePanel()
     {
         setLayout(new GridLayout(2,1, 30, 0));
-        setBorder(new EmptyBorder(50, 100, 50, 100));
+        //setBorder(new EmptyBorder(50, 100, 50, 100));
 
         SPanel textPanel = new SPanel();
         textPanel.setLayout(new FlowLayout());

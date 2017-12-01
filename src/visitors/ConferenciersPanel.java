@@ -7,6 +7,6 @@ class ConferenciersPanel extends SPanel
 
     public ConferenciersPanel()
     {
-
+        /// TODO : Add Conferenciers Panel
     }
 }

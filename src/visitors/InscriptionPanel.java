@@ -50,6 +50,7 @@ public class InscriptionPanel extends SPanel
         panel.add(tarifLabel, BorderLayout.NORTH);
 
         SPanel centerPanel = initFormPanel();
+
         panel.add(centerPanel, BorderLayout.CENTER);
 
         SPanel southPanel = new SPanel();
@@ -71,18 +72,16 @@ public class InscriptionPanel extends SPanel
         ));
         formPanel.setLayout(new BorderLayout());
 
-        JLabel infoLabel = new JLabel("La confirmation et procédures de paiment vous seront fournies par mail");
+        JLabel infoLabel = new JLabel("La confirmation et procédures de paiement vous seront fournies par mail");
         infoLabel.setHorizontalAlignment(JLabel.CENTER);
         infoLabel.setForeground(Theme.FONT_DEFAULT_COLOR);
         infoLabel.setFont(Theme.FONT_DEFAULT);
         formPanel.add(infoLabel, BorderLayout.NORTH);
 
         SPanel fieldsPanel = initFieldsPanel();
-
-
-        /// TODO : add fields Panel
-
-        formPanel.add(fieldsPanel, BorderLayout.CENTER);
+        JScrollPane scrollPane = new JScrollPane(fieldsPanel);
+        scrollPane.setOpaque(false);
+        formPanel.add(scrollPane, BorderLayout.CENTER);
 
         JCheckBox checkBox = new JCheckBox("J'ai lu le reglement interne du congrés");
         checkBox.setHorizontalAlignment(JCheckBox.CENTER);
@@ -108,39 +107,64 @@ public class InscriptionPanel extends SPanel
                 )
         ));
 
+
         SLabel nomLbl = new SLabel("Nom");
-        nomLbl.setFont(Theme.FONT_DEFAULT);
-
-        SLabel prenomLbl = new SLabel("Prenom");
-        prenomLbl.setFont(Theme.FONT_DEFAULT);
-
         SLabel mailLbl = new SLabel("Email");
-        mailLbl.setFont(Theme.FONT_DEFAULT);
-
+        SLabel prenomLbl = new SLabel("Prenom");
         SLabel occupationLbl = new SLabel("Occupation");
+
+        nomLbl.setPreferredSize(new Dimension(150, Theme.BTN_DEFAULT_HEIGHT));
+        mailLbl.setPreferredSize(new Dimension(150, Theme.BTN_DEFAULT_HEIGHT));
+        prenomLbl.setPreferredSize(new Dimension(150, Theme.BTN_DEFAULT_HEIGHT));
+        occupationLbl.setPreferredSize(new Dimension(150, Theme.BTN_DEFAULT_HEIGHT));
+        nomLbl.setFont(Theme.FONT_DEFAULT);
+        prenomLbl.setFont(Theme.FONT_DEFAULT);
+        mailLbl.setFont(Theme.FONT_DEFAULT);
         occupationLbl.setFont(Theme.FONT_DEFAULT);
 
+
         nomTxt = new JTextField();
-        nomTxt.setFont(Theme.FONT_DEFAULT);
-        nomTxt.setForeground(Theme.FONT_INPUT_COLOR);
         prenomTxt = new JTextField();
-        prenomTxt.setFont(Theme.FONT_DEFAULT);
-        prenomTxt.setForeground(Theme.FONT_INPUT_COLOR);
         mailTxt = new JTextField();
-        mailTxt.setFont(Theme.FONT_DEFAULT);
-        mailTxt.setForeground(Theme.FONT_INPUT_COLOR);
         occupationTxt = new JComboBox();
+
+        nomTxt.setFont(Theme.FONT_DEFAULT);
+        prenomTxt.setFont(Theme.FONT_DEFAULT);
+        mailTxt.setFont(Theme.FONT_DEFAULT);
         occupationTxt.setFont(Theme.FONT_DEFAULT);
+
+        nomTxt.setForeground(Theme.FONT_INPUT_COLOR);
+        prenomTxt.setForeground(Theme.FONT_INPUT_COLOR);
+        mailTxt.setForeground(Theme.FONT_INPUT_COLOR);
         occupationTxt.setForeground(Theme.FONT_INPUT_COLOR);
 
-        fieldsPanel.add(nomLbl);
-        fieldsPanel.add(nomTxt);
-        fieldsPanel.add(prenomLbl);
-        fieldsPanel.add(prenomTxt);
-        fieldsPanel.add(mailLbl);
-        fieldsPanel.add(mailTxt);
-        fieldsPanel.add(occupationLbl);
-        fieldsPanel.add(occupationTxt);
+        /// TODO : Prevent them from getting too big
+        SPanel nomPanel = new SPanel();
+        SPanel mailPanel = new SPanel();
+        SPanel prenomPanel = new SPanel();
+        SPanel occupationPanel = new SPanel();
+
+        nomPanel.setLayout(new BorderLayout());
+        mailPanel.setLayout(new BorderLayout());
+        prenomPanel.setLayout(new BorderLayout());
+        occupationPanel.setLayout(new BorderLayout());
+
+
+        nomPanel.add(nomLbl, BorderLayout.WEST);
+        mailPanel.add(mailLbl, BorderLayout.WEST);
+        prenomPanel.add(prenomLbl, BorderLayout.WEST);
+        occupationPanel.add(occupationLbl, BorderLayout.WEST);
+
+        nomPanel.add(nomTxt, BorderLayout.CENTER);
+        mailPanel.add(mailTxt, BorderLayout.CENTER);
+        prenomPanel.add(prenomTxt, BorderLayout.CENTER);
+        occupationPanel.add(occupationTxt, BorderLayout.CENTER);
+
+
+        fieldsPanel.add(nomPanel);
+        fieldsPanel.add(prenomPanel);
+        fieldsPanel.add(mailPanel);
+        fieldsPanel.add(occupationPanel);
 
         return fieldsPanel;
     }

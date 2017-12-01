@@ -15,6 +15,7 @@ import java.awt.event.ActionListener;
 
 public class PublicMainMenu extends SPanel
 {
+    /// TODO : add from Database
     static final String INFO_TEXT = "<html><center>" +
             "INFORMATION GENERALE\n" +
             "<h1>DATE ET LIEU\n</h1>" +
@@ -34,6 +35,7 @@ public class PublicMainMenu extends SPanel
         organisationButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                /// TODO: Add passwords
                 MainFrame.getInstance().switchToPanel(new OrganisationMainMenu());
             }
         });

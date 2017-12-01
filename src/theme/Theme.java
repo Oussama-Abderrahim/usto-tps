@@ -31,8 +31,8 @@ public class Theme
     public static final Color FONT_SUCCESS_COLOR = Color.GREEN;
 
     // Layout
-    public static final int WINDOW_WIDTH = 1100;
-    public static final int WINDOW_HEIGHT = 700;
+    public static final int WINDOW_WIDTH = 1280;
+    public static final int WINDOW_HEIGHT = 720;
 
 
     // Custom Button properties

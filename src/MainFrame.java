@@ -94,9 +94,10 @@ public class MainFrame extends JFrame
         setTitle("Application Gestion Congres");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setBounds(100, 100, Theme.WINDOW_WIDTH, Theme.WINDOW_HEIGHT);
-        setMinimumSize(new Dimension(Theme.WINDOW_WIDTH, Theme.WINDOW_HEIGHT));
+        setPreferredSize(new Dimension(Theme.WINDOW_WIDTH, Theme.WINDOW_HEIGHT));
 
         contentPane = new SPanel();
+        contentPane.setOpaque(true);
         contentPane.setLayout(new BorderLayout(5,5));
         setContentPane(contentPane);
     }
@@ -107,7 +108,7 @@ public class MainFrame extends JFrame
         topBarPanel.setLayout(new BorderLayout(0,0));
 
         backButton = new SButton("");
-        backButton.setSize(Theme.BTN_DEFAULT_WIDTH/4, Theme.BTN_DEFAULT_HEIGHT*3/4);
+        backButton.setSize(Theme.BTN_DEFAULT_WIDTH/2, Theme.BTN_DEFAULT_HEIGHT*3/4);
         backButton.setIcon(FileManager.loadImage("back-icon", 48,48));
 
         backButton.addActionListener(new ActionListener() {
@@ -131,7 +132,7 @@ public class MainFrame extends JFrame
         adminButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                /// TODO : Add admin panel
             }
         });
         footerPanel.add(adminButton, BorderLayout.WEST);

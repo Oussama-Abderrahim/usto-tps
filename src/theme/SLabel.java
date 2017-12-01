@@ -17,6 +17,8 @@ public class SLabel extends JLabel
         super(text);
         setFont(font);
         setForeground(Theme.FONT_DEFAULT_COLOR);
+        setHorizontalAlignment(JLabel.CENTER);
+        setVerticalAlignment(JLabel.CENTER);
         
     }
 }

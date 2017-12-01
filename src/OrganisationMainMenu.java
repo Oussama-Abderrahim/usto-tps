@@ -22,8 +22,9 @@ public class OrganisationMainMenu extends SPanel
     {
         setLayout(new BorderLayout(0, 0));
 
-        SButton organisationButton = new SButton("Espace public");
-        organisationButton.addActionListener(new ActionListener() {
+        SButton publicButton = new SButton("Espace public");
+        publicButton.setSize(Theme.BTN_DEFAULT_WIDTH*3/2, Theme.BTN_DEFAULT_HEIGHT);
+        publicButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MainFrame.getInstance().switchToPanel(new PublicMainMenu());
@@ -32,7 +33,7 @@ public class OrganisationMainMenu extends SPanel
 
         SPanel topPanel = new SPanel();
         topPanel.setLayout(new FlowLayout(FlowLayout.TRAILING));
-        topPanel.add(organisationButton);
+        topPanel.add(publicButton);
         add(topPanel, BorderLayout.NORTH);
 
 

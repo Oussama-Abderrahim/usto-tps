@@ -2,6 +2,7 @@ package visitors;
 
 import theme.SLabel;
 import theme.SPanel;
+import theme.Theme;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -23,6 +24,7 @@ public class PlanningPanel extends SPanel
         JTabbedPane tabPane = new JTabbedPane();
 
         tabPane.setBorder(new EmptyBorder(20, 50, 20, 50));
+        tabPane.setFont(Theme.FONT_DEFAULT);
 
         tabPane.add("Jour 1", new SchedulePlanningPanel());
         tabPane.add("Jour 2", new SchedulePlanningPanel());

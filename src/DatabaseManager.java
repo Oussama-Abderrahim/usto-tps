@@ -45,7 +45,6 @@ public class DatabaseManager
 
     private void checkTables()
     {
-        /// TODO : write create table queries
         String attandantQuery = "CREATE  TABLE IF NOT EXISTS \"Attandant\" (\"id\" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , \"Name\" VARCHAR, \"Email\" VARCHAR, \"Occupation\" VARCHAR)";
         String speakerQuery = "CREATE TABLE IF NOT EXISTS \"Speaker\" (\"id\" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , \"Name\" VARCHAR, \"Description\" VARCHAR)";
         String confQuery = "CREATE TABLE IF NOT EXISTS \"Conference\" (\"id\" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL , \"Title\" VARCHAR, \"Day\" INTEGER DEFAULT 0, \"Time\" VARCHAR, \"Speaker\"  INTEGER NOT NULL ,\n" +

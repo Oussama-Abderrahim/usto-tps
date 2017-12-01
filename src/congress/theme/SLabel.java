@@ -1,4 +1,4 @@
-package theme;
+package congress.theme;
 
 import javax.swing.*;
 import java.awt.*;

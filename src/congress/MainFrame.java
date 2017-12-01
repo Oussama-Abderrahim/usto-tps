@@ -1,10 +1,10 @@
-import sun.applet.Main;
-import theme.SButton;
-import theme.SPanel;
-import theme.Theme;
+package congress;
+
+import congress.theme.SButton;
+import congress.theme.SPanel;
+import congress.theme.Theme;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

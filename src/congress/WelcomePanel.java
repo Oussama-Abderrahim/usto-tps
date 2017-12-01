@@ -1,11 +1,10 @@
-import theme.SButton;
-import theme.SLabel;
-import theme.SPanel;
-import theme.Theme;
+package congress;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
+import congress.theme.SButton;
+import congress.theme.SLabel;
+import congress.theme.SPanel;
+import congress.theme.Theme;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

@@ -1,24 +1,23 @@
-package visitors;
+package congress.visitors;
 
-import theme.SLabel;
-import theme.SPanel;
-import theme.Theme;
+import congress.theme.SLabel;
+import congress.theme.SPanel;
+import congress.theme.Theme;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 
-public class GuidePanel extends SPanel
+public class PlanningPanel extends SPanel
 {
-    public GuidePanel()
+    public PlanningPanel()
     {
         setLayout(new BorderLayout(0, 20));
 
         SPanel titlePanel = new SPanel();
         titlePanel.setLayout(new FlowLayout());
-        titlePanel.add(new SLabel("Guide"));
+        titlePanel.add(new SLabel("Planning Conferences"));
 
         add(titlePanel, BorderLayout.NORTH);
 
@@ -27,9 +26,9 @@ public class GuidePanel extends SPanel
         tabPane.setBorder(new EmptyBorder(20, 50, 20, 50));
         tabPane.setFont(Theme.FONT_DEFAULT);
 
-        tabPane.add("A propos", new AboutPanel());
-        tabPane.add("Conférenciers", new ConferenciersPanel());
-        tabPane.add("Hebergement et voyage", new AboutPanel());
+        tabPane.add("Jour 1", new SchedulePlanningPanel());
+        tabPane.add("Jour 2", new SchedulePlanningPanel());
+        tabPane.add("Jour 3", new SchedulePlanningPanel());
 
         add(tabPane, BorderLayout.CENTER);
     }

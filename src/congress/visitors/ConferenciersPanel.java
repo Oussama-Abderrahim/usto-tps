@@ -1,6 +1,6 @@
-package visitors;
+package congress.visitors;
 
-import theme.SPanel;
+import congress.theme.SPanel;
 
 class ConferenciersPanel extends SPanel
 {

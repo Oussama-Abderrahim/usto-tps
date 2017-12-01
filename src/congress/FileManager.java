@@ -1,4 +1,4 @@
-import theme.Theme;
+package congress;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -6,7 +6,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.file.Files;
 
 public class FileManager
 {

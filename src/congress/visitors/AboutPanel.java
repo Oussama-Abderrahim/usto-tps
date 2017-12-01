@@ -1,9 +1,8 @@
-package visitors;
+package congress.visitors;
 
-import theme.SPanel;
+import congress.theme.SPanel;
 
 import javax.swing.*;
-import java.awt.*;
 
 
 public class AboutPanel extends SPanel

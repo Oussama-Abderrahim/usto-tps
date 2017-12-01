@@ -80,7 +80,6 @@ public class DatabaseManager
         }
     }
 
-
     public void disconnect()
     {
         try
@@ -91,5 +90,15 @@ public class DatabaseManager
         {
             e.printStackTrace();
         }
+    }
+
+    public ResultSet fetchConferences(int jour)
+    {
+        String QUERY = "SELECT Conference.hour, Conference.title, Speaker.Name \n" +
+                "FROM Conference, Speaker\n" +
+                "WHERE Conference.Speaker = Speaker.id\n" +
+                "AND Conference.day = "+jour+";";
+
+        return executeQuery(QUERY);
     }
 }

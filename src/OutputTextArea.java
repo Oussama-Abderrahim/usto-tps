@@ -16,10 +16,14 @@ public class OutputTextArea extends JTextPane
         setEditable(false);
     }
 
-    public void appendtext(String text)
+    public void appendText(String text)
+    {
+        appendText(text, Theme.FONT_INPUT_COLOR);
+    }
+
+    public void appendText(String text, Color color)
     {
         setText(getText()+text);
     }
-
 
 }

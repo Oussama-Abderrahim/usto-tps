@@ -142,10 +142,10 @@ public class MainFrame extends JFrame
     private void showSyntaxResult(ArrayList<String> result)
     {
         outputTextArea.setText("");
-        outputTextArea.appendtext("Syntax Analysis result : ", Color.RED);
+        outputTextArea.appendText("Syntax Analysis result : ", Color.RED);
         for(String s : result)
         {
-            outputTextArea.appendtext(s);
+            outputTextArea.appendText(s);
         }
     }
 
@@ -157,30 +157,30 @@ public class MainFrame extends JFrame
             switch (t.getType())
             {
                 case DATA:
-                    outputTextArea.appendtext(t.getText() + " : Donnée\n");
+                    outputTextArea.appendText(t.getText() + " : Donnée\n");
                     break;
                 case ID:
-                    outputTextArea.appendtext(t.getText() + " : Identificateur\n");
+                    outputTextArea.appendText(t.getText() + " : Identificateur\n");
                     break;
                 case TYPE:
-                    outputTextArea.appendtext(t.getText() + " : Type variable\n");
+                    outputTextArea.appendText(t.getText() + " : Type variable\n");
                     break;
                 case SYMBOL:
-                    outputTextArea.appendtext(t.getText() + " : Symbol clé\n");
+                    outputTextArea.appendText(t.getText() + " : Symbol clé\n");
                     break;
                 case KEYWORD:
-                    outputTextArea.appendtext(t.getText() + " : Mot clé\n");
+                    outputTextArea.appendText(t.getText() + " : Mot clé\n");
                     break;
                 case ARITHMETIC:
-                    outputTextArea.appendtext(t.getText() + " : Operateur arithmetic\n");
+                    outputTextArea.appendText(t.getText() + " : Operateur arithmetic\n");
                     break;
                 case LOGICAL:
-                    outputTextArea.appendtext(t.getText() + " : Operateur logique\n");
+                    outputTextArea.appendText(t.getText() + " : Operateur logique\n");
                     break;
                 case EOF:
                     break;
                 default:
-                    outputTextArea.appendtext(t.getText() + " : ???\n");
+                    outputTextArea.appendText(t.getText() + " : ???\n");
             }
         }
     }

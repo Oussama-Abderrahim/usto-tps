@@ -15,6 +15,14 @@ public class FileManager
         return new File("res/" + fileName);
     }
 
+    /**
+    * affiche une boite de dialogue pour ouvrir un fichier 
+    *	(exemple : File file =  loadFile("Compila source files", "Compila");  ) 
+    * @param desc : Description du fichier 
+    * @param ext  : extensions acceptées 
+    * @return File : un objet File du fichier lu 
+    */
+
     public static File loadFile(String desc, String ext)
     {
         File file = null;

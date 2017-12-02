@@ -70,9 +70,9 @@ public class SyntaxEngine
             nextToken();
             validSyntax("Debut programme");
             followedByBlockInstruction();
-
             if(currentToken().equals(KeywordToken.END_PROGRAM))
             {
+                nextToken();
                 validSyntax("Fin programme correctement");
                 return true;
             }
@@ -137,8 +137,10 @@ public class SyntaxEngine
             if(c.equals(SymbolToken.COLUMN))
             {
                 c = nextToken();
+                System.out.print("Should find String here...");
                 if(c instanceof DataToken)
                 {
+                    System.out.println("YES!");
                     c = nextToken();
                     if(c.equals(KeywordToken.SEMI_COLON))
                     {
@@ -156,7 +158,7 @@ public class SyntaxEngine
             if(c.equals(SymbolToken.COLUMN))
             {
                 c = nextToken();
-                if(c instanceof DataToken)
+                if(c instanceof IdToken)
                 {
                     c = nextToken();
                     if(c.equals(KeywordToken.SEMI_COLON))
@@ -182,7 +184,10 @@ public class SyntaxEngine
                     {
                         c = nextToken();
                         validSyntax("If statement");
-                        return followedByStartFinishBlock();
+                        if(followedByStartFinishBlock())
+                        {
+                            return followedByBlockInstruction();
+                        }
                     }
                 }
             }
@@ -326,7 +331,7 @@ public class SyntaxEngine
             instr = instr + t.getText() + " ";
         }
 
-        result.add(instr + "\t-->  " + s);
+        result.add(instr + "\t-->  " + s+"\n");
         buffer.clear();
     }
 
@@ -359,6 +364,11 @@ public class SyntaxEngine
         tokenSource.add(new IdToken("i"));
         tokenSource.add(new KeywordToken("to"));
         tokenSource.add(new IdToken("j"));
+        tokenSource.add(new KeywordToken(";;"));
+
+        tokenSource.add(new KeywordToken("ShowMes"));
+        tokenSource.add(new SymbolToken(":"));
+        tokenSource.add(new DataToken("\"Ceci est un message\""));
         tokenSource.add(new KeywordToken(";;"));
 
         /*
@@ -400,7 +410,6 @@ public class SyntaxEngine
         tokenSource.add(new DataToken("123.54"));
         tokenSource.add(new KeywordToken(";;"));
         tokenSource.add(new KeywordToken("Finish"));
-
 
         tokenSource.add(new KeywordToken("End_Program"));
 

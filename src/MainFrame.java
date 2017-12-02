@@ -142,6 +142,7 @@ public class MainFrame extends JFrame
     private void showSyntaxResult(ArrayList<String> result)
     {
         outputTextArea.setText("");
+        outputTextArea.appendtext("Syntax Analysis result : ", Color.RED);
         for(String s : result)
         {
             outputTextArea.appendtext(s);

@@ -9,14 +9,16 @@ import congress.visitors.InscriptionPanel;
 import congress.visitors.PlanningPanel;
 
 import javax.swing.border.EmptyBorder;
+import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class PublicMainMenu extends SPanel
 {
-    /// TODO : add from Database
-    static final String INFO_TEXT = "<html><center>" +
+    static  String INFO_TEXT = "<html><center>" +
             "INFORMATION GENERALE\n" +
             "<h1>DATE ET LIEU\n</h1>" +
             "Some long text<br>" +
@@ -28,6 +30,17 @@ public class PublicMainMenu extends SPanel
 
     public PublicMainMenu()
     {
+        try
+        {
+            ResultSet congres = DatabaseManager.getInstance().fetchCongressData();
+
+            INFO_TEXT = "<html><center>" +
+                    congres.getString("Nom") + "\n" +
+                    "<h1>" + congres.getString("Date_Debut")+ "\n</h1>" +
+                    "<h1>" + congres.getString("Lieu")+ "\n</h1>" +
+                    "</center></html>";
+
+        }catch (SQLException ignored) {}
         setLayout(new BorderLayout(0,0));
 
         SButton organisationButton = new SButton("Espace Organisateur");

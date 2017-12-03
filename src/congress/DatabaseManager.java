@@ -94,6 +94,12 @@ public class DatabaseManager
         }
     }
 
+    public ResultSet fetchCongressData()
+    {
+        String QUERY = "SELECT * FROM Congres";
+
+        return executeQuery(QUERY);
+    }
     public ResultSet fetchConferences(int jour)
     {
         String QUERY = "SELECT Time, Title, Speaker.Name \n" +

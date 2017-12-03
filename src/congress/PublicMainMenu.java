@@ -36,7 +36,13 @@ public class PublicMainMenu extends SPanel
             @Override
             public void actionPerformed(ActionEvent e) {
                 /// TODO: Add passwords
-                MainFrame.getInstance().switchToPanel(new OrganisationMainMenu());
+                PasswordDialog passwordDialog = new PasswordDialog(MainFrame.getInstance(), "Authentication", true);
+                passwordDialog.showDialog();
+
+                if(passwordDialog.isPasswordValid())
+                {
+                    MainFrame.getInstance().switchToPanel(new OrganisationMainMenu());
+                }
             }
         });
 

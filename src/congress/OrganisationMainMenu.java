@@ -1,6 +1,8 @@
 package congress;
 
+import congress.organisation.ChangePlanningPanel;
 import congress.organisation.InfoModifPanel;
+import congress.organisation.SpeakerFormPanel;
 import congress.theme.SButton;
 import congress.theme.SLabel;
 import congress.theme.SPanel;
@@ -68,13 +70,13 @@ public class OrganisationMainMenu extends SPanel
         conferencierButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //MainFrame.getInstance().switchToPanel(new GuidePanel());
+                MainFrame.getInstance().switchToPanel(new SpeakerFormPanel());
             }
         });
         planningButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //MainFrame.getInstance().switchToPanel(new PlanningPanel());
+                MainFrame.getInstance().switchToPanel(new ChangePlanningPanel());
             }
         });
         informationButton.addActionListener(new ActionListener() {

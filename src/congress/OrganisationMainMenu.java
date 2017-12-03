@@ -1,5 +1,6 @@
 package congress;
 
+import congress.organisation.InfoModifPanel;
 import congress.theme.SButton;
 import congress.theme.SLabel;
 import congress.theme.SPanel;
@@ -79,7 +80,7 @@ public class OrganisationMainMenu extends SPanel
         informationButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //MainFrame.getInstance().switchToPanel(new InscriptionPanel());
+                MainFrame.getInstance().switchToPanel(new InfoModifPanel());
             }
         });
 

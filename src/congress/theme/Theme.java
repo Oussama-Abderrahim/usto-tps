@@ -12,7 +12,7 @@ public class Theme
     public static final Font FONT_DEFAULT_SMALL     = new Font("Cambria", Font.PLAIN, 12);
     public static final Font FONT_DEFAULT_MEDIUM    = new Font("Cambria", Font.PLAIN, 18);
     public static final Font FONT_DEFAULT_LARGE     = new Font("Cambria", Font.PLAIN, 32);
-    public static final Font FONT_DEFAULT_BIG       = new Font("Cambria", Font.PLAIN, 42);
+    public static final Font FONT_DEFAULT_BIG       = new Font("Cambria", Font.PLAIN, 48);
 
     // Custom Colors
     public static final Color CHIBHBLACK = new Color(33, 33, 33);
@@ -37,8 +37,8 @@ public class Theme
 
     // Custom Button properties
     public static final Font BTN_DEFAULT_FONT = FONT_DEFAULT;
-    public static final Color BTN_DEFAULT_COLOR = SILVER;
-    public static final Color BTN_DEFAULT_TEXT_COLOR = FONT_INPUT_COLOR;
+    public static final Color BTN_DEFAULT_COLOR = GREEN_EMERALD;
+    public static final Color BTN_DEFAULT_TEXT_COLOR = FONT_DEFAULT_COLOR;
     public static final Color BTN_DEFAULT_TEXT_HOVER_COLOR = FONT_INPUT_COLOR;
     public static final int BTN_DEFAULT_HEIGHT = 28;
     public static final int BTN_DEFAULT_WIDTH = 150;
@@ -49,7 +49,7 @@ public class Theme
     // TextInputs
     public static final Font INPUT_TEXT_FONT = FONT_DEFAULT_MEDIUM;
     public static final int LABELED_MARGIN = 2;
-    public static final int BTN_ICON_SIZE = 64;
+    public static final int BTN_ICON_SIZE = 84;
 
     // Custom Settings
 }

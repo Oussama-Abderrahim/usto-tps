@@ -34,8 +34,8 @@ public class SchedulePlanningPanel extends SPanel
                 SPanel conferencePanel = new SPanel();
 
                 JLabel horaireText = new JLabel(conferences.getString("Time"));
-                JLabel confText = new JLabel(conferences.getString("Conference.title"));
-                JLabel speakerText = new JLabel(conferences.getString("Speaker.Name"));
+                JLabel confText = new JLabel(conferences.getString("title"));
+                JLabel speakerText = new JLabel(conferences.getString("Name"));
 
                 horaireText.setFont(Theme.FONT_DEFAULT_MEDIUM);
                 confText.setFont(Theme.FONT_DEFAULT_MEDIUM);

@@ -102,10 +102,17 @@ public class DatabaseManager
     }
     public ResultSet fetchConferences(int jour)
     {
-        String QUERY = "SELECT Time, Title, Speaker.Name \n" +
+        String QUERY = "SELECT Conference.Time, Conference.Title, Speaker.Name \n" +
                 "FROM Conference, Speaker\n" +
                 "WHERE Conference.Speaker = Speaker.id\n" +
                 "AND Conference.day = "+jour+";";
+
+        return executeQuery(QUERY);
+    }
+
+    public ResultSet fetchSpeakers()
+    {
+        String QUERY = "SELECT * FROM Speaker";
 
         return executeQuery(QUERY);
     }

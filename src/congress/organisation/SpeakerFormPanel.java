@@ -19,6 +19,11 @@ import javax.swing.JTextField;
 
 public class SpeakerFormPanel extends SPanel
 {
+	/*
+	int returnVal = chooser.showOpenDialog(getParent());
+	if(returnVal == JFileChooser.APPROVE_OPTION)
+		image.setText(chooser.getSelectedFile().getName());
+	 */
 	private JTextField textFieldBio;
 	private JTextField textFieldNo;
 	private JTextField textFieldNom;
@@ -60,7 +65,7 @@ public class SpeakerFormPanel extends SPanel
 		SPanel paneChoosePic = new SPanel();
 		panePic.add(paneChoosePic);
 		
-		JButton btnChoosePic = new JButton("Load pic");
+		SButton btnChoosePic = new SButton("Charger l'image");
 		paneChoosePic.add(btnChoosePic);
 		
 		SPanel paneTxt = new SPanel();

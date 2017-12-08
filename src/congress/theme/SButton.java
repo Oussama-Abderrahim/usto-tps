@@ -77,6 +77,8 @@ public class SButton extends JButton{
 
     public void makeIntoIconButton(ImageIcon icon)
     {
+        if(icon == null)
+            return;
         setIcon(icon);
         setOpaque(false);
         setBorder(null);

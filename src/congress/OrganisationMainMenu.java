@@ -28,7 +28,7 @@ public class OrganisationMainMenu extends SPanel
         publicButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MainFrame.getInstance().switchToPanel(new PublicMainMenu());
+                MainFrame.getInstance().switchToPanel(new PublicMainMenu(), "Menu Principal");
             }
         });
 
@@ -70,24 +70,27 @@ public class OrganisationMainMenu extends SPanel
         conferencierButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MainFrame.getInstance().switchToPanel(new SpeakerFormPanel());
+                MainFrame.getInstance().switchToPanel(new SpeakerFormPanel(), "Introduire Conferencier");
             }
         });
         planningButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MainFrame.getInstance().switchToPanel(new ChangePlanningPanel());
+                MainFrame.getInstance().switchToPanel(new ChangePlanningPanel(), "Modifier Planning");
             }
         });
         informationButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MainFrame.getInstance().switchToPanel(new InfoModifPanel());
+                MainFrame.getInstance().switchToPanel(new InfoModifPanel(), "Modifier Inforamtions");
             }
         });
 
         conferencierButton.setIcon(FileManager.loadImage("speaker", Theme.BTN_ICON_SIZE, Theme.BTN_ICON_SIZE));
+        conferencierButton.setHoverIcon(FileManager.loadImage("speaker-black", Theme.BTN_ICON_SIZE, Theme.BTN_ICON_SIZE));
         planningButton.setIcon(FileManager.loadImage("PlanningPlus", Theme.BTN_ICON_SIZE, Theme.BTN_ICON_SIZE));
+        planningButton.setHoverIcon(FileManager.loadImage("PlanningPlus-black", Theme.BTN_ICON_SIZE, Theme.BTN_ICON_SIZE));
         informationButton.setIcon(FileManager.loadImage("Info", Theme.BTN_ICON_SIZE, Theme.BTN_ICON_SIZE));
+        informationButton.setHoverIcon(FileManager.loadImage("Info-black", Theme.BTN_ICON_SIZE, Theme.BTN_ICON_SIZE));
     }
 }

@@ -22,9 +22,9 @@ public class InscriptionPanel extends SPanel
     {
         setLayout(new BorderLayout());
 
-        SPanel topPanel = new SPanel();
-        topPanel.add(new SLabel("Conference"));
-        add(topPanel, BorderLayout.NORTH);
+//        SPanel topPanel = new SPanel();
+//        topPanel.add(new SLabel("Conference"));
+//        add(topPanel, BorderLayout.NORTH);
 
         SPanel centerPanel = initCenterPanel();
 

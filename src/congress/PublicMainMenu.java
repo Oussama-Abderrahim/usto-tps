@@ -54,7 +54,7 @@ public class PublicMainMenu extends SPanel
 
                 if(passwordDialog.isPasswordValid())
                 {
-                    MainFrame.getInstance().switchToPanel(new OrganisationMainMenu());
+                    MainFrame.getInstance().switchToPanel(new OrganisationMainMenu(), "Menu Organisateur");
                 }
             }
         });
@@ -98,24 +98,28 @@ public class PublicMainMenu extends SPanel
         planningButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MainFrame.getInstance().switchToPanel(new PlanningPanel());
+                MainFrame.getInstance().switchToPanel(new PlanningPanel(), "Planning Conferences");
             }
         });
         guideButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MainFrame.getInstance().switchToPanel(new GuidePanel());
+                MainFrame.getInstance().switchToPanel(new GuidePanel(), "Guide");
             }
         });
         InscriptionButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MainFrame.getInstance().switchToPanel(new InscriptionPanel());
+                MainFrame.getInstance().switchToPanel(new InscriptionPanel(), "Inscription");
             }
         });
 
         planningButton.setIcon(FileManager.loadImage("Planning", Theme.BTN_ICON_SIZE,Theme.BTN_ICON_SIZE));
         guideButton.setIcon(FileManager.loadImage("Guide", Theme.BTN_ICON_SIZE,Theme.BTN_ICON_SIZE));
         InscriptionButton.setIcon(FileManager.loadImage("Inscription", Theme.BTN_ICON_SIZE,Theme.BTN_ICON_SIZE));
+
+        planningButton.setHoverIcon(FileManager.loadImage("Planning-black", Theme.BTN_ICON_SIZE,Theme.BTN_ICON_SIZE));
+        guideButton.setHoverIcon(FileManager.loadImage("Guide-black", Theme.BTN_ICON_SIZE,Theme.BTN_ICON_SIZE));
+        InscriptionButton.setHoverIcon(FileManager.loadImage("Inscription-black", Theme.BTN_ICON_SIZE,Theme.BTN_ICON_SIZE));
     }
 }

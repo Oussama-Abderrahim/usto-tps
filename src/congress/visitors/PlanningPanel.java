@@ -17,11 +17,11 @@ public class PlanningPanel extends SPanel
     {
         setLayout(new BorderLayout(0, 20));
 
-        SPanel titlePanel = new SPanel();
-        titlePanel.setLayout(new FlowLayout());
-        titlePanel.add(new SLabel("Planning Conferences"));
+//        SPanel titlePanel = new SPanel();
+//        titlePanel.setLayout(new FlowLayout());
+//        titlePanel.add(new SLabel("Planning Conferences"));
 
-        add(titlePanel, BorderLayout.NORTH);
+//        add(titlePanel, BorderLayout.NORTH);
 
         JTabbedPane tabPane = new JTabbedPane();
 

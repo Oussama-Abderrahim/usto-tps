@@ -1,6 +1,7 @@
 package congress;
 
 import congress.theme.SButton;
+import congress.theme.SLabel;
 import congress.theme.SPanel;
 import congress.theme.Theme;
 
@@ -58,7 +59,7 @@ public class MainFrame extends JFrame
         contentPane.add(mainWrapper, BorderLayout.CENTER);
 
         welcomePanel = new WelcomePanel();
-        switchToPanel(welcomePanel);
+        switchToPanel(welcomePanel, "Acceuil");
     }
 
     private void switchToPrevious()
@@ -73,10 +74,8 @@ public class MainFrame extends JFrame
             backButton.setEnabled(false);
         }
     }
-    public void switchToPanel(SPanel panel)
+    public void switchToPanel(SPanel panel, String name)
     {
-        String name = panel.getClass().getName();
-
         panelStack.push(name);
         mainWrapper.add(panel, panelStack.peek());
         System.out.println("Added : " + panelStack.peek());
@@ -95,6 +94,7 @@ public class MainFrame extends JFrame
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setBounds(100, 100, Theme.WINDOW_WIDTH, Theme.WINDOW_HEIGHT);
         setPreferredSize(new Dimension(Theme.WINDOW_WIDTH, Theme.WINDOW_HEIGHT));
+        setLocationRelativeTo(null);
 
         contentPane = new SPanel();
         contentPane.setOpaque(true);
@@ -108,8 +108,7 @@ public class MainFrame extends JFrame
         topBarPanel.setLayout(new BorderLayout(0,0));
 
         backButton = new SButton("");
-        backButton.setSize(Theme.BTN_DEFAULT_WIDTH/2, Theme.BTN_DEFAULT_HEIGHT*3/4);
-        backButton.setIcon(FileManager.loadImage("back-icon", 48,48));
+        backButton.makeIntoIconButton(FileManager.loadImage("back-icon", 36,24));
 
         backButton.addActionListener(new ActionListener() {
             @Override
@@ -118,6 +117,11 @@ public class MainFrame extends JFrame
             }
         });
         topBarPanel.add(backButton,BorderLayout.WEST);
+
+        SLabel panelTitle = new SLabel("Menu principal");
+        panelTitle.setFont(Theme.FONT_DEFAULT_LARGE);
+        topBarPanel.add(panelTitle, BorderLayout.CENTER);
+
         return topBarPanel;
     }
 

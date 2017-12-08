@@ -25,9 +25,9 @@ public class PasswordDialog extends JDialog
         passwordValid = false;
 
         setResizable(false);
-        setLocationRelativeTo(null);
 
         initContent();
+        setLocationRelativeTo(null);
     }
 
     private void initContent()
@@ -50,11 +50,11 @@ public class PasswordDialog extends JDialog
 
         SLabel usernameLbl = new SLabel("Username : ", Theme.FONT_DEFAULT);
         SLabel passwordLbl = new SLabel("Password : ", Theme.FONT_DEFAULT);
-        usernameLbl.setSize(100, Theme.BTN_DEFAULT_HEIGHT);
-        passwordLbl.setSize(100, Theme.BTN_DEFAULT_HEIGHT);
+        usernameLbl.setSize(120, Theme.BTN_DEFAULT_HEIGHT);
+        passwordLbl.setSize(120, Theme.BTN_DEFAULT_HEIGHT);
 
         JTextField usernameField = new JTextField();
-        JTextField passwordField = new JTextField();
+        JTextField passwordField = new JPasswordField();
 
         usernamePanel.add(usernameLbl, BorderLayout.WEST);
         passwordPanel.add(passwordLbl, BorderLayout.WEST);

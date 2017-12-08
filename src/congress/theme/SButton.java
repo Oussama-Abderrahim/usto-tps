@@ -19,6 +19,7 @@ public class SButton extends JButton{
     private Color borderColor = null;
 
     private Icon icon = null;
+    private ImageIcon hoverIcon = null;
 
     public SButton(String text) {
         super(text);
@@ -39,6 +40,7 @@ public class SButton extends JButton{
 
         SButton self = this;
 
+
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent me) {
@@ -54,17 +56,32 @@ public class SButton extends JButton{
 
             @Override
             public void mouseEntered(MouseEvent me) {
+                if(hoverIcon != null)
+                {
+                    icon = getIcon();
+                    self.setIcon(hoverIcon);
+                }
                 self.setBackground(hoverBg);
                 self.setForeground(Theme.BTN_DEFAULT_TEXT_HOVER_COLOR);
             }
 
             @Override
             public void mouseExited(MouseEvent me) {
+                if(icon != null)
+                    self.setIcon(icon);
                 self.setBackground(bg);
                 self.setForeground(Theme.BTN_DEFAULT_TEXT_COLOR);
             }
         });
+    }
 
+    public void makeIntoIconButton(ImageIcon icon)
+    {
+        setIcon(icon);
+        setOpaque(false);
+        setBorder(null);
+        addMouseListener(null);
+        setSize(icon.getIconWidth(), icon.getIconHeight());
     }
 
     @Override
@@ -87,6 +104,12 @@ public class SButton extends JButton{
         setVerticalTextPosition(SwingConstants.BOTTOM);
         setHorizontalTextPosition(SwingConstants.CENTER);
     }
+
+    public void setHoverIcon(ImageIcon img)
+    {
+        this.hoverIcon = img;
+    }
+
     public void setBgColor(Color background) {
         this.bg = background;
         this.hoverBg = calcHoverBgColor(bg);

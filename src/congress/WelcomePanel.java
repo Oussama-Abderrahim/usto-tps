@@ -24,7 +24,7 @@ public class WelcomePanel extends SPanel
     public WelcomePanel()
     {
         setLayout(new GridLayout(2,1, 30, 0));
-        setBorder(new EmptyBorder(50, 0, 50, 0));
+        setBorder(new EmptyBorder(55, 0, 50, 0));
 
         ResultSet congres = DatabaseManager.getInstance().fetchCongressData();
 
@@ -52,7 +52,7 @@ public class WelcomePanel extends SPanel
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                MainFrame.getInstance().switchToPanel(new PublicMainMenu());
+                MainFrame.getInstance().switchToPanel(new PublicMainMenu(), "Menu Principal");
             }
         });
 

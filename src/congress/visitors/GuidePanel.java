@@ -15,11 +15,12 @@ public class GuidePanel extends SPanel
     {
         setLayout(new BorderLayout(0, 20));
 
-//        SPanel titlePanel = new SPanel();
-//        titlePanel.setLayout(new FlowLayout());
-//        titlePanel.add(new SLabel("Guide"));
-//
-//        add(titlePanel, BorderLayout.NORTH);
+        SPanel titlePanel = new SPanel();
+        titlePanel.setLayout(new FlowLayout());
+        titlePanel.setFont(Theme.FONT_DEFAULT_MEDIUM);
+        titlePanel.add(new SLabel(""));
+
+        add(titlePanel, BorderLayout.NORTH);
 
         JTabbedPane tabPane = new JTabbedPane();
 

@@ -14,6 +14,11 @@ import java.sql.SQLException;
 
 public class SchedulePlanningPanel extends SPanel
 {
+    public SchedulePlanningPanel()
+    {
+        this(1);
+    }
+
     public SchedulePlanningPanel(int jour)
     {
 
@@ -31,33 +36,7 @@ public class SchedulePlanningPanel extends SPanel
 
             while (conferences != null && conferences.next())
             {
-                SPanel conferencePanel = new SPanel();
-
-                JLabel horaireText = new JLabel(conferences.getString("Time"));
-                JLabel confText = new JLabel(conferences.getString("title"));
-                JLabel speakerText = new JLabel(conferences.getString("Name"));
-
-                horaireText.setFont(Theme.FONT_DEFAULT_MEDIUM);
-                confText.setFont(Theme.FONT_DEFAULT_MEDIUM);
-                speakerText.setFont(Theme.FONT_DEFAULT_MEDIUM);
-
-                confText.setHorizontalAlignment(JLabel.CENTER);
-
-                horaireText.setForeground(Theme.FONT_DEFAULT_COLOR);
-                confText.setForeground(Theme.FONT_DEFAULT_COLOR);
-                speakerText.setForeground(Theme.FONT_DEFAULT_COLOR);
-
-                conferencePanel.setLayout(new BorderLayout(20, 0));
-                conferencePanel.setBorder(new CompoundBorder(
-                        BorderFactory.createLineBorder(Color.WHITE, 2),
-                        new EmptyBorder(5, 10, 5, 10)
-                ));
-
-                conferencePanel.add(horaireText, BorderLayout.WEST);
-                conferencePanel.add(confText, BorderLayout.CENTER);
-                conferencePanel.add(speakerText, BorderLayout.EAST);
-
-                content.add(conferencePanel);
+                content.add(makeConferencePanel(conferences));
             }
         }catch (SQLException e){
             System.err.println("Errer fetching conferences " + e.getMessage());
@@ -67,4 +46,36 @@ public class SchedulePlanningPanel extends SPanel
         setLayout(new BorderLayout());
         add(scrollPane, BorderLayout.CENTER);
     }
+
+    public SPanel makeConferencePanel(ResultSet conferences) throws SQLException
+    {
+        SPanel conferencePanel = new SPanel();
+
+        JLabel horaireText = new JLabel(conferences.getString("Time"));
+        JLabel confText = new JLabel(conferences.getString("title"));
+        JLabel speakerText = new JLabel(conferences.getString("Name"));
+
+        horaireText.setFont(Theme.FONT_DEFAULT_MEDIUM);
+        confText.setFont(Theme.FONT_DEFAULT_MEDIUM);
+        speakerText.setFont(Theme.FONT_DEFAULT_MEDIUM);
+
+        confText.setHorizontalAlignment(JLabel.CENTER);
+
+        horaireText.setForeground(Theme.FONT_DEFAULT_COLOR);
+        confText.setForeground(Theme.FONT_DEFAULT_COLOR);
+        speakerText.setForeground(Theme.FONT_DEFAULT_COLOR);
+
+        conferencePanel.setLayout(new BorderLayout(20, 0));
+        conferencePanel.setBorder(new CompoundBorder(
+                BorderFactory.createLineBorder(Color.WHITE, 2),
+                new EmptyBorder(5, 10, 5, 10)
+        ));
+
+        conferencePanel.add(horaireText, BorderLayout.WEST);
+        conferencePanel.add(confText, BorderLayout.CENTER);
+        conferencePanel.add(speakerText, BorderLayout.EAST);
+
+        return conferencePanel;
+    }
+
 }

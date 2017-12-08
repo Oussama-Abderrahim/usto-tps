@@ -1,18 +1,23 @@
 package congress.organisation;
 
 import congress.DatabaseManager;
+import congress.FileManager;
+import congress.theme.SButton;
 import congress.theme.SPanel;
 import congress.theme.Theme;
+import congress.visitors.SchedulePlanningPanel;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
-public class ChangeSchedulePlanningPanel extends SPanel
+public class ChangeSchedulePlanningPanel extends SchedulePlanningPanel
 {
     public ChangeSchedulePlanningPanel(int jour)
     {
@@ -31,33 +36,65 @@ public class ChangeSchedulePlanningPanel extends SPanel
 
             while (conferences != null && conferences.next())
             {
-                SPanel conferencePanel = new SPanel();
+                SPanel conferencePanel = makeConferencePanel(conferences);
 
-                JLabel horaireText = new JLabel(conferences.getString("Time"));
-                JLabel confText = new JLabel(conferences.getString("title"));
-                JLabel speakerText = new JLabel(conferences.getString("Name"));
 
-                horaireText.setFont(Theme.FONT_DEFAULT_MEDIUM);
-                confText.setFont(Theme.FONT_DEFAULT_MEDIUM);
-                speakerText.setFont(Theme.FONT_DEFAULT_MEDIUM);
+                SPanel editButtonPanel = new SPanel();
+                editButtonPanel.setLayout(new FlowLayout());
+                editButtonPanel.setPreferredSize(new Dimension(50,24));
 
-                confText.setHorizontalAlignment(JLabel.CENTER);
+                SButton editButton = new SButton("");
+                editButton.makeIntoIconButton(FileManager.loadImage("edit-icon", 24, 24));
+                editButton.setVisible(false);
+                editButtonPanel.add(editButton);
 
-                horaireText.setForeground(Theme.FONT_DEFAULT_COLOR);
-                confText.setForeground(Theme.FONT_DEFAULT_COLOR);
-                speakerText.setForeground(Theme.FONT_DEFAULT_COLOR);
+                SPanel editConferencePanel = new SPanel();
+                editConferencePanel.setLayout(new BorderLayout());
+                editConferencePanel.add(conferencePanel, BorderLayout.CENTER);
+                editConferencePanel.add(editButtonPanel, BorderLayout.EAST);
 
-                conferencePanel.setLayout(new BorderLayout(20, 0));
-                conferencePanel.setBorder(new CompoundBorder(
-                        BorderFactory.createLineBorder(Color.WHITE, 2),
-                        new EmptyBorder(5, 10, 5, 10)
-                ));
+                editConferencePanel.addMouseListener(new MouseListener()
+                {
+                    @Override
+                    public void mouseClicked(MouseEvent e)
+                    {
 
-                conferencePanel.add(horaireText, BorderLayout.WEST);
-                conferencePanel.add(confText, BorderLayout.CENTER);
-                conferencePanel.add(speakerText, BorderLayout.EAST);
+                    }
 
-                content.add(conferencePanel);
+                    @Override
+                    public void mousePressed(MouseEvent e)
+                    {
+
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent e)
+                    {
+
+                    }
+
+                    @Override
+                    public void mouseEntered(MouseEvent e)
+                    {
+                        editButton.setVisible(true);
+                        conferencePanel.setBorder(new CompoundBorder(
+                                BorderFactory.createLineBorder(Color.WHITE, 4),
+                                new EmptyBorder(5, 10, 5, 10)
+                        ));
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e)
+                    {
+                        editButton.setVisible(false);
+                        conferencePanel.setBorder(new CompoundBorder(
+                                BorderFactory.createLineBorder(Color.WHITE, 2),
+                                new EmptyBorder(5, 10, 5, 10)
+                        ));
+                    }
+                });
+
+                content.add(editConferencePanel);
             }
         }catch (SQLException e){
             System.err.println("Errer fetching conferences " + e.getMessage());

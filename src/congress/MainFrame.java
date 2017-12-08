@@ -27,6 +27,7 @@ public class MainFrame extends JFrame
     private SPanel topBarPanel;
     private SPanel footerPanel;
     private SPanel welcomePanel;
+    private SLabel panelTitle;
 
     public static MainFrame getInstance()
     {
@@ -76,6 +77,7 @@ public class MainFrame extends JFrame
     }
     public void switchToPanel(SPanel panel, String name)
     {
+        panelTitle.setText(name);
         panelStack.push(name);
         mainWrapper.add(panel, panelStack.peek());
         System.out.println("Added : " + panelStack.peek());
@@ -118,7 +120,7 @@ public class MainFrame extends JFrame
         });
         topBarPanel.add(backButton,BorderLayout.WEST);
 
-        SLabel panelTitle = new SLabel("Menu principal");
+        panelTitle = new SLabel("Menu principal");
         panelTitle.setFont(Theme.FONT_DEFAULT_LARGE);
         topBarPanel.add(panelTitle, BorderLayout.CENTER);
 

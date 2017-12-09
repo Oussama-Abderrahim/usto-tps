@@ -122,7 +122,7 @@ public class DatabaseManager
 
     public void insertSpeakers(String no, String nom, String prenom, String bio)
     {
-        String QUERY = "INSERT INTO Speaker (id, Name, Description) VALUES (" + no + ", " + nom + " " + prenom + ", " + bio + ")";
+        String QUERY = "INSERT INTO Speaker (id, Name, Description) VALUES ('" + no + "', '" + nom + " " + prenom + "', '" + bio + "')";
         executeUpdate(QUERY);
     }
 
@@ -133,8 +133,7 @@ public class DatabaseManager
                 "Date_Debut = '" + jourDu + "/" + moisDu + "/" + anneeDu + "', " +
                 "Date_Fin = '" + jourAu + "/" + moisAu + "/" + anneeAu + "', " +
                 "Date_Fin_Inscription = '" + jourInscription + "/" + moisInscription + "/" + anneeInscription + "', " +
-                "Lieu = '" + adresse + "' " +
-                "Citation = '" + citation + "' " +
-                "WHERE row id = 1";
+                "Lieu = '" + adresse + "', " +
+                "Citation = '" + citation + "'";
     }
 }

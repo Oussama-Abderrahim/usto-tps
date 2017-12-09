@@ -75,7 +75,7 @@ public class PasswordDialog extends JDialog
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                if (usernameField.getText().equals("root") && passwordField.getText().equals("root"))
+                if (usernameField.getText().equals("") && passwordField.getText().equals(""))
                 {
                     passwordValid = true;
                     setVisible(false);

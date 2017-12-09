@@ -1,5 +1,6 @@
 package congress.organisation;
 
+import congress.DatabaseManager;
 import congress.FileManager;
 import congress.theme.*;
 
@@ -11,10 +12,13 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class InfoModifPanel extends SPanel
 {
 	private STextField nomCongres;
+	private STextField citationCongress;
 	private STextField jourDu;
 	private STextField moisDu;
 	private STextField anneeDu;
@@ -54,6 +58,17 @@ public class InfoModifPanel extends SPanel
 		nomCongres.setColumns(20);
 		nomCongres.setFont(Theme.FONT_DEFAULT_LARGE);
 		paneNom.add(nomCongres);
+
+		SPanel paneCitation = new SPanel();
+		paneInfo.add(paneCitation);
+		paneCitation.setBorder(new EmptyBorder(10, 0, 10, 0));
+		paneCitation.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+		citationCongress = new STextField();
+		citationCongress.setHorizontalAlignment(SwingConstants.CENTER);
+		citationCongress.setColumns(20);
+		citationCongress.setFont(Theme.FONT_DEFAULT_LARGE);
+		paneCitation.add(citationCongress);
 		
 		SPanel paneDateDu = new SPanel();
 		paneInfo.add(paneDateDu);
@@ -169,6 +184,13 @@ public class InfoModifPanel extends SPanel
 		add(paneValider, BorderLayout.SOUTH);
 		
 		SButton btnValider = new SButton("Valider");
+		btnValider.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
+				DatabaseManager.getInstance().updateCongressData(nomCongres.getText(), jourDu.getText(), moisDu.getText(), anneeDu.getText(), jourAu.getText(), moisAu.getText(), anneeAu.getText(), jourInscription.getText(), moisInscription.getText(), anneeInscription.getText(), adresse.getText(), citationCongress.getText());
+			}
+		});
 		paneValider.add(btnValider);
 
 	}

@@ -1,5 +1,8 @@
 package congress;
 
+import congress.organisation.SpeakerFormPanel;
+
+import javax.swing.*;
 import java.sql.*;
 
 
@@ -115,5 +118,23 @@ public class DatabaseManager
         String QUERY = "SELECT * FROM Speaker";
 
         return executeQuery(QUERY);
+    }
+
+    public void insertSpeakers(String no, String nom, String prenom, String bio)
+    {
+        String QUERY = "INSERT INTO Speaker (id, Name, Description) VALUES (" + no + ", " + nom + " " + prenom + ", " + bio + ")";
+        executeUpdate(QUERY);
+    }
+
+    public void updateCongressData(String nom, String jourDu, String moisDu, String anneeDu, String jourAu, String moisAu, String anneeAu, String jourInscription, String moisInscription, String anneeInscription, String adresse, String citation)
+    {
+        String QUERY = "UPDATE Congres SET " +
+                "Nom = '" + nom + "', " +
+                "Date_Debut = '" + jourDu + "/" + moisDu + "/" + anneeDu + "', " +
+                "Date_Fin = '" + jourAu + "/" + moisAu + "/" + anneeAu + "', " +
+                "Date_Fin_Inscription = '" + jourInscription + "/" + moisInscription + "/" + anneeInscription + "', " +
+                "Lieu = '" + adresse + "' " +
+                "Citation = '" + citation + "' " +
+                "WHERE row id = 1";
     }
 }

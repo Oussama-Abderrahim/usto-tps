@@ -14,7 +14,7 @@ public class FileManager
         return new File("res/" + fileName);
     }
 
-    private static File loadFile(String desc, String ext)
+    public static File loadFile(String desc, String ext)
     {
         File file = null;
 
@@ -24,7 +24,7 @@ public class FileManager
 
         int returnVal = fileChooser.showOpenDialog(null);
 
-        if(returnVal == JFileChooser.APPROVE_OPTION)
+        if (returnVal == JFileChooser.APPROVE_OPTION)
         {
             file = fileChooser.getSelectedFile();
         }
@@ -45,13 +45,16 @@ public class FileManager
             return new ImageIcon(
                     resizeImage(img, type, iWidth, iHeight)
             );
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             return null;
         }
 
     }
+
     /**
      * Resize image
+     *
      * @param originalImage (BufferedImage) image to resize
      * @param type          type of image, use ARGB for tranparancy
      * @param IMG_WIDTH     (int)
@@ -71,24 +74,42 @@ public class FileManager
         return bimage;
     }
 
-    public static String getLoadedFileText() {
+    public static String getLoadedFileText()
+    {
         File file = loadFile("Compila source files", "Compila");
 
-        if(file == null)
+        if (file == null)
             return "";
 
         String text = "";
 
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(file)))
+        {
             String line;
             while ((line = br.readLine()) != null)
             {
-                text += line+"\n";
+                text += line + "\n";
             }
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
 
         }
 
         return text;
+    }
+
+    public static ImageIcon loadImageFromChooser(int width, int height)
+    {
+        File file = loadFile("Image file", "png");
+        try
+        {
+            BufferedImage img = ImageIO.read(file);
+            return new ImageIcon(
+                    resizeImage(img, img.getType(), width, height)
+            );
+        } catch (Exception e)
+        {
+            return null;
+        }
     }
 }

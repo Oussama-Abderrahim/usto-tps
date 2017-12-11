@@ -6,6 +6,7 @@ import congress.theme.SPanel;
 import congress.theme.Theme;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -69,6 +70,7 @@ public class MainFrame extends JFrame
         {
             panelStack.pop();
             cardLayout.show(mainWrapper, panelStack.peek());
+            panelTitle.setText(panelStack.peek());
         }
         if(panelStack.size() <= 1)
         {
@@ -150,6 +152,21 @@ public class MainFrame extends JFrame
 
         footerPanel.add(copyrightText, BorderLayout.CENTER);
 
+        SPanel socialPanel  = new SPanel();
+        socialPanel.setLayout(new GridLayout(0, 3, 5, 0));
+
+        SButton fbButton = new SButton("");
+        SButton twitterButton = new SButton("");
+        SButton mailButton = new SButton("");
+        fbButton.makeIntoIconButton(FileManager.loadImage("fb", Theme.BTN_ICON_SIZE/3, Theme.BTN_ICON_SIZE/3));
+        twitterButton.makeIntoIconButton(FileManager.loadImage("twitter", Theme.BTN_ICON_SIZE/3, Theme.BTN_ICON_SIZE/3));
+        mailButton.makeIntoIconButton(FileManager.loadImage("mail", Theme.BTN_ICON_SIZE/3, Theme.BTN_ICON_SIZE/3));
+
+        socialPanel.add(fbButton);
+        socialPanel.add(twitterButton);
+        socialPanel.add(mailButton);
+
+        footerPanel.add(socialPanel, BorderLayout.EAST);
         return footerPanel;
     }
 

@@ -25,7 +25,7 @@ public class ChangePlanningPanel extends SPanel
 
         SPanel titlePanel = new SPanel();
         titlePanel.setLayout(new FlowLayout());
-        titlePanel.add(new SLabel("Planning Conferences"));
+        titlePanel.add(new SLabel(""));
 
         add(titlePanel, BorderLayout.NORTH);
 

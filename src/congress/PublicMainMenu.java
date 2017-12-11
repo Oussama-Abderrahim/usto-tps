@@ -48,7 +48,6 @@ public class PublicMainMenu extends SPanel
         organisationButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                /// TODO: Add passwords
                 PasswordDialog passwordDialog = new PasswordDialog(MainFrame.getInstance(), "Authentication", true);
                 passwordDialog.showDialog();
 

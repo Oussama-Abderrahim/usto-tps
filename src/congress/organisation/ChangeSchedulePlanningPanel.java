@@ -27,8 +27,6 @@ public class ChangeSchedulePlanningPanel extends SchedulePlanningPanel
         content.setLayout(new GridLayout(0, 1, 0, 20));
         content.setBorder(new EmptyBorder(20, 50, 20, 50));
 
-        /// TODO : Add from database
-
         try
         {
             ResultSet conferences = null;

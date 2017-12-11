@@ -136,7 +136,6 @@ public class InscriptionPanel extends SPanel
         mailTxt.setForeground(Theme.FONT_INPUT_COLOR);
         occupationTxt.setForeground(Theme.FONT_INPUT_COLOR);
 
-        /// TODO : Prevent them from getting too big
         SPanel nomPanel = new SPanel();
         SPanel mailPanel = new SPanel();
         SPanel prenomPanel = new SPanel();

@@ -14,6 +14,8 @@ import javax.swing.SwingConstants;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class InfoModifPanel extends SPanel
 {
@@ -40,7 +42,7 @@ public class InfoModifPanel extends SPanel
 		SPanel paneTitre = new SPanel();
 		add(paneTitre, BorderLayout.NORTH);
 		
-		SLabel lblTitre = new SLabel("Modifier informations du congr\u00E8s", Theme.FONT_DEFAULT_LARGE);
+		SLabel lblTitre = new SLabel("", Theme.FONT_DEFAULT_LARGE);
 		paneTitre.add(lblTitre);
 		lblTitre.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -193,6 +195,40 @@ public class InfoModifPanel extends SPanel
 		});
 		paneValider.add(btnValider);
 
+		showData();
+	}
+
+	private void showData()
+	{
+		try
+		{
+			ResultSet result = DatabaseManager.getInstance().fetchCongressData();
+			if(result.next())
+            {
+                nomCongres.setText(result.getString("nom"));
+				citationCongress.setText(result.getString("citation"));
+
+				String[] date_debut = result.getString("Date_Debut").split("/");
+				jourDu.setText(date_debut[0]);
+				moisDu.setText(date_debut[1]);
+				anneeDu.setText(date_debut[2]);
+
+				String[] date_fin = result.getString("Date_Fin").split("/");
+				jourAu.setText(date_fin[0]);
+				moisAu.setText(date_fin[1]);
+				anneeAu.setText(date_fin[2]);
+
+				String[] date_Inscr = result.getString("Date_Fin_Inscription").split("/");
+				jourInscription.setText(date_Inscr[0]);
+				moisInscription.setText(date_Inscr[1]);
+				anneeInscription.setText(date_Inscr[2]);
+
+				adresse.setText(result.getString("lieu"));
+			}
+		} catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -120,9 +120,16 @@ public class DatabaseManager
         return executeQuery(QUERY);
     }
 
-    public void insertSpeakers(String no, String nom, String prenom, String bio)
+    public void insertSpeakers(String nom, String prenom, String bio)
     {
-        String QUERY = "INSERT INTO Speaker (id, Name, Description) VALUES ('" + no + "', '" + nom + " " + prenom + "', '" + bio + "')";
+        String QUERY = "INSERT INTO Speaker (Name, Description) VALUES ('" + nom + " " + prenom + "', '" + bio + "')";
+        executeUpdate(QUERY);
+    }
+
+    public void insertConference(String title, String day, String time)
+    {
+        String QUERY = "INSERT INTO Conference (title, day, time, speaker) VALUES ('"+title+"', "+day+" , '"+time+"', 1)";
+
         executeUpdate(QUERY);
     }
 
@@ -135,5 +142,7 @@ public class DatabaseManager
                 "Date_Fin_Inscription = '" + jourInscription + "/" + moisInscription + "/" + anneeInscription + "', " +
                 "Lieu = '" + adresse + "', " +
                 "Citation = '" + citation + "'";
+
+        executeUpdate(QUERY);
     }
 }

@@ -84,6 +84,7 @@ public class SpeakerFormPanel extends SPanel
         textFieldNo.setPreferredSize(new Dimension(400, 20));
         textFieldNo.setHorizontalAlignment(SwingConstants.CENTER);
         textFieldNo.setEnabled(false);
+        textFieldNo.setOpaque(false);
         paneNo.add(textFieldNo, BorderLayout.CENTER);
         textFieldNo.setColumns(4);
 
@@ -143,7 +144,7 @@ public class SpeakerFormPanel extends SPanel
         {
             public void actionPerformed(ActionEvent arg0)
             {
-                DatabaseManager.getInstance().insertSpeakers(textFieldNo.getText(), textFieldNom.getText(), textFieldPrenom.getText(), textFieldBio.getText());
+                DatabaseManager.getInstance().insertSpeakers(textFieldNom.getText(), textFieldPrenom.getText(), textFieldBio.getText());
             }
         });
         paneValider.add(btnValider);

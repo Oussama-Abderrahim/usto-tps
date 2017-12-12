@@ -1,13 +1,11 @@
 package congress.organisation;
 
 import congress.DatabaseManager;
-import congress.theme.SButton;
-import congress.theme.SLabel;
-import congress.theme.SPanel;
-import congress.theme.Theme;
+import congress.theme.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,9 +32,9 @@ public class ChangePlanningPanel extends SPanel
         tabPane.setBorder(new EmptyBorder(20, 50, 20, 50));
         tabPane.setFont(Theme.FONT_DEFAULT);
 
-        for(int i = 1; i <= NBR_JOURS; i++)
+        for (int i = 1; i <= NBR_JOURS; i++)
         {
-            tabPane.add("Jour "+i, new ChangeSchedulePlanningPanel(i));
+            tabPane.add("Jour " + i, new ChangeSchedulePlanningPanel(i));
         }
 
         add(tabPane, BorderLayout.CENTER);
@@ -46,8 +44,16 @@ public class ChangePlanningPanel extends SPanel
         formPanel.setLayout(new FlowLayout());
 
         SLabel addConfLabel = new SLabel("Ajouter conf : ", Theme.FONT_DEFAULT);
-        JTextField timeField = new JTextField();
-        JTextField titleField = new JTextField();
+        STextField timeField = new STextField();
+        timeField.setOpaque(true);
+        timeField.setFont(Theme.FONT_DEFAULT);
+        timeField.setForeground(Theme.FONT_INPUT_COLOR);
+        timeField.setPlaceHolder("Heure");
+        STextField titleField = new STextField();
+        titleField.setOpaque(true);
+        titleField.setFont(Theme.FONT_DEFAULT);
+        titleField.setForeground(Theme.FONT_INPUT_COLOR);
+        titleField.setPlaceHolder("Intitulé");
         JComboBox<String> speakerField = new JComboBox<String>();
 
         timeField.setColumns(10);
@@ -63,12 +69,15 @@ public class ChangePlanningPanel extends SPanel
 
         ResultSet speakers = DatabaseManager.getInstance().fetchSpeakers();
 
-        try {
+        try
+        {
             while (speakers != null && speakers.next())
             {
                 speakerField.addItem(speakers.getString("Name"));
             }
-        }catch (SQLException ignored){}
+        } catch (SQLException ignored)
+        {
+        }
 
         SButton addButton = new SButton("+");
         addButton.addActionListener(new ActionListener()
@@ -76,7 +85,11 @@ public class ChangePlanningPanel extends SPanel
             @Override
             public void actionPerformed(ActionEvent e)
             {
-
+                DatabaseManager.getInstance().insertConference(
+                        titleField.getText(),
+                        "" + tabPane.getSelectedIndex() + 1,
+                        timeField.getText()
+                );
             }
         });
         formPanel.add(addButton);

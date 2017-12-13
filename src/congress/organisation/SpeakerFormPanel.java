@@ -5,18 +5,15 @@ import congress.FileManager;
 import congress.theme.*;
 
 import java.awt.*;
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.io.IOException;
 
 
 public class SpeakerFormPanel extends SPanel
 {
-    private JTextField textFieldBio;
+    private JTextArea textBio;
     private JTextField textFieldNo;
     private JTextField textFieldNom;
     private JTextField textFieldPrenom;
@@ -92,14 +89,15 @@ public class SpeakerFormPanel extends SPanel
         paneNNP.add(paneNom);
         paneNom.setLayout(new BorderLayout());
 
-        SLabel lblNom = new SLabel("Nom", Theme.FONT_DEFAULT);
+        SLabel lblNom = new SLabel("Nom", Theme.FONT_DEFAULT_MEDIUM);
         lblNom.setHorizontalAlignment(SwingConstants.LEADING);
         lblNom.setPreferredSize(new Dimension(150, 20));
         paneNom.add(lblNom, BorderLayout.WEST);
 
         textFieldNom = new JTextField();
+        textFieldNom.setFont(Theme.FONT_DEFAULT_MEDIUM);
         textFieldNom.setPreferredSize(new Dimension(400, 20));
-        textFieldNom.setHorizontalAlignment(SwingConstants.CENTER);
+        //textFieldNom.setHorizontalAlignment(SwingConstants.CENTER);
         paneNom.add(textFieldNom, BorderLayout.CENTER);
         textFieldNom.setColumns(10);
 
@@ -107,14 +105,15 @@ public class SpeakerFormPanel extends SPanel
         paneNNP.add(panePrenom);
         panePrenom.setLayout(new BorderLayout());
 
-        SLabel lblPrenom = new SLabel("Pr\u00E9nom", Theme.FONT_DEFAULT);
+        SLabel lblPrenom = new SLabel("Pr\u00E9nom", Theme.FONT_DEFAULT_MEDIUM);
         lblPrenom.setHorizontalAlignment(SwingConstants.LEADING);
         lblPrenom.setPreferredSize(new Dimension(150, 20));
         panePrenom.add(lblPrenom, BorderLayout.WEST);
 
         textFieldPrenom = new JTextField();
+        textFieldPrenom.setFont(Theme.FONT_DEFAULT_MEDIUM);
         textFieldPrenom.setPreferredSize(new Dimension(400, 20));
-        textFieldPrenom.setHorizontalAlignment(SwingConstants.CENTER);
+        //textFieldPrenom.setHorizontalAlignment(SwingConstants.CENTER);
         panePrenom.add(textFieldPrenom, BorderLayout.CENTER);
         textFieldPrenom.setColumns(10);
 
@@ -123,16 +122,22 @@ public class SpeakerFormPanel extends SPanel
         paneTxt.add(paneBio);
         paneBio.setLayout(new BorderLayout());
 
-        SLabel lblBio = new SLabel("Bio:", Theme.FONT_DEFAULT);
+        SLabel lblBio = new SLabel("Bio:", Theme.FONT_DEFAULT_MEDIUM);
         lblBio.setHorizontalAlignment(SwingConstants.LEADING);
         lblBio.setPreferredSize(new Dimension(150, 20));
         paneBio.add(lblBio, BorderLayout.WEST);
 
-        textFieldBio = new JTextField();
-        textFieldBio.setPreferredSize(new Dimension(400, 100));
-        textFieldBio.setHorizontalAlignment(SwingConstants.CENTER);
-        paneBio.add(textFieldBio, BorderLayout.CENTER);
-        textFieldBio.setColumns(10);
+
+        textBio = new JTextArea();
+        textBio.setLineWrap(true);
+        textBio.setWrapStyleWord(true);
+        textBio.setFont(Theme.FONT_DEFAULT_MEDIUM);
+//        textBio.setPreferredSize(new Dimension(400, 100));
+        //textBio.setHorizontalAlignment(SwingConstants.CENTER);
+        JScrollPane scrollBio = new JScrollPane(textBio);
+        scrollBio.setBorder(null);
+        paneBio.add(scrollBio, BorderLayout.CENTER);
+        textBio.setColumns(10);
 
         SPanel paneValider = new SPanel();
         add(paneValider, BorderLayout.SOUTH);
@@ -144,7 +149,16 @@ public class SpeakerFormPanel extends SPanel
         {
             public void actionPerformed(ActionEvent arg0)
             {
-                DatabaseManager.getInstance().insertSpeakers(textFieldNom.getText(), textFieldPrenom.getText(), textFieldBio.getText());
+                if(textFieldNom.getText().isEmpty() || textFieldPrenom.getText().isEmpty())
+                {
+                    JOptionPane jop3 = new JOptionPane();
+                    jop3.showMessageDialog(null, "Veuillez remplir le nom et prenom du speaker", "Champ vide",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+                else
+                {
+                    DatabaseManager.getInstance().insertSpeakers(textFieldNom.getText(), textFieldPrenom.getText(), textBio.getText());
+                }
             }
         });
         paneValider.add(btnValider);

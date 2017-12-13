@@ -97,7 +97,7 @@ public class PublicMainMenu extends SPanel
         planningButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MainFrame.getInstance().switchToPanel(new PlanningPanel(), "Planning Conferences");
+                MainFrame.getInstance().switchToPanel(new PlanningPanel(), "Planning Conference");
             }
         });
         guideButton.addActionListener(new ActionListener() {

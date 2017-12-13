@@ -29,7 +29,7 @@ public class GuidePanel extends SPanel
 
         tabPane.add("A propos", new AboutPanel());
         tabPane.add("Conférenciers", new ConferenciersPanel());
-        tabPane.add("Hebergement et voyage", new AboutPanel());
+        tabPane.add("Hebergement et voyage", new TravelPanel());
 
         add(tabPane, BorderLayout.CENTER);
     }

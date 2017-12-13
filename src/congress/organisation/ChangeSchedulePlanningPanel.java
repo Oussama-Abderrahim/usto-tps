@@ -11,6 +11,8 @@ import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.ResultSet;
@@ -44,6 +46,14 @@ public class ChangeSchedulePlanningPanel extends SchedulePlanningPanel
                 SButton editButton = new SButton("");
                 editButton.makeIntoIconButton(FileManager.loadImage("edit-icon", 24, 24));
                 editButton.setVisible(false);
+                editButton.addActionListener(new ActionListener()
+                {
+                    @Override
+                    public void actionPerformed(ActionEvent e)
+                    {
+
+                    }
+                });
                 editButtonPanel.add(editButton);
 
                 SPanel editConferencePanel = new SPanel();
@@ -56,7 +66,9 @@ public class ChangeSchedulePlanningPanel extends SchedulePlanningPanel
                     @Override
                     public void mouseClicked(MouseEvent e)
                     {
-
+                        JOptionPane jop3 = new JOptionPane();
+                        jop3.showMessageDialog(null, "Champ modifier talk ( TBA )", "Modifier talk",
+                                JOptionPane.QUESTION_MESSAGE);
                     }
 
                     @Override
@@ -87,7 +99,7 @@ public class ChangeSchedulePlanningPanel extends SchedulePlanningPanel
                         editButton.setVisible(false);
                         conferencePanel.setBorder(new CompoundBorder(
                                 BorderFactory.createLineBorder(Color.WHITE, 2),
-                                new EmptyBorder(5, 10, 5, 10)
+                                new EmptyBorder(7, 12, 7, 12)
                         ));
                     }
                 });

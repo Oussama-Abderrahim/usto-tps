@@ -5,6 +5,7 @@ import congress.theme.SLabel;
 import congress.theme.SPanel;
 import congress.theme.Theme;
 
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -29,6 +30,7 @@ public class WelcomePanel extends SPanel
         try
         {
             WELCOME_TEXT = "<html><center>" +
+                    "<img width='"+Theme.BTN_ICON_SIZE+"' height='"+Theme.BTN_ICON_SIZE+"' src=\""+getClass().getResource("/logo.png")+"\">" +
                     congres.getString("Nom") + "\n" +
                     "<h1>"+congres.getString("citation")+"</h1>\n" +
                     "</center></html>";
@@ -36,8 +38,7 @@ public class WelcomePanel extends SPanel
 
         SPanel textPanel = new SPanel();
         textPanel.setLayout(new FlowLayout());
-        SLabel welcomeText = new SLabel(WELCOME_TEXT);
-        welcomeText.setFont(Theme.FONT_DEFAULT_BIG);
+        SLabel welcomeText = new SLabel(WELCOME_TEXT, Theme.FONT_DEFAULT_BIG);
 
         textPanel.add(welcomeText);
         add(textPanel);

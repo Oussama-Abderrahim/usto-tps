@@ -16,7 +16,7 @@ public class InscriptionPanel extends SPanel
     private JTextField nomTxt;
     private JTextField prenomTxt;
     private JTextField mailTxt;
-    private JComboBox occupationTxt;
+    private JComboBox<String> occupationTxt;
 
     public InscriptionPanel()
     {
@@ -38,9 +38,9 @@ public class InscriptionPanel extends SPanel
         panel.setLayout(new BorderLayout());
 
         JLabel tarifLabel = new JLabel("<html>" +
-                "Tarif ( Avant 01 Octobre ) :\t0.00Eu\n<br>" +
-                "Tarif ( Entre 01 Octobre et 30 Novembre) :\t0.00Eu\n<br>" +
-                "Tarif derniere minute :\t0.00Eu" +
+                "Tarif Etudiant :\t0.00Eu\n<br>" +
+                "Tarif Etudiant avec Hebergement :\t0.00Eu\n<br>" +
+                "Tarif Enseignant :\t0.00Eu\n<br>" +
                 "</html>");
         tarifLabel.setFont(Theme.FONT_DEFAULT_MEDIUM);
         tarifLabel.setForeground(Theme.FONT_DEFAULT_COLOR);
@@ -95,7 +95,7 @@ public class InscriptionPanel extends SPanel
     private SPanel initFieldsPanel()
     {
         SPanel fieldsPanel = new SPanel();
-        fieldsPanel.setLayout(new GridLayout(4, 2, -10, 30));
+        fieldsPanel.setLayout(new GridLayout(5, 1, -10, 30));
 
         fieldsPanel.setBorder(new CompoundBorder(
                 new EmptyBorder(20, 50, 20, 50),
@@ -124,7 +124,7 @@ public class InscriptionPanel extends SPanel
         nomTxt = new JTextField();
         prenomTxt = new JTextField();
         mailTxt = new JTextField();
-        occupationTxt = new JComboBox();
+        occupationTxt = new JComboBox<>();
 
         nomTxt.setFont(Theme.FONT_DEFAULT);
         prenomTxt.setFont(Theme.FONT_DEFAULT);
@@ -135,6 +135,10 @@ public class InscriptionPanel extends SPanel
         prenomTxt.setForeground(Theme.FONT_INPUT_COLOR);
         mailTxt.setForeground(Theme.FONT_INPUT_COLOR);
         occupationTxt.setForeground(Theme.FONT_INPUT_COLOR);
+
+        occupationTxt.addItem("Etudiant");
+        occupationTxt.addItem("Enseignant");
+        occupationTxt.addItem("Autre");
 
         SPanel nomPanel = new SPanel();
         SPanel mailPanel = new SPanel();
@@ -157,11 +161,17 @@ public class InscriptionPanel extends SPanel
         prenomPanel.add(prenomTxt, BorderLayout.CENTER);
         occupationPanel.add(occupationTxt, BorderLayout.CENTER);
 
+        JCheckBox checkBox = new JCheckBox("Hebergement");
+        checkBox.setHorizontalAlignment(JCheckBox.CENTER);
+        checkBox.setOpaque(false);
+        checkBox.setFont(Theme.FONT_DEFAULT);
+        checkBox.setForeground(Theme.FONT_DEFAULT_COLOR);
 
         fieldsPanel.add(nomPanel);
         fieldsPanel.add(prenomPanel);
         fieldsPanel.add(mailPanel);
         fieldsPanel.add(occupationPanel);
+        fieldsPanel.add(checkBox);
 
         return fieldsPanel;
     }

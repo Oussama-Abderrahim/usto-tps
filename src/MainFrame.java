@@ -1,4 +1,5 @@
 import com.sun.deploy.panel.ControlPanel;
+import instruction.Instruction;
 import javafx.scene.layout.Border;
 import theme.SButton;
 import theme.SPanel;
@@ -116,6 +117,7 @@ public class MainFrame extends JFrame
         syntaxButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                lexicalEngine.setSourceCode(sourceCode);
                 syntaxEngine.setTokenSource(lexicalEngine.getTokenSource());
                 showSyntaxResult(syntaxEngine.getResult());
             }
@@ -123,7 +125,6 @@ public class MainFrame extends JFrame
         SymanticButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
             }
         });
 
@@ -139,13 +140,67 @@ public class MainFrame extends JFrame
         return controlPanel;
     }
 
-    private void showSyntaxResult(ArrayList<String> result)
+    private void showSyntaxResult(ArrayList<Instruction> result)
     {
         outputTextArea.setText("");
-        outputTextArea.appendText("Syntax Analysis result : ", Color.RED);
-        for(String s : result)
+        outputTextArea.appendText("Syntax Analysis result : \n", Color.RED, false);
+
+        // print instr :
+        //outputTextArea.appendText(s, Color.BLACK, false);
+
+
+        for(Instruction s : result)
         {
-            outputTextArea.appendText(s);
+            /*Print instr */
+            String instr = "";
+            for(Token t : s.getTokenList())
+            {
+                instr = instr + t.getText() + " ";
+            }
+            outputTextArea.appendText(instr, Color.BLACK, true);
+
+            /*Print type */
+            outputTextArea.appendText(" -> ", Color.BLACK, false);
+            switch (s.getType())
+            {
+                case START_PROGRAM:
+                    outputTextArea.appendText("Debut Programme");
+                    break;
+                case END_PROGRAM:
+                    outputTextArea.appendText("Fin Programme");
+                    break;
+                case AFFECT_VALUE:
+                    outputTextArea.appendText("Affecation valeur à variable");
+                    break;
+                case AFFECT_VAR:
+                    outputTextArea.appendText("Affectation Variable à variable");
+                    break;
+                case SHOW_MSG:
+                    outputTextArea.appendText("Affichage message");
+                    break;
+                case IF_STATEMENT:
+                    outputTextArea.appendText("Condition");
+                    break;
+                case VAR_DECL:
+                    outputTextArea.appendText("Declaration variables");
+                    break;
+                case BEGIN:
+                    outputTextArea.appendText("Debut bloc instructions");
+                    break;
+                case FINISH:
+                    outputTextArea.appendText("Fin block instructions");
+                    break;
+                case ELSE_STATEMENT:
+                    outputTextArea.appendText("Else");
+                    break;
+                case SHOW_VAR:
+                    outputTextArea.appendText("Affichage Variable");
+                    break;
+                    default:
+                        outputTextArea.appendText("???");
+            }
+
+            outputTextArea.appendText("\n");
         }
     }
 
@@ -154,33 +209,34 @@ public class MainFrame extends JFrame
         outputTextArea.setText("");
         for(Token t : tokenSource)
         {
+            outputTextArea.appendText(t.getText() + " -> ", Theme.FONT_INPUT_COLOR, true);
             switch (t.getType())
             {
                 case DATA:
-                    outputTextArea.appendText(t.getText() + " : Donnée\n");
+                    outputTextArea.appendText("Donnée\n");
                     break;
                 case ID:
-                    outputTextArea.appendText(t.getText() + " : Identificateur\n");
+                    outputTextArea.appendText("Identificateur\n");
                     break;
                 case TYPE:
-                    outputTextArea.appendText(t.getText() + " : Type variable\n");
+                    outputTextArea.appendText("Type variable\n");
                     break;
                 case SYMBOL:
-                    outputTextArea.appendText(t.getText() + " : Symbol clé\n");
+                    outputTextArea.appendText("Symbol clé\n");
                     break;
                 case KEYWORD:
-                    outputTextArea.appendText(t.getText() + " : Mot clé\n");
+                    outputTextArea.appendText("Mot clé\n");
                     break;
                 case ARITHMETIC:
-                    outputTextArea.appendText(t.getText() + " : Operateur arithmetic\n");
+                    outputTextArea.appendText("Operateur arithmetic\n");
                     break;
                 case LOGICAL:
-                    outputTextArea.appendText(t.getText() + " : Operateur logique\n");
+                    outputTextArea.appendText("Operateur logique\n");
                     break;
                 case EOF:
                     break;
                 default:
-                    outputTextArea.appendText(t.getText() + " : ???\n");
+                    outputTextArea.appendText("???\n");
             }
         }
     }
@@ -191,6 +247,7 @@ public class MainFrame extends JFrame
         String sourceCode = FileManager.getLoadedFileText();
 
         outputTextArea.setText(sourceCode);
+        outputTextArea.highlight();
         this.sourceCode = sourceCode;
     }
 

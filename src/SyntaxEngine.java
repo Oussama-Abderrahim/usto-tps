@@ -1,3 +1,5 @@
+import instruction.Instruction;
+import instruction.InstructionType;
 import token.*;
 
 import java.util.ArrayList;
@@ -7,7 +9,7 @@ import java.util.ArrayList;
 public class SyntaxEngine
 {
     private ArrayList<Token> tokenSource;
-    private ArrayList<String> result = new ArrayList<>();
+    private ArrayList<Instruction> result = new ArrayList<>();
     private ArrayList<Token> buffer = new ArrayList<>();
 
     private int positionTeteLecture = 0;
@@ -37,7 +39,7 @@ public class SyntaxEngine
         this.tokenSource = tokenSource;
     }
 
-    public ArrayList<String> getResult()
+    public ArrayList<Instruction> getResult()
     {
         performAnalysis();
         return result;
@@ -68,18 +70,19 @@ public class SyntaxEngine
         if(currentToken().equals(KeywordToken.START_PROGRAM))
         {
             nextToken();
-            validSyntax("Debut programme");
+            validSyntax(InstructionType.START_PROGRAM);
             followedByBlockInstruction();
             if(currentToken().equals(KeywordToken.END_PROGRAM))
             {
                 nextToken();
-                validSyntax("Fin programme correctement");
+                validSyntax(InstructionType.END_PROGRAM);
                 return true;
             }
         }
         return false;
     }
 
+    /// TODO : Add S' for repeating instructions
     private boolean followedByBlockInstruction()
     {
         Token c = currentToken();
@@ -99,7 +102,7 @@ public class SyntaxEngine
                         if(c.equals(KeywordToken.SEMI_COLON))
                         {
                             c = nextToken();
-                            validSyntax("Donner valeur à variable");
+                            validSyntax(InstructionType.AFFECT_VALUE);
                             return followedByBlockInstruction();// next instruction
                         }
                     }
@@ -122,7 +125,7 @@ public class SyntaxEngine
                         if(c.equals(KeywordToken.SEMI_COLON))
                         {
                             c = nextToken();
-                            validSyntax("Affect variable a variable");
+                            validSyntax(InstructionType.AFFECT_VAR);
                             return followedByBlockInstruction();// next instruction
                         }
                     }
@@ -145,7 +148,7 @@ public class SyntaxEngine
                     if(c.equals(KeywordToken.SEMI_COLON))
                     {
                         c = nextToken();
-                        validSyntax("Affichage message");
+                        validSyntax(InstructionType.SHOW_MSG);
                         return followedByBlockInstruction();  // next instruction
                     }
                 }
@@ -164,7 +167,7 @@ public class SyntaxEngine
                     if(c.equals(KeywordToken.SEMI_COLON))
                     {
                         c = nextToken();
-                        validSyntax("Affichage Valeur");
+                        validSyntax(InstructionType.SHOW_VAR);
                         return followedByBlockInstruction();  // next instruction
                     }
                 }
@@ -183,7 +186,7 @@ public class SyntaxEngine
                     if( c.equals(SymbolToken.DOUBLE_DASH))
                     {
                         c = nextToken();
-                        validSyntax("If statement");
+                        validSyntax(InstructionType.IF_STATEMENT);
                         if(followedByStartFinishBlock())
                         {
                             return followedByBlockInstruction();
@@ -205,7 +208,7 @@ public class SyntaxEngine
                     if(c.equals(KeywordToken.SEMI_COLON))
                     {
                         c = nextToken();
-                        validSyntax("Declaration variable");
+                        validSyntax(InstructionType.VAR_DECL);
                         return followedByBlockInstruction();  // next instruction
                     }
                 }
@@ -290,14 +293,14 @@ public class SyntaxEngine
         if(c.equals(KeywordToken.START))
         {
             c = nextToken();
-            validSyntax("Debut block instr");
+            validSyntax(InstructionType.BEGIN);
             if(followedByBlockInstruction())
             {
                 c = currentToken();
                 if (c.equals(KeywordToken.FINISH))
                 {
                     c = nextToken();
-                    validSyntax("Fin block instr");
+                    validSyntax(InstructionType.FINISH);
                     return followedByElseStatement();
                 }
             }
@@ -312,7 +315,7 @@ public class SyntaxEngine
         if(c.equals(KeywordToken.ELSE))
         {
             c = nextToken();
-            validSyntax("Else");
+            validSyntax(InstructionType.ELSE_STATEMENT);
             if(followedByStartFinishBlock())
             {
                 return true;
@@ -323,15 +326,9 @@ public class SyntaxEngine
     }
 
 
-    private void validSyntax(String s)
+    private void validSyntax(InstructionType type)
     {
-        String instr = "";
-        for(Token t : buffer)
-        {
-            instr = instr + t.getText() + " ";
-        }
-
-        result.add(instr + "\t-->  " + s+"\n");
+        result.add(new Instruction((ArrayList<Token>) buffer.clone(), type));
         buffer.clear();
     }
 
@@ -416,10 +413,5 @@ public class SyntaxEngine
         syntaxEngine.setTokenSource(tokenSource);
 
         syntaxEngine.performAnalysis();
-
-        for (String s : syntaxEngine.result)
-        {
-            System.out.println(s);
-        }
     }
 }

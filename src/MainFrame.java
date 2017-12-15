@@ -1,6 +1,4 @@
-import com.sun.deploy.panel.ControlPanel;
 import instruction.Instruction;
-import javafx.scene.layout.Border;
 import theme.SButton;
 import theme.SPanel;
 import theme.Theme;
@@ -10,22 +8,24 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.ArrayList;
 
 public class MainFrame extends JFrame
 {
     public static MainFrame instance = null;
     private SPanel contentPane;
-
     private SPanel controlPanel;
+
     private SPanel outputPanel;
 
-    private OutputTextArea outputTextArea;
+    private OutputTextArea EditorTextArea;
+    private final OutputTextArea logTextArea;
+
     private String sourceCode = "";
 
     private LexicalEngine lexicalEngine;
     private SyntaxEngine syntaxEngine;
+    private SemanticEngine semanticEngine;
 
     public MainFrame getInstance()
     {
@@ -38,12 +38,14 @@ public class MainFrame extends JFrame
     {
         lexicalEngine = new LexicalEngine();
         syntaxEngine = new SyntaxEngine();
+        semanticEngine = new SemanticEngine();
 
         initWindow();
 
         controlPanel = initControlPanel();
-        outputTextArea = new OutputTextArea();
-        outputPanel = initOutputPanel(outputTextArea);
+        EditorTextArea = new OutputTextArea(true);
+        logTextArea = new OutputTextArea(false);
+        outputPanel = initOutputPanel(EditorTextArea, logTextArea);
 
         contentPane.setLayout(new BorderLayout(5,5));
         contentPane.add(controlPanel, BorderLayout.WEST);
@@ -61,7 +63,7 @@ public class MainFrame extends JFrame
         setContentPane(contentPane);
     }
 
-    private SPanel initOutputPanel(OutputTextArea outputTextArea)
+    private SPanel initOutputPanel(OutputTextArea outputTextArea, OutputTextArea logTextArea)
     {
         SPanel outputPanel = new SPanel();
         outputPanel.setLayout(new BorderLayout(5,5));
@@ -71,8 +73,13 @@ public class MainFrame extends JFrame
         outLabel.setForeground(Theme.FONT_DEFAULT_COLOR);
         outputPanel.add(outLabel, BorderLayout.NORTH);
 
-        JScrollPane scrollPane = new JScrollPane(outputTextArea);
-        outputPanel.add(scrollPane, BorderLayout.CENTER);
+        JScrollPane scrollOutput = new JScrollPane(outputTextArea);
+        JScrollPane scrollLog = new JScrollPane(logTextArea);
+
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollOutput, scrollLog);
+        splitPane.setDividerLocation(50);
+        splitPane.setOneTouchExpandable(true);
+        outputPanel.add(splitPane, BorderLayout.CENTER);
         return outputPanel;
     }
 
@@ -110,6 +117,7 @@ public class MainFrame extends JFrame
         lexicalButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                sourceCode = EditorTextArea.getText();
                 lexicalEngine.setSourceCode(sourceCode);
                 showLexicalResult(lexicalEngine.getTokenSource());
             }
@@ -117,6 +125,7 @@ public class MainFrame extends JFrame
         syntaxButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                sourceCode = EditorTextArea.getText();
                 lexicalEngine.setSourceCode(sourceCode);
                 syntaxEngine.setTokenSource(lexicalEngine.getTokenSource());
                 showSyntaxResult(syntaxEngine.getResult());
@@ -124,7 +133,10 @@ public class MainFrame extends JFrame
         });
         SymanticButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e)
+            {
+                semanticEngine.setInstructionSource(syntaxEngine.getResult());
+                logTextArea.setText("Semantic Result : \n" + semanticEngine.getResult());
             }
         });
 
@@ -142,11 +154,12 @@ public class MainFrame extends JFrame
 
     private void showSyntaxResult(ArrayList<Instruction> result)
     {
-        outputTextArea.setText("");
-        outputTextArea.appendText("Syntax Analysis result : \n", Color.RED, false);
+        logTextArea.setVisible(true);
+        logTextArea.setText("");
+        logTextArea.appendText("Syntax Analysis result : \n", Color.RED, false);
 
         // print instr :
-        //outputTextArea.appendText(s, Color.BLACK, false);
+        //logTextArea.appendText(s, Color.BLACK, false);
 
 
         for(Instruction s : result)
@@ -157,86 +170,87 @@ public class MainFrame extends JFrame
             {
                 instr = instr + t.getText() + " ";
             }
-            outputTextArea.appendText(instr, Color.BLACK, true);
+            logTextArea.appendText(instr, Color.BLACK, true);
 
             /*Print type */
-            outputTextArea.appendText(" -> ", Color.BLACK, false);
+            logTextArea.appendText(" -> ", Color.BLACK, false);
             switch (s.getType())
             {
                 case START_PROGRAM:
-                    outputTextArea.appendText("Debut Programme");
+                    logTextArea.appendText("Debut Programme");
                     break;
                 case END_PROGRAM:
-                    outputTextArea.appendText("Fin Programme");
+                    logTextArea.appendText("Fin Programme");
                     break;
                 case AFFECT_VALUE:
-                    outputTextArea.appendText("Affecation valeur à variable");
+                    logTextArea.appendText("Affecation valeur à variable");
                     break;
                 case AFFECT_VAR:
-                    outputTextArea.appendText("Affectation Variable à variable");
+                    logTextArea.appendText("Affectation Variable à variable");
                     break;
                 case SHOW_MSG:
-                    outputTextArea.appendText("Affichage message");
+                    logTextArea.appendText("Affichage message");
                     break;
                 case IF_STATEMENT:
-                    outputTextArea.appendText("Condition");
+                    logTextArea.appendText("Condition");
                     break;
                 case VAR_DECL:
-                    outputTextArea.appendText("Declaration variables");
+                    logTextArea.appendText("Declaration variables");
                     break;
                 case BEGIN:
-                    outputTextArea.appendText("Debut bloc instructions");
+                    logTextArea.appendText("Debut bloc instructions");
                     break;
                 case FINISH:
-                    outputTextArea.appendText("Fin block instructions");
+                    logTextArea.appendText("Fin block instructions");
                     break;
                 case ELSE_STATEMENT:
-                    outputTextArea.appendText("Else");
+                    logTextArea.appendText("Else");
                     break;
                 case SHOW_VAR:
-                    outputTextArea.appendText("Affichage Variable");
+                    logTextArea.appendText("Affichage Variable");
                     break;
                     default:
-                        outputTextArea.appendText("???");
+                        logTextArea.appendText("???");
             }
 
-            outputTextArea.appendText("\n");
+            logTextArea.appendText("\n");
         }
     }
 
     private void showLexicalResult(ArrayList<Token> tokenSource)
     {
-        outputTextArea.setText("");
+        logTextArea.setVisible(true);
+        logTextArea.setText("");
         for(Token t : tokenSource)
         {
-            outputTextArea.appendText(t.getText() + " -> ", Theme.FONT_INPUT_COLOR, true);
+            logTextArea.appendText(t.getText() + " -> ", Theme.FONT_INPUT_COLOR, true);
             switch (t.getType())
             {
                 case DATA:
-                    outputTextArea.appendText("Donnée\n");
+                    logTextArea.appendText("Donnée\n");
                     break;
                 case ID:
-                    outputTextArea.appendText("Identificateur\n");
+                    logTextArea.appendText("Identificateur\n");
                     break;
                 case TYPE:
-                    outputTextArea.appendText("Type variable\n");
+                    logTextArea.appendText("Type variable\n");
                     break;
                 case SYMBOL:
-                    outputTextArea.appendText("Symbol clé\n");
+                    logTextArea.appendText("Symbol clé\n");
                     break;
                 case KEYWORD:
-                    outputTextArea.appendText("Mot clé\n");
+                    logTextArea.appendText("Mot clé\n");
                     break;
                 case ARITHMETIC:
-                    outputTextArea.appendText("Operateur arithmetic\n");
+                    logTextArea.appendText("Operateur arithmetic\n");
                     break;
                 case LOGICAL:
-                    outputTextArea.appendText("Operateur logique\n");
+                    logTextArea.appendText("Operateur logique\n");
                     break;
                 case EOF:
                     break;
                 default:
-                    outputTextArea.appendText("???\n");
+                    logTextArea.appendText("???\n");
             }
         }
     }
@@ -246,8 +260,8 @@ public class MainFrame extends JFrame
     {
         String sourceCode = FileManager.getLoadedFileText();
 
-        outputTextArea.setText(sourceCode);
-        outputTextArea.highlight();
+        EditorTextArea.setText(sourceCode);
+        EditorTextArea.highlight();
         this.sourceCode = sourceCode;
     }
 

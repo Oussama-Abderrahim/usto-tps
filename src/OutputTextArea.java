@@ -1,23 +1,85 @@
 import theme.Theme;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Arrays;
 
 public class OutputTextArea extends JTextPane
 {
     private StyledDocument styledDocument;
     private Style style;
+    private boolean changed = true;
 
-    public OutputTextArea()
+    public OutputTextArea(boolean editable)
     {
         super();
         setFont(Theme.FONT_DEFAULT);
-        setEditable(false);
+        setEditable(editable);
         setText("");
         styledDocument = this.getStyledDocument();
         style = this.addStyle("Standard style", null);
+
+        if(editable)
+        {
+            addKeyListener(new KeyListener()
+            {
+                @Override
+                public void keyTyped(KeyEvent e)
+                {
+                    changed = true;
+                }
+
+                @Override
+                public void keyPressed(KeyEvent e)
+                {
+
+                }
+
+                @Override
+                public void keyReleased(KeyEvent e)
+                {
+
+                }
+            });
+            getDocument().addDocumentListener(new DocumentListener()
+            {
+                @Override
+                public void insertUpdate(DocumentEvent e)
+                {
+                    EventQueue.invokeLater(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            if (changed)
+                            {
+                                int pos = getCaretPosition();
+                                highlight();
+                                setCaretPosition(pos);
+                                requestFocus();
+                            }
+                        }
+                    });
+                }
+
+                @Override
+                public void removeUpdate(DocumentEvent e)
+                {
+
+                }
+
+                @Override
+                public void changedUpdate(DocumentEvent e)
+                {
+
+                }
+            });
+        }
     }
 
     public void highlight()
@@ -47,7 +109,6 @@ public class OutputTextArea extends JTextPane
                 "--",
                 ","
         };
-
         String text = getText();
 
         clear();
@@ -67,6 +128,7 @@ public class OutputTextArea extends JTextPane
             }
             appendText("\n");
         }
+        changed = false;
     }
 
     private void clear()

@@ -51,7 +51,13 @@ public class MainFrame extends JFrame
         contentPane.add(controlPanel, BorderLayout.WEST);
         contentPane.add(outputPanel, BorderLayout.CENTER);
 
-        editorTextArea.setText("Start_Program\n  ShowMes : \"Hello World !\\n\";;\nEnd_Program");
+        editorTextArea.setText("Start_Program\n" +
+                "  String : i ;;\n" +
+                "  Give i : \"World\";;\n" +
+                "  ShowMes : \"Hello \";;\n" +
+                "  ShowVal : i ;;\n" +
+                "  ShowMes : \" !\\n\" ;;\n" +
+                "End_Program");
         editorTextArea.highlight();
         pack();
     }
@@ -167,16 +173,59 @@ public class MainFrame extends JFrame
         return controlPanel;
     }
 
-    private void showSemanticResult(String result, String errors)
+    private void loadSourceCode()
     {
-        logTextArea.setText("");
-        if (errors.isEmpty())
+        String sourceCode = FileManager.getLoadedFileText();
+        if(!sourceCode.isEmpty())
         {
-            logTextArea.appendText("No errors found\n", Theme.FONT_SUCCESS_COLOR, false);
-            logTextArea.appendText("Console Output : \n" + result, Theme.FONT_INPUT_COLOR, false);
+            editorTextArea.setText(sourceCode);
+            editorTextArea.highlight();
+            this.sourceCode = sourceCode;
         }
+    }
+
+    private void showLexicalResult(ArrayList<Token> tokenSource, String errors)
+    {
+        logTextArea.setVisible(true);
+        logTextArea.setText("");
+        for (Token t : tokenSource)
+        {
+            logTextArea.appendText(t.getText() + " -> ", Theme.FONT_INPUT_COLOR, true);
+            switch (t.getType())
+            {
+                case DATA:
+                    logTextArea.appendText("Donnée\n");
+                    break;
+                case ID:
+                    logTextArea.appendText("Identificateur\n");
+                    break;
+                case TYPE:
+                    logTextArea.appendText("Type variable\n");
+                    break;
+                case SYMBOL:
+                    logTextArea.appendText("Symbol clé\n");
+                    break;
+                case KEYWORD:
+                    logTextArea.appendText("Mot clé\n");
+                    break;
+                case ARITHMETIC:
+                    logTextArea.appendText("Operateur arithmetic\n");
+                    break;
+                case LOGICAL:
+                    logTextArea.appendText("Operateur logique\n");
+                    break;
+                case EOF:
+                    break;
+                default:
+                    logTextArea.appendText("???\n");
+            }
+        }
+
+        if (errors.isEmpty())
+            logTextArea.appendText("No errors found", Theme.FONT_SUCCESS_COLOR, false);
         else
-            logTextArea.appendText("Found errors : \n" + errors, Theme.FONT_WARNING_COLOR, false);
+            logTextArea.appendText(errors, Theme.FONT_WARNING_COLOR, false);
+
     }
 
     private void showSyntaxResult(ArrayList<Instruction> result, String errors)
@@ -195,10 +244,10 @@ public class MainFrame extends JFrame
             {
                 instr = instr + t.getText() + " ";
             }
-            logTextArea.appendText(instr, Color.BLACK, true);
+            logTextArea.appendText(instr, Theme.FONT_INPUT_COLOR, true);
 
             /*Print type */
-            logTextArea.appendText(" -> ", Color.BLACK, false);
+            logTextArea.appendText(" -> ", Theme.FONT_INPUT_COLOR, false);
             switch (s.getType())
             {
                 case START_PROGRAM:
@@ -247,60 +296,17 @@ public class MainFrame extends JFrame
             logTextArea.appendText("Compilation failed : \n" + errors, Theme.FONT_WARNING_COLOR, false);
     }
 
-    private void showLexicalResult(ArrayList<Token> tokenSource, String errors)
+
+    private void showSemanticResult(String result, String errors)
     {
-        logTextArea.setVisible(true);
         logTextArea.setText("");
-        for (Token t : tokenSource)
-        {
-            logTextArea.appendText(t.getText() + " -> ", Theme.FONT_INPUT_COLOR, true);
-            switch (t.getType())
-            {
-                case DATA:
-                    logTextArea.appendText("Donnée\n");
-                    break;
-                case ID:
-                    logTextArea.appendText("Identificateur\n");
-                    break;
-                case TYPE:
-                    logTextArea.appendText("Type variable\n");
-                    break;
-                case SYMBOL:
-                    logTextArea.appendText("Symbol clé\n");
-                    break;
-                case KEYWORD:
-                    logTextArea.appendText("Mot clé\n");
-                    break;
-                case ARITHMETIC:
-                    logTextArea.appendText("Operateur arithmetic\n");
-                    break;
-                case LOGICAL:
-                    logTextArea.appendText("Operateur logique\n");
-                    break;
-                case EOF:
-                    break;
-                default:
-                    logTextArea.appendText("???\n");
-            }
-        }
-
         if (errors.isEmpty())
-            logTextArea.appendText("No errors found", Theme.FONT_SUCCESS_COLOR, false);
-        else
-            logTextArea.appendText(errors, Theme.FONT_WARNING_COLOR, false);
-
-    }
-
-
-    private void loadSourceCode()
-    {
-        String sourceCode = FileManager.getLoadedFileText();
-        if(!sourceCode.isEmpty())
         {
-            editorTextArea.setText(sourceCode);
-            editorTextArea.highlight();
-            this.sourceCode = sourceCode;
+            logTextArea.appendText("No errors found\n", Theme.FONT_SUCCESS_COLOR, false);
+            logTextArea.appendText("Console Output : \n" + result, Theme.FONT_INPUT_COLOR, false);
         }
+        else
+            logTextArea.appendText("Found errors : \n" + errors, Theme.FONT_WARNING_COLOR, false);
     }
 
     public static void main(String args[])

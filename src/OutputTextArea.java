@@ -19,8 +19,11 @@ public class OutputTextArea extends JTextPane
     {
         super();
         setFont(Theme.FONT_DEFAULT);
+        setForeground(Theme.FONT_INPUT_COLOR);
         setEditable(editable);
         setText("");
+        setBackground(Theme.INPUT_BACKGROUND_COLOR);
+        setCaretColor(Theme.FONT_INPUT_COLOR);
         styledDocument = this.getStyledDocument();
         style = this.addStyle("Standard style", null);
 
@@ -122,11 +125,11 @@ public class OutputTextArea extends JTextPane
                 for (String word : line.split("\\s"))
                 {
                     if (Arrays.asList(KEYWORDS).contains(word))
-                        appendText(word+" ", Color.RED, true);
+                        appendText(word+" ", Theme.FONT_KEYWORD_COLOR, true);
                     else if (Arrays.asList(VARTYPES).contains(word))
-                        appendText(word+" ", Color.GREEN, false);
+                        appendText(word+" ", Theme.FONT_TYPE_COLOR, true);
                     else if (Arrays.asList(SYMBOLS).contains(word))
-                        appendText(word+" ", Color.RED, false);
+                        appendText(word+" ", Theme.FONT_SYMBOL_COLOR, false);
                     else
                         appendText(word+" ");
                 }

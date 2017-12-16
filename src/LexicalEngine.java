@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 
-public class LexicalEngine
+class LexicalEngine
 {
     private final Pattern idPattern = Pattern.compile("[a-z]|[A-Z](_?([A-Za-z]|[0-9])+)*");
-    Pattern dataPattern = Pattern.compile("(\\\".*\\\")|([0-9]+(\\.[0-9]+)?)");
     Pattern numberPatter = Pattern.compile("([0-9]+(\\.[0-9]+)?)");
 
 
@@ -19,7 +18,7 @@ public class LexicalEngine
     private int positionTeteLecture = 0;
     private int lineCount;
 
-    public LexicalEngine()
+    LexicalEngine()
     {
         sourceCode = "";
         buffer = "";
@@ -45,25 +44,25 @@ public class LexicalEngine
         return sourceCode.charAt(positionTeteLecture);
     }
 
-    public void setSourceCode(String src)
+    void setSourceCode(String src)
     {
         positionTeteLecture = 0;
         this.sourceCode = src;
     }
 
-    public ArrayList<Token> getTokenSource()
+    ArrayList<Token> getTokenSource()
     {
         performAnalysis();
         System.out.println("Line count : " + lineCount);
         return tokenSource;
     }
 
-    public String getErrors()
+    String getErrors()
     {
         return errors;
     }
 
-    public void clear()
+    void clear()
     {
         lineCount = 1;
         tokenSource.clear();
@@ -72,14 +71,13 @@ public class LexicalEngine
         positionTeteLecture = 0;
     }
 
-    /// TODO : Add line count
     private boolean performAnalysis()
     {
         clear();
         System.out.println("Performing lexical analysis");
 
         lineCount = 0;
-        char c = currentChar();
+        char c;
         while (!EOF())
         {
             boolean proceed = true; // si vrai lire le prochain char à la fin
@@ -162,14 +160,12 @@ public class LexicalEngine
                     default:    // whitespace ignored
                 }
                 if (proceed)
-                    c = nextChar();
-                else
-                    c = currentChar();
+                    nextChar();
                 buffer = ""; // clear buffer
             }
             else
             {
-                c = nextChar();
+                nextChar();
             }
         }
 
@@ -212,7 +208,7 @@ public class LexicalEngine
             char next_c = nextChar();
             if (next_c == '=')
             {
-                next_c = nextChar();
+                nextChar();
                 tokenSource.add(new ArithmeticToken(c + "=", lineCount));
             }
             else

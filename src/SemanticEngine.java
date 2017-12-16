@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by ${} on 18/11/2017.
- */
-public class SemanticEngine
+
+class SemanticEngine
 {
 
     private ArrayList<Instruction> instructionSource;
@@ -19,7 +17,7 @@ public class SemanticEngine
     private String result = "";
     private String errors = "";
 
-    public SemanticEngine()
+    SemanticEngine()
     {
         clear();
     }
@@ -44,14 +42,14 @@ public class SemanticEngine
     {
         return instructionSource.get(currentInstrIndex);
     }
-    public String getResult()
+    String getResult()
     {
         clear();
         performAnalysis();
         return result;
     }
 
-    public String getErrors()
+    String getErrors()
     {
         return errors;
     }

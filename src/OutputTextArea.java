@@ -113,19 +113,23 @@ public class OutputTextArea extends JTextPane
         String text = getText();
 
         clear();
+
         for(String line : text.split("\n"))
         {
-            for (String word : line.split("\\s"))
-            {
-                if (Arrays.asList(KEYWORDS).contains(word))
-                    appendText(word+" ", Color.RED, true);
-                else if (Arrays.asList(VARTYPES).contains(word))
-                    appendText(word+" ", Color.GREEN, false);
-                else if (Arrays.asList(SYMBOLS).contains(word))
-                    appendText(word+" ", Color.RED, false);
-                else
-                    appendText(word+" ");
-            }
+            if(line.startsWith("//."))
+                appendText(line, Color.GRAY, false);
+            else
+                for (String word : line.split("\\s"))
+                {
+                    if (Arrays.asList(KEYWORDS).contains(word))
+                        appendText(word+" ", Color.RED, true);
+                    else if (Arrays.asList(VARTYPES).contains(word))
+                        appendText(word+" ", Color.GREEN, false);
+                    else if (Arrays.asList(SYMBOLS).contains(word))
+                        appendText(word+" ", Color.RED, false);
+                    else
+                        appendText(word+" ");
+                }
             appendText("\n");
         }
         changed = false;

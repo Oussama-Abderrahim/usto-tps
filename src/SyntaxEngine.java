@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 
 
-public class SyntaxEngine
+class SyntaxEngine
 {
     private ArrayList<Token> tokenSource;
     private ArrayList<Instruction> result = new ArrayList<>();
@@ -16,7 +16,7 @@ public class SyntaxEngine
     private String errors = "";
     private int lineCount = 1;
 
-    public SyntaxEngine()
+    SyntaxEngine()
     {
         tokenSource = null;
     }
@@ -36,18 +36,18 @@ public class SyntaxEngine
         return tokenSource.get(positionTeteLecture);
     }
 
-    public void setTokenSource(ArrayList<Token> tokenSource)
+    void setTokenSource(ArrayList<Token> tokenSource)
     {
         this.tokenSource = tokenSource;
     }
 
-    public ArrayList<Instruction> getResult()
+    ArrayList<Instruction> getResult()
     {
         performAnalysis();
         return result;
     }
 
-    public String getErrors()
+    String getErrors()
     {
         return errors;
     }
@@ -109,7 +109,7 @@ public class SyntaxEngine
                         c = nextToken();
                         if(c.equals(KeywordToken.SEMI_COLON))
                         {
-                            c = nextToken();
+                            nextToken();
                             validSyntax(InstructionType.AFFECT_VALUE);
                             return followedByBlockInstruction();// next instruction
                         }
@@ -132,7 +132,7 @@ public class SyntaxEngine
                         c = nextToken();
                         if(c.equals(KeywordToken.SEMI_COLON))
                         {
-                            c = nextToken();
+                            nextToken();
                             validSyntax(InstructionType.AFFECT_VAR);
                             return followedByBlockInstruction();// next instruction
                         }
@@ -153,7 +153,7 @@ public class SyntaxEngine
                     c = nextToken();
                     if(c.equals(KeywordToken.SEMI_COLON))
                     {
-                        c = nextToken();
+                        nextToken();
                         validSyntax(InstructionType.SHOW_MSG);
                         return followedByBlockInstruction();  // next instruction
                     }
@@ -172,7 +172,7 @@ public class SyntaxEngine
                     c = nextToken();
                     if(c.equals(KeywordToken.SEMI_COLON))
                     {
-                        c = nextToken();
+                        nextToken();
                         validSyntax(InstructionType.SHOW_VAR);
                         return followedByBlockInstruction();  // next instruction
                     }
@@ -185,13 +185,13 @@ public class SyntaxEngine
             c = nextToken();
             if(c.equals(SymbolToken.DOUBLE_DASH))
             {
-                c = nextToken();
+                nextToken();
                 if(followedByCondition()) // condition
                 {
                     c = currentToken();
                     if( c.equals(SymbolToken.DOUBLE_DASH))
                     {
-                        c = nextToken();
+                        nextToken();
                         validSyntax(InstructionType.IF_STATEMENT);
                         if(followedByStartFinishBlock())
                         {
@@ -207,13 +207,13 @@ public class SyntaxEngine
             c = nextToken();
             if(c.equals(SymbolToken.COLUMN))
             {
-                c = nextToken();
+                nextToken();
                 if(followedByIdentifiers())
                 {
                     c = currentToken();
                     if(c.equals(KeywordToken.SEMI_COLON))
                     {
-                        c = nextToken();
+                        nextToken();
                         validSyntax(InstructionType.VAR_DECL);
                         return followedByBlockInstruction();  // next instruction
                     }
@@ -234,7 +234,7 @@ public class SyntaxEngine
             Token c = nextToken();
             if(c.equals(SymbolToken.COMMA))
             {
-                c = nextToken();
+                nextToken();
                 return followedByIdentifiers();
             }
             else return true; // id seulment
@@ -247,10 +247,10 @@ public class SyntaxEngine
         Token c;
         if(currentToken().equals(LogicalToken.NOT))
         {
-            c = nextToken();
+            nextToken();
             if(followedByCondition())
             {
-                c = nextToken();
+                nextToken();
                 return followedByCondition2();
             }
         }
@@ -262,7 +262,7 @@ public class SyntaxEngine
                 c = nextToken();
                 if(c instanceof IdToken)
                 {
-                    c = nextToken();
+                    nextToken();
                     return followedByCondition2();
                 }
             }
@@ -275,10 +275,10 @@ public class SyntaxEngine
     {
         if(currentToken() instanceof LogicalToken)
         {
-            Token c = nextToken();
+            nextToken();
             if(followedByCondition())
             {
-                c = currentToken();
+                currentToken();
                 if(followedByCondition())
                 {
                     return true;
@@ -298,14 +298,14 @@ public class SyntaxEngine
         Token c = currentToken();
         if(c.equals(KeywordToken.START))
         {
-            c = nextToken();
+            nextToken();
             validSyntax(InstructionType.BEGIN);
             if(followedByBlockInstruction())
             {
                 c = currentToken();
                 if (c.equals(KeywordToken.FINISH))
                 {
-                    c = nextToken();
+                    nextToken();
                     validSyntax(InstructionType.FINISH);
                     return followedByElseStatement();
                 }
@@ -320,13 +320,9 @@ public class SyntaxEngine
 
         if(c.equals(KeywordToken.ELSE))
         {
-            c = nextToken();
+            nextToken();
             validSyntax(InstructionType.ELSE_STATEMENT);
-            if(followedByStartFinishBlock())
-            {
-                return true;
-            }
-            return false;
+            return followedByStartFinishBlock();
         }
         return true;
     }

@@ -1,7 +1,5 @@
 import instruction.Instruction;
-import token.KeywordToken;
-import token.Token;
-import token.VarTypeToken;
+import token.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +17,7 @@ public class SemanticEngine
     private Map<String, VarTypeToken> idTable;
 
     private String result = "";
+    private String errors = "";
 
     public SemanticEngine()
     {
@@ -29,13 +28,14 @@ public class SemanticEngine
     {
         idTable = new HashMap<>();
         result = "";
+        errors = "";
         currentInstrIndex = -1;
     }
 
     private Instruction nextInstruction()
     {
         currentInstrIndex++;
-        if(currentInstrIndex < instructionSource.size())
+        if(currentInstrIndex >= instructionSource.size())
             return null;
         return currentInstruction();
     }
@@ -46,12 +46,19 @@ public class SemanticEngine
     }
     public String getResult()
     {
+        clear();
         performAnalysis();
         return result;
     }
 
+    public String getErrors()
+    {
+        return errors;
+    }
+
     private void performAnalysis()
     {
+        System.out.println("Performing semantic analysis");
         while (nextInstruction() != null)
         {
             switch (currentInstruction().getType())
@@ -134,11 +141,16 @@ public class SemanticEngine
             }
             i++;
         }while (!instr.getTokenList().get(i).equals(KeywordToken.SEMI_COLON));
+
+        for (String id : idTable.keySet())
+        {
+            System.out.println(id + " : " + idTable.get(id).getText());
+        }
     }
 
     private void logError(String error)
     {
-        System.err.println("Error : " + error);
+        errors += "Line " + currentInstruction().getTokenList().get(0).getLine() + " : " + error + "\n";
     }
 
     private void interpretIfStatement()
@@ -154,11 +166,42 @@ public class SemanticEngine
     private void interpretAffectVar()
     {
         Instruction instr = currentInstruction();
+        IdToken id1 = (IdToken) instr.getTokenList().get(1);
+        IdToken id2 = (IdToken) instr.getTokenList().get(3);
+
+        if(idTable.containsKey(id1.getText()) && idTable.containsKey(id2.getText())
+                && idTable.get(id1.getText()).getText().equals(idTable.get(id2.getText()).getText()))
+        {
+            System.out.println("Affectation true");
+        }
+        else
+        {
+            logError("Type mismatch");
+        }
     }
 
     private void interpretAffectValue()
     {
         Instruction instr = currentInstruction();
+        IdToken id1 = (IdToken) instr.getTokenList().get(1);
+        DataToken id2 = (DataToken) instr.getTokenList().get(3);
+
+        if(idTable.containsKey(id1.getText()))
+        {
+            if(idTable.get(id1.getText()).getText().equals(id2.getDataType().getText()))
+            {
+                System.out.println("Affectation true");
+            }
+            else
+            {
+                logError("Type mismatch");
+            }
+        }
+        else
+        {
+            logError("Undeclared variable : " + id1.getText());
+        }
+
     }
 
     private void interpretEndProgram()

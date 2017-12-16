@@ -128,15 +128,19 @@ public class MainFrame extends JFrame
                 sourceCode = EditorTextArea.getText();
                 lexicalEngine.setSourceCode(sourceCode);
                 syntaxEngine.setTokenSource(lexicalEngine.getTokenSource());
-                showSyntaxResult(syntaxEngine.getResult());
+                showSyntaxResult(syntaxEngine.getResult(), syntaxEngine.getErrors());
             }
         });
         SymanticButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e)
             {
+                sourceCode = EditorTextArea.getText();
+                lexicalEngine.setSourceCode(sourceCode);
+                syntaxEngine.setTokenSource(lexicalEngine.getTokenSource());
                 semanticEngine.setInstructionSource(syntaxEngine.getResult());
-                logTextArea.setText("Semantic Result : \n" + semanticEngine.getResult());
+                logTextArea.setText("Semantic Result : \n" + semanticEngine.getResult() + "\n");
+                logTextArea.appendText(semanticEngine.getErrors(), Theme.FONT_WARNING_COLOR, false);
             }
         });
 
@@ -152,11 +156,11 @@ public class MainFrame extends JFrame
         return controlPanel;
     }
 
-    private void showSyntaxResult(ArrayList<Instruction> result)
+    private void showSyntaxResult(ArrayList<Instruction> result, String errors)
     {
         logTextArea.setVisible(true);
         logTextArea.setText("");
-        logTextArea.appendText("Syntax Analysis result : \n", Color.RED, false);
+        logTextArea.appendText("Syntax Analysis result : \n", Theme.FONT_SUCCESS_COLOR, false);
 
         // print instr :
         //logTextArea.appendText(s, Color.BLACK, false);
@@ -215,13 +219,17 @@ public class MainFrame extends JFrame
 
             logTextArea.appendText("\n");
         }
+
+        if(errors.isEmpty())
+            logTextArea.appendText("No errors found \n", Theme.FONT_SUCCESS_COLOR, false);
+        else
+            logTextArea.appendText("Compilation failed : \n" + errors, Theme.FONT_WARNING_COLOR, false);
     }
 
     private void showLexicalResult(ArrayList<Token> tokenSource, String errors)
     {
         logTextArea.setVisible(true);
         logTextArea.setText("");
-        logTextArea.appendText(errors, Theme.FONT_WARNING_COLOR, false);
         for(Token t : tokenSource)
         {
             logTextArea.appendText(t.getText() + " -> ", Theme.FONT_INPUT_COLOR, true);
@@ -254,6 +262,12 @@ public class MainFrame extends JFrame
                     logTextArea.appendText("???\n");
             }
         }
+
+        if(errors.isEmpty())
+            logTextArea.appendText("No errors found", Theme.FONT_SUCCESS_COLOR, false);
+        else
+            logTextArea.appendText(errors, Theme.FONT_WARNING_COLOR, false);
+
     }
 
 

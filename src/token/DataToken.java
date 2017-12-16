@@ -9,4 +9,14 @@ public class DataToken extends Token
     {
         super(text, line, TokenType.DATA);
     }
+
+    public VarTypeToken getDataType()
+    {
+        if(getText().charAt(0) == '"')
+            return VarTypeToken.STRING;
+        else if(getText().contains("."))
+            return VarTypeToken.REAL_NUMBER;
+        else
+            return VarTypeToken.INT_NUMBER;
+    }
 }

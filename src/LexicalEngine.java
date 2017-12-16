@@ -28,7 +28,8 @@ public class LexicalEngine
 
     private final String[] varTypes = {
             "Int_Number",
-            "Real_Number"
+            "Real_Number",
+            "String"
     };
 
     private final String[] symbols = {

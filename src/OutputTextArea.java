@@ -101,7 +101,8 @@ public class OutputTextArea extends JTextPane
 
         final String[] VARTYPES = {
                 "Int_Number",
-                "Real_Number"
+                "Real_Number",
+                "String"
         };
 
         final String[] SYMBOLS = {

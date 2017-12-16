@@ -11,41 +11,6 @@ public class LexicalEngine
     Pattern numberPatter = Pattern.compile("([0-9]+(\\.[0-9]+)?)");
 
 
-    private final String[] keywords = {
-            "Start_Program",
-            "End_Program",
-            "ShowMes",
-            "ShowVal",
-            "Give",
-            "Affect",
-            "If",
-            "Else",
-            ";;",
-            "to",
-            "Start",
-            "Finish"
-    };
-
-    private final String[] varTypes = {
-            "Int_Number",
-            "Real_Number",
-            "String"
-    };
-
-    private final String[] symbols = {
-            ":",
-            "--",
-            ","
-    };
-
-    private final String[] arithmeticOp = {
-            ">",
-            "<",
-            "==",
-            "<=",
-            ">="
-    };
-
     private String sourceCode;
     private ArrayList<Token> tokenSource = new ArrayList<>();
     private String errors = "";
@@ -100,7 +65,7 @@ public class LexicalEngine
 
     public void clear()
     {
-        lineCount = 0;
+        lineCount = 1;
         tokenSource.clear();
         errors = "";
         buffer = "";
@@ -290,7 +255,8 @@ public class LexicalEngine
     private boolean isVarType(String buffer)
     {
         return TextProcessor.compare(buffer, "Int_Number")
-                || TextProcessor.compare(buffer, "Real_Number");
+                || TextProcessor.compare(buffer, "Real_Number")
+                || TextProcessor.compare(buffer, "String");
     }
 
     private boolean isKeyword(String buffer)

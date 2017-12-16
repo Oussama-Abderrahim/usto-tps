@@ -106,7 +106,22 @@ class SemanticEngine
     private void interpretShowVar()
     {
         Instruction instr = currentInstruction();
-        compiledCode += "System.out.println(\"\"+"+instr.getTokenList().get(2).getText()+");";
+        String id = instr.getTokenList().get(2).getText();
+        if(idTable.containsKey(id))
+        {
+            if(initialisedVariables.contains(id))
+            {
+                compiledCode += "System.out.print(\"\"+" + id + ");";
+            }
+            else
+            {
+                logError("Unitialised variable : " + id);
+            }
+        }
+        else
+        {
+            logError("Undeclared variable : " + id);
+        }
     }
 
     private void interpretElseStatement()
@@ -204,7 +219,11 @@ class SemanticEngine
     {
         Instruction instr = currentInstruction();
 
-        compiledCode += "System.out.println("+instr.getTokenList().get(2).getText()+");\n";
+        DataToken msg = (DataToken) instr.getTokenList().get(2);
+        if(msg.getDataType() == VarTypeToken.STRING)
+            compiledCode += "System.out.print("+msg.getText()+");\n";
+        else
+            logError("Type mismatch");
     }
 
     private void interpretAffectVar()

@@ -13,6 +13,8 @@ public class SyntaxEngine
     private ArrayList<Token> buffer = new ArrayList<>();
 
     private int positionTeteLecture = 0;
+    private String errors = "";
+    private int lineCount = 1;
 
     public SyntaxEngine()
     {
@@ -45,8 +47,14 @@ public class SyntaxEngine
         return result;
     }
 
+    public String getErrors()
+    {
+        return errors;
+    }
     private void clear()
     {
+        lineCount = 1;
+        errors = "";
         result.clear();
         buffer.clear();
         positionTeteLecture = 0;
@@ -79,7 +87,7 @@ public class SyntaxEngine
                 return true;
             }
         }
-        return false;
+        return logError("Build failed");
     }
 
     /// TODO : Add S' for repeating instructions
@@ -108,7 +116,7 @@ public class SyntaxEngine
                     }
                 }
             }
-            return logError();
+            return logError("Instruction non valide");
         }
         else if(c.equals(KeywordToken.AFFECT))
         {
@@ -132,7 +140,7 @@ public class SyntaxEngine
                 }
 
             }
-            return logError();
+            return logError("Instruction non valide");
         }
         else if(c.equals(KeywordToken.SHOW_MESSAGE))
         {
@@ -151,7 +159,7 @@ public class SyntaxEngine
                     }
                 }
             }
-            return logError();
+            return logError("Instruction non valide");
         }
         else if(c.equals(KeywordToken.SHOW_VAL))
         {
@@ -170,7 +178,7 @@ public class SyntaxEngine
                     }
                 }
             }
-            return logError();
+            return logError("Instruction non valide");
         }
         else if(c.equals(KeywordToken.IF))
         {
@@ -192,7 +200,7 @@ public class SyntaxEngine
                     }
                 }
             }
-            return logError();
+            return logError("Instruction non valide");
         }
         else if(c instanceof VarTypeToken)
         {
@@ -211,7 +219,7 @@ public class SyntaxEngine
                     }
                 }
             }
-            return logError();
+            return logError("Instruction non valide");
         }
         else
         {
@@ -231,7 +239,7 @@ public class SyntaxEngine
             }
             else return true; // id seulment
         }
-        return logError();
+        return logError("Instruction non valide");
     }
 
     private boolean followedByCondition()
@@ -260,7 +268,7 @@ public class SyntaxEngine
             }
         }
 
-        return logError();
+        return logError("Instruction non valide");
     }
 
     private boolean followedByCondition2()
@@ -282,7 +290,7 @@ public class SyntaxEngine
             return true; // mot vide
         }
 
-        return logError();
+        return logError("Instruction non valide");
     }
 
     private boolean followedByStartFinishBlock()
@@ -303,7 +311,7 @@ public class SyntaxEngine
                 }
             }
         }
-        return logError();
+        return logError("Instruction non valide");
     }
 
     private boolean followedByElseStatement()
@@ -327,10 +335,11 @@ public class SyntaxEngine
     private void validSyntax(InstructionType type)
     {
         result.add(new Instruction(new ArrayList<>(buffer), type));
+        lineCount++;
         buffer.clear();
     }
 
-    private boolean logError()
+    private boolean logError(String s)
     {
         String instr = "";
         for(Token t : buffer)
@@ -338,9 +347,9 @@ public class SyntaxEngine
             instr = instr + t.getText() + " ";
         }
 
-        System.out.println("ERROR ! instruction non valide : " + instr);
+        errors += "line " + lineCount + " : " + s + " at " + instr + '\n';
         buffer.clear();
-        return false;
+        return true;
     }
 
     public static void main(String[] args)

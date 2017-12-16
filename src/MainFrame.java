@@ -119,7 +119,7 @@ public class MainFrame extends JFrame
             public void actionPerformed(ActionEvent e) {
                 sourceCode = EditorTextArea.getText();
                 lexicalEngine.setSourceCode(sourceCode);
-                showLexicalResult(lexicalEngine.getTokenSource());
+                showLexicalResult(lexicalEngine.getTokenSource(), lexicalEngine.getErrors());
             }
         });
         syntaxButton.addActionListener(new ActionListener() {
@@ -217,10 +217,11 @@ public class MainFrame extends JFrame
         }
     }
 
-    private void showLexicalResult(ArrayList<Token> tokenSource)
+    private void showLexicalResult(ArrayList<Token> tokenSource, String errors)
     {
         logTextArea.setVisible(true);
         logTextArea.setText("");
+        logTextArea.appendText(errors, Theme.FONT_WARNING_COLOR, false);
         for(Token t : tokenSource)
         {
             logTextArea.appendText(t.getText() + " -> ", Theme.FONT_INPUT_COLOR, true);

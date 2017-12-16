@@ -3,8 +3,8 @@ package token;
 
 public class ArithmeticToken extends Token
 {
-    public ArithmeticToken(String text)
+    public ArithmeticToken(String text, int line)
     {
-        super(text, TokenType.ARITHMETIC);
+        super(text, line, TokenType.ARITHMETIC);
     }
 }

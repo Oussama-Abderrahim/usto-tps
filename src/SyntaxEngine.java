@@ -29,7 +29,7 @@ public class SyntaxEngine
     private Token currentToken()
     {
         if(positionTeteLecture >= tokenSource.size())
-            return new SymbolToken("$");
+            return new SymbolToken("$", 0);
 
         return tokenSource.get(positionTeteLecture);
     }
@@ -140,10 +140,8 @@ public class SyntaxEngine
             if(c.equals(SymbolToken.COLUMN))
             {
                 c = nextToken();
-                System.out.print("Should find String here...");
                 if(c instanceof DataToken)
                 {
-                    System.out.println("YES!");
                     c = nextToken();
                     if(c.equals(KeywordToken.SEMI_COLON))
                     {
@@ -328,7 +326,7 @@ public class SyntaxEngine
 
     private void validSyntax(InstructionType type)
     {
-        result.add(new Instruction((ArrayList<Token>) buffer.clone(), type));
+        result.add(new Instruction(new ArrayList<>(buffer), type));
         buffer.clear();
     }
 
@@ -351,22 +349,22 @@ public class SyntaxEngine
 
         ArrayList<Token> tokenSource = new ArrayList<>();
 
-        tokenSource.add(new KeywordToken("Start_Program"));
-        tokenSource.add(new KeywordToken("Give"));
-        tokenSource.add(new IdToken("TesVar"));
-        tokenSource.add(new SymbolToken(":"));
-        tokenSource.add(new DataToken("125"));
-        tokenSource.add(new KeywordToken(";;"));
-        tokenSource.add(new KeywordToken("Affect"));
-        tokenSource.add(new IdToken("i"));
-        tokenSource.add(new KeywordToken("to"));
-        tokenSource.add(new IdToken("j"));
-        tokenSource.add(new KeywordToken(";;"));
+        tokenSource.add(new KeywordToken("Start_Program", 0));
+        tokenSource.add(new KeywordToken("Give", 0));
+        tokenSource.add(new IdToken("TesVar", 0));
+        tokenSource.add(new SymbolToken(":", 0));
+        tokenSource.add(new DataToken("125", 0));
+        tokenSource.add(new KeywordToken(";;", 0));
+        tokenSource.add(new KeywordToken("Affect", 0));
+        tokenSource.add(new IdToken("i", 0));
+        tokenSource.add(new KeywordToken("to", 0));
+        tokenSource.add(new IdToken("j", 0));
+        tokenSource.add(new KeywordToken(";;", 0));
 
-        tokenSource.add(new KeywordToken("ShowMes"));
-        tokenSource.add(new SymbolToken(":"));
-        tokenSource.add(new DataToken("\"Ceci est un message\""));
-        tokenSource.add(new KeywordToken(";;"));
+        tokenSource.add(new KeywordToken("ShowMes", 0));
+        tokenSource.add(new SymbolToken(":", 0));
+        tokenSource.add(new DataToken("\"Ceci est un message\"", 0));
+        tokenSource.add(new KeywordToken(";;", 0));
 
         /*
             If -- i<j --
@@ -380,35 +378,35 @@ public class SyntaxEngine
               Finish
         */
 
-        tokenSource.add(new KeywordToken("If"));
-        tokenSource.add(new SymbolToken("--"));
-        tokenSource.add(new IdToken("i"));
-        tokenSource.add(new ArithmeticToken("<"));
-        tokenSource.add(new IdToken("j"));
-        tokenSource.add(new SymbolToken("--"));
-        tokenSource.add(new KeywordToken("Start"));
-        tokenSource.add(new KeywordToken("Give"));
-        tokenSource.add(new IdToken("Aft_5"));
-        tokenSource.add(new SymbolToken(":"));
-        tokenSource.add(new DataToken("10"));
-        tokenSource.add(new KeywordToken(";;"));
-        tokenSource.add(new KeywordToken("Finish"));
+        tokenSource.add(new KeywordToken("If", 0));
+        tokenSource.add(new SymbolToken("--", 0));
+        tokenSource.add(new IdToken("i", 0));
+        tokenSource.add(new ArithmeticToken("<", 0));
+        tokenSource.add(new IdToken("j", 0));
+        tokenSource.add(new SymbolToken("--", 0));
+        tokenSource.add(new KeywordToken("Start", 0));
+        tokenSource.add(new KeywordToken("Give", 0));
+        tokenSource.add(new IdToken("Aft_5", 0));
+        tokenSource.add(new SymbolToken(":", 0));
+        tokenSource.add(new DataToken("10", 0));
+        tokenSource.add(new KeywordToken(";;", 0));
+        tokenSource.add(new KeywordToken("Finish", 0));
 
-        tokenSource.add(new KeywordToken("Else"));
-        tokenSource.add(new KeywordToken("Start"));
-        tokenSource.add(new KeywordToken("Affect"));
-        tokenSource.add(new IdToken("i"));
-        tokenSource.add(new KeywordToken("to"));
-        tokenSource.add(new IdToken("j"));
-        tokenSource.add(new KeywordToken(";;"));
-        tokenSource.add(new KeywordToken("Give"));
-        tokenSource.add(new IdToken("Af34_2"));
-        tokenSource.add(new SymbolToken(":"));
-        tokenSource.add(new DataToken("123.54"));
-        tokenSource.add(new KeywordToken(";;"));
-        tokenSource.add(new KeywordToken("Finish"));
+        tokenSource.add(new KeywordToken("Else", 0));
+        tokenSource.add(new KeywordToken("Start", 0));
+        tokenSource.add(new KeywordToken("Affect", 0));
+        tokenSource.add(new IdToken("i", 0));
+        tokenSource.add(new KeywordToken("to", 0));
+        tokenSource.add(new IdToken("j", 0));
+        tokenSource.add(new KeywordToken(";;", 0));
+        tokenSource.add(new KeywordToken("Give", 0));
+        tokenSource.add(new IdToken("Af34_2", 0));
+        tokenSource.add(new SymbolToken(":", 0));
+        tokenSource.add(new DataToken("123.54", 0));
+        tokenSource.add(new KeywordToken(";;", 0));
+        tokenSource.add(new KeywordToken("Finish", 0));
 
-        tokenSource.add(new KeywordToken("End_Program"));
+        tokenSource.add(new KeywordToken("End_Program", 0));
 
         syntaxEngine.setTokenSource(tokenSource);
 

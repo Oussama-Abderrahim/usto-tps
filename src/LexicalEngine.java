@@ -1,14 +1,9 @@
 import token.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.regex.Pattern;
 
-import static jdk.nashorn.internal.runtime.JSType.isNumber;
 
-/**
- * Created by ${} on 18/11/2017.
- */
 public class LexicalEngine
 {
     private final Pattern idPattern = Pattern.compile("[a-z]|[A-Z](_?([A-Za-z]|[0-9])+)*");
@@ -52,9 +47,11 @@ public class LexicalEngine
 
     private String sourceCode;
     private ArrayList<Token> tokenSource = new ArrayList<>();
+    private String errors = "";
     private String buffer = "";
 
     private int positionTeteLecture = 0;
+    private int lineCount;
 
     public LexicalEngine()
     {
@@ -91,36 +88,31 @@ public class LexicalEngine
     public ArrayList<Token> getTokenSource()
     {
         performAnalysis();
+        System.out.println("Line count : " + lineCount);
         return tokenSource;
+    }
+
+    public String getErrors()
+    {
+        return errors;
     }
 
     public void clear()
     {
+        lineCount = 0;
         tokenSource.clear();
+        errors = "";
         buffer = "";
         positionTeteLecture = 0;
     }
 
-    private ArrayList<String> reconstructLines(String sourceCode)
-    {
-        // divise en lignes et ignore les commentaires, if needed
-        String[] lines = sourceCode.split("\\n");
-
-
-        ArrayList<String> linesList = new ArrayList<>();
-
-        for (String line : lines)
-            if (!line.startsWith("//."))
-                linesList.add(line);
-
-        return linesList;
-    }
-
+    /// TODO : Add line count
     private boolean performAnalysis()
     {
         clear();
         System.out.println("Performing lexical analysis");
 
+        lineCount = 0;
         char c = currentChar();
         while (!EOF())
         {
@@ -140,27 +132,27 @@ public class LexicalEngine
                 }
                 else if (isKeyword(buffer))
                 {
-                    tokenSource.add(new KeywordToken(buffer));
+                    tokenSource.add(new KeywordToken(buffer, lineCount));
                 }
                 else if (isArithmeticOp(buffer))
                 {
-                    tokenSource.add(new ArithmeticToken(buffer));
+                    tokenSource.add(new ArithmeticToken(buffer, lineCount));
                 }
                 else if (isVarType(buffer))
                 {
-                    tokenSource.add(new VarTypeToken(buffer));
+                    tokenSource.add(new VarTypeToken(buffer, lineCount));
                 }
                 else if (isNumber(buffer))
                 {
-                    tokenSource.add(new DataToken(buffer));
+                    tokenSource.add(new DataToken(buffer, lineCount));
                 }
                 else if (isIdentifier(buffer))
                 {
-                    tokenSource.add(new IdToken(buffer));
+                    tokenSource.add(new IdToken(buffer, lineCount));
                 }
                 else
                 {
-                    return logError("Unidentified");
+                    return logError("Unidentified token " + buffer);
                 }
 
                 // Now check the separator
@@ -170,33 +162,36 @@ public class LexicalEngine
                     case '>':
                     case '=':
                         if (!readArithmeticOp())
-                            return logError("Illegal operator Expected ");
+                            return logError("Illegal operator");
                         proceed = false;
                         break;
                     case ':':
-                        tokenSource.add(new SymbolToken(":"));
+                        tokenSource.add(new SymbolToken(":", lineCount));
                         break;
                     case ';':
                         c = nextChar();
                         if (c == ';')
-                            tokenSource.add(new KeywordToken(";;"));
+                            tokenSource.add(new KeywordToken(";;", lineCount));
                         else
-                            return logError("Unexpected token ';' found");
+                            return logError("Unknown token ';' found");
                         break;
                     case '-':
                         c = nextChar();
                         if (c == '-')
-                            tokenSource.add(new SymbolToken("--"));
+                            tokenSource.add(new SymbolToken("--", lineCount));
                         else
-                            return logError("Unexpected token ';' found");
+                            return logError("Unknown token '-'"+c+" found");
                         break;
                     case ',':
-                        tokenSource.add(new SymbolToken(","));
+                        tokenSource.add(new SymbolToken(",", lineCount));
                         break;
                     case '"':
                         if (!readString())
                             return logError("'\"' Expected ");
                         proceed = false;
+                        break;
+                    case '\n':
+                        lineCount++;
                         break;
                     default:    // whitespace ignored
                 }
@@ -230,6 +225,7 @@ public class LexicalEngine
                     while (nextChar() != '\n');
                     nextChar();
                     buffer = "";
+                    lineCount++;
                     return true;
                 }
             }
@@ -251,11 +247,11 @@ public class LexicalEngine
             if (next_c == '=')
             {
                 next_c = nextChar();
-                tokenSource.add(new ArithmeticToken(c + "="));
+                tokenSource.add(new ArithmeticToken(c + "=", lineCount));
             }
             else
             {
-                tokenSource.add(new ArithmeticToken("" + c));
+                tokenSource.add(new ArithmeticToken("" + c, lineCount));
             }
             return true;
         }
@@ -271,7 +267,7 @@ public class LexicalEngine
             c = nextChar();
         } while (c != '"' && !EOF());
         nextChar();
-        tokenSource.add(new DataToken(buffer));
+        tokenSource.add(new DataToken(buffer, lineCount));
         buffer = "";
         return true;
     }
@@ -362,53 +358,13 @@ public class LexicalEngine
 
     private boolean logError(String s)
     {
-        System.out.println("ERROR : " + s);
-        return false;
+        /// TODO : add error to result
+        errors += "Line " + lineCount + " : " + s + "\n";
+
+        char c = currentChar();
+        while (!EOF() && c != '\n') c = nextChar();
+
+        return true;    // continue after error
     }
 
-    private void performAnalysis2()
-    {
-        clear();
-        System.out.println("Performing lexical analysis");
-
-        Pattern idPattern = Pattern.compile("[a-z]|[A-Z](_?([A-Za-z]|[0-9])+)*");
-        Pattern dataPattern = Pattern.compile("(\\\".*\\\")|([0-9]+(\\.[0-9]+)?)");
-
-        ArrayList<String> lines = reconstructLines(sourceCode);
-
-        for (String line : lines)
-        {
-            String[] words = line.split(" ");
-
-            for (String word : words)
-            {
-                if (Arrays.asList(keywords).contains(word))
-                {
-                    tokenSource.add(new KeywordToken(word));
-                }
-                else if (Arrays.asList(symbols).contains(word))
-                {
-                    tokenSource.add(new SymbolToken(word));
-                }
-                else if (Arrays.asList(varTypes).contains(word))
-                {
-                    tokenSource.add(new VarTypeToken(word));
-                }
-                else if (Arrays.asList(arithmeticOp).contains(word))
-                {
-                    tokenSource.add(new ArithmeticToken(word));
-                }
-                else if (dataPattern.matcher(word).matches())
-                {
-                    tokenSource.add(new DataToken(word));
-                }
-                else if (idPattern.matcher(word).matches())
-                {
-                    tokenSource.add(new IdToken(word));
-                }
-            }
-        }
-
-        System.out.println("Found " + tokenSource.size() + " tokens");
-    }
 }

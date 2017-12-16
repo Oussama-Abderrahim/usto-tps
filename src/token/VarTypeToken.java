@@ -5,11 +5,11 @@ package token;
  */
 public class VarTypeToken extends Token
 {
-    public static final VarTypeToken INT_NUMBER = new VarTypeToken("Int_Number");
-    public static final VarTypeToken REAL_NUMBER = new VarTypeToken("Real_Number");
+    public static final VarTypeToken INT_NUMBER = new VarTypeToken("Int_Number", 0);
+    public static final VarTypeToken REAL_NUMBER = new VarTypeToken("Real_Number", 0);
 
-    public VarTypeToken(String text)
+    public VarTypeToken(String text, int line)
     {
-        super(text, TokenType.TYPE);
+        super(text, line, TokenType.TYPE);
     }
 }

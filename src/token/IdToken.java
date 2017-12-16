@@ -5,9 +5,9 @@ package token;
  */
 public class IdToken extends Token {
 
-    public IdToken(String text)
+    public IdToken(String text, int line)
     {
-        super(text, TokenType.ID);
+        super(text, line, TokenType.ID);
     }
 
 }

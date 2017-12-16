@@ -13,6 +13,7 @@ class SemanticEngine
     private int currentInstrIndex = -1;
 
     private Map<String, VarTypeToken> idTable;
+    private ArrayList<String> initialisedVariables;
 
     private String compiledCode = "";
     private String errors = "";
@@ -24,6 +25,7 @@ class SemanticEngine
 
     private void clear()
     {
+        initialisedVariables = new ArrayList<>();
         idTable = new HashMap<>();
         compiledCode = "";
         errors = "";
@@ -169,10 +171,31 @@ class SemanticEngine
         Instruction instr = currentInstruction();
         int i = 2;
         String cond = "";
+        VarTypeToken type = null;
         while (!instr.getTokenList().get(i).equals(SymbolToken.DOUBLE_DASH))
         {
-            cond += instr.getTokenList().get(i).getText();
+            Token t = instr.getTokenList().get(i);
+            cond += t.getText();
             i++;
+
+            if(t instanceof IdToken)
+            {
+                if(!idTable.containsKey(t.getText()))
+                    logError("Undeclared variable " + t.getText());
+                else if(!initialisedVariables.contains(t.getText()))
+                    logError("Uninitialised variable " + t.getText());
+                else if(type == null)
+                    type = idTable.get(t.getText());
+                else if(!idTable.get(t.getText()).equals(type))
+                    logError("Type mismatch");
+            }
+            if(t instanceof DataToken)
+            {
+                if(type == null)
+                    type = ((DataToken) t).getDataType();
+                if(!((DataToken) t).getDataType().equals(type))
+                    logError("Type mismatch");
+            }
         }
         compiledCode += "if (" + cond + ") \n";
     }
@@ -190,14 +213,35 @@ class SemanticEngine
         IdToken id1 = (IdToken) instr.getTokenList().get(1);
         IdToken id2 = (IdToken) instr.getTokenList().get(3);
 
-        if(idTable.containsKey(id1.getText()) && idTable.containsKey(id2.getText())
-                && idTable.get(id1.getText()).getText().equals(idTable.get(id2.getText()).getText()))
+        if(idTable.containsKey(id1.getText()))
         {
-            compiledCode += id1.getText() + "=" + id2.getText() + ";\n";
+            if(idTable.containsKey(id2.getText()))
+            {
+                if(idTable.get(id1.getText()).equals(idTable.get(id2.getText())))
+                {
+                    if(initialisedVariables.contains(id1.getText()))
+                    {
+                        initialisedVariables.add(id2.getText());
+                        compiledCode += id2.getText() + "=" + id1.getText() + ";\n";
+                    }
+                    else
+                    {
+                        logError("Uninitialised variable " + id1.getText());
+                    }
+                }
+                else
+                {
+                    logError("Type mismatch");
+                }
+            }
+            else
+            {
+                logError("Undeclared Variable " + id2.getText());
+            }
         }
         else
         {
-            logError("Type mismatch");
+            logError("Undeclared Variable " + id1.getText());
         }
     }
 
@@ -209,8 +253,9 @@ class SemanticEngine
 
         if(idTable.containsKey(id1.getText()))
         {
-            if(idTable.get(id1.getText()).getText().equals(id2.getDataType().getText()))
+            if(idTable.get(id1.getText()).equals(id2.getDataType()))
             {
+                initialisedVariables.add(id1.getText());
                 compiledCode += id1.getText() + "=" + id2.getText() + ";\n";
             }
             else

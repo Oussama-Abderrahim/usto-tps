@@ -60,8 +60,8 @@ public class OutputTextArea extends JTextPane
                             {
                                 int pos = getCaretPosition();
                                 highlight();
-                                setCaretPosition(pos);
                                 requestFocus();
+                                setCaretPosition(pos);
                             }
                         }
                     });
@@ -113,7 +113,6 @@ public class OutputTextArea extends JTextPane
         String text = getText();
 
         clear();
-
         for(String line : text.split("\n"))
         {
             for (String word : line.split("\\s"))

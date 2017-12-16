@@ -347,7 +347,7 @@ public class SyntaxEngine
             instr = instr + t.getText() + " ";
         }
 
-        errors += "line " + lineCount + " : " + s + " at " + instr + '\n';
+        errors += "line " + lineCount + " : " + s + " " + instr + '\n';
         buffer.clear();
         return true;
     }

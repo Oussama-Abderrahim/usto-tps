@@ -18,7 +18,7 @@ public class MainFrame extends JFrame
 
     private SPanel outputPanel;
 
-    private OutputTextArea EditorTextArea;
+    private OutputTextArea editorTextArea;
     private final OutputTextArea logTextArea;
 
     private String sourceCode = "";
@@ -29,7 +29,7 @@ public class MainFrame extends JFrame
 
     public MainFrame getInstance()
     {
-        if(instance == null)
+        if (instance == null)
             instance = new MainFrame();
         return instance;
     }
@@ -43,13 +43,17 @@ public class MainFrame extends JFrame
         initWindow();
 
         controlPanel = initControlPanel();
-        EditorTextArea = new OutputTextArea(true);
+        editorTextArea = new OutputTextArea(true);
         logTextArea = new OutputTextArea(false);
-        outputPanel = initOutputPanel(EditorTextArea, logTextArea);
+        outputPanel = initOutputPanel(editorTextArea, logTextArea);
 
-        contentPane.setLayout(new BorderLayout(5,5));
+        contentPane.setLayout(new BorderLayout(5, 5));
         contentPane.add(controlPanel, BorderLayout.WEST);
         contentPane.add(outputPanel, BorderLayout.CENTER);
+
+        editorTextArea.setText("Start_Program\n  ShowMes : \"Hello World !\\n\";;\nEnd_Program");
+        editorTextArea.highlight();
+        pack();
     }
 
     private void initWindow()
@@ -57,16 +61,17 @@ public class MainFrame extends JFrame
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Mon analyseur lexical, syntaxique et sémantique");
         setBounds(100, 100, Theme.WINDOW_WIDTH, Theme.WINDOW_HEIGHT);
+        setPreferredSize(new Dimension(Theme.WINDOW_WIDTH, Theme.WINDOW_HEIGHT));
 
         contentPane = new SPanel();
-        contentPane.setLayout(new BorderLayout(5,5));
+        contentPane.setLayout(new BorderLayout(5, 5));
         setContentPane(contentPane);
     }
 
     private SPanel initOutputPanel(OutputTextArea outputTextArea, OutputTextArea logTextArea)
     {
         SPanel outputPanel = new SPanel();
-        outputPanel.setLayout(new BorderLayout(5,5));
+        outputPanel.setLayout(new BorderLayout(5, 5));
 
         JLabel outLabel = new JLabel("Sortie : ");
         outLabel.setFont(Theme.FONT_DEFAULT);
@@ -77,7 +82,7 @@ public class MainFrame extends JFrame
         JScrollPane scrollLog = new JScrollPane(logTextArea);
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollOutput, scrollLog);
-        splitPane.setDividerLocation(50);
+        splitPane.setResizeWeight(0.8);
         splitPane.setOneTouchExpandable(true);
         outputPanel.add(splitPane, BorderLayout.CENTER);
         return outputPanel;
@@ -86,7 +91,7 @@ public class MainFrame extends JFrame
     private SPanel initControlPanel()
     {
         SPanel controlPanel = new SPanel();
-        controlPanel.setLayout(new BorderLayout(5,5));
+        controlPanel.setLayout(new BorderLayout(5, 5));
 
         JLabel cmdLabel = new JLabel("Commandes : ");
         cmdLabel.setFont(Theme.FONT_DEFAULT);
@@ -107,40 +112,46 @@ public class MainFrame extends JFrame
         SymanticButton.setIcon(FileManager.loadImage("source-code"));
 
 
-        loadFileButton.addActionListener(new ActionListener() {
+        loadFileButton.addActionListener(new ActionListener()
+        {
 
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e)
+            {
                 loadSourceCode();
             }
         });
-        lexicalButton.addActionListener(new ActionListener() {
+        lexicalButton.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                sourceCode = EditorTextArea.getText();
+            public void actionPerformed(ActionEvent e)
+            {
+                sourceCode = editorTextArea.getText();
                 lexicalEngine.setSourceCode(sourceCode);
                 showLexicalResult(lexicalEngine.getTokenSource(), lexicalEngine.getErrors());
             }
         });
-        syntaxButton.addActionListener(new ActionListener() {
+        syntaxButton.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                sourceCode = EditorTextArea.getText();
+            public void actionPerformed(ActionEvent e)
+            {
+                sourceCode = editorTextArea.getText();
                 lexicalEngine.setSourceCode(sourceCode);
                 syntaxEngine.setTokenSource(lexicalEngine.getTokenSource());
                 showSyntaxResult(syntaxEngine.getResult(), syntaxEngine.getErrors());
             }
         });
-        SymanticButton.addActionListener(new ActionListener() {
+        SymanticButton.addActionListener(new ActionListener()
+        {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                sourceCode = EditorTextArea.getText();
+                sourceCode = editorTextArea.getText();
                 lexicalEngine.setSourceCode(sourceCode);
                 syntaxEngine.setTokenSource(lexicalEngine.getTokenSource());
                 semanticEngine.setInstructionSource(syntaxEngine.getResult());
-                logTextArea.setText("Semantic Result : \n" + semanticEngine.getResult() + "\n");
-                logTextArea.appendText(semanticEngine.getErrors(), Theme.FONT_WARNING_COLOR, false);
+                showSemanticResult(semanticEngine.getResult(), semanticEngine.getErrors());
             }
         });
 
@@ -156,6 +167,16 @@ public class MainFrame extends JFrame
         return controlPanel;
     }
 
+    private void showSemanticResult(String result, String errors)
+    {
+        logTextArea.setText("Semantic Result : \n");
+
+        if (errors.isEmpty())
+            logTextArea.appendText("No errors found", Theme.FONT_SUCCESS_COLOR, false);
+        else
+            logTextArea.appendText("Found errors : \n" + errors, Theme.FONT_WARNING_COLOR, false);
+    }
+
     private void showSyntaxResult(ArrayList<Instruction> result, String errors)
     {
         logTextArea.setVisible(true);
@@ -166,11 +187,11 @@ public class MainFrame extends JFrame
         //logTextArea.appendText(s, Color.BLACK, false);
 
 
-        for(Instruction s : result)
+        for (Instruction s : result)
         {
             /*Print instr */
             String instr = "";
-            for(Token t : s.getTokenList())
+            for (Token t : s.getTokenList())
             {
                 instr = instr + t.getText() + " ";
             }
@@ -213,14 +234,14 @@ public class MainFrame extends JFrame
                 case SHOW_VAR:
                     logTextArea.appendText("Affichage Variable");
                     break;
-                    default:
-                        logTextArea.appendText("???");
+                default:
+                    logTextArea.appendText("???");
             }
 
             logTextArea.appendText("\n");
         }
 
-        if(errors.isEmpty())
+        if (errors.isEmpty())
             logTextArea.appendText("No errors found \n", Theme.FONT_SUCCESS_COLOR, false);
         else
             logTextArea.appendText("Compilation failed : \n" + errors, Theme.FONT_WARNING_COLOR, false);
@@ -230,7 +251,7 @@ public class MainFrame extends JFrame
     {
         logTextArea.setVisible(true);
         logTextArea.setText("");
-        for(Token t : tokenSource)
+        for (Token t : tokenSource)
         {
             logTextArea.appendText(t.getText() + " -> ", Theme.FONT_INPUT_COLOR, true);
             switch (t.getType())
@@ -263,7 +284,7 @@ public class MainFrame extends JFrame
             }
         }
 
-        if(errors.isEmpty())
+        if (errors.isEmpty())
             logTextArea.appendText("No errors found", Theme.FONT_SUCCESS_COLOR, false);
         else
             logTextArea.appendText(errors, Theme.FONT_WARNING_COLOR, false);
@@ -274,17 +295,21 @@ public class MainFrame extends JFrame
     private void loadSourceCode()
     {
         String sourceCode = FileManager.getLoadedFileText();
-
-        EditorTextArea.setText(sourceCode);
-        EditorTextArea.highlight();
-        this.sourceCode = sourceCode;
+        if(!sourceCode.isEmpty())
+        {
+            editorTextArea.setText(sourceCode);
+            editorTextArea.highlight();
+            this.sourceCode = sourceCode;
+        }
     }
 
     public static void main(String args[])
     {
-        EventQueue.invokeLater(new Runnable() {
+        EventQueue.invokeLater(new Runnable()
+        {
             @Override
-            public void run() {
+            public void run()
+            {
                 new MainFrame().setVisible(true);
             }
         });

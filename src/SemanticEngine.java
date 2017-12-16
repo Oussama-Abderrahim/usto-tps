@@ -14,7 +14,7 @@ class SemanticEngine
 
     private Map<String, VarTypeToken> idTable;
 
-    private String result = "";
+    private String compiledCode = "";
     private String errors = "";
 
     SemanticEngine()
@@ -25,7 +25,7 @@ class SemanticEngine
     private void clear()
     {
         idTable = new HashMap<>();
-        result = "";
+        compiledCode = "";
         errors = "";
         currentInstrIndex = -1;
     }
@@ -46,7 +46,10 @@ class SemanticEngine
     {
         clear();
         performAnalysis();
-        return result;
+        if(errors.isEmpty())
+            return (new ProgramRunner(compiledCode).getConsoleOutput());
+        //return compiledCode;
+        return "";
     }
 
     String getErrors()
@@ -101,21 +104,22 @@ class SemanticEngine
     private void interpretShowVar()
     {
         Instruction instr = currentInstruction();
+        compiledCode += "System.out.println(\"\"+"+instr.getTokenList().get(2).getText()+");";
     }
 
     private void interpretElseStatement()
     {
-        Instruction instr = currentInstruction();
+        compiledCode += "else\n";
     }
 
     private void interpretFinish()
     {
-        Instruction instr = currentInstruction();
+        compiledCode += "}\n";
     }
 
     private void interpretBegin()
     {
-        Instruction instr = currentInstruction();
+        compiledCode += "{\n";
     }
 
     private void interpretVarDecl()
@@ -123,6 +127,17 @@ class SemanticEngine
         Instruction instr = currentInstruction();
 
         VarTypeToken type = (VarTypeToken) instr.getTokenList().get(0);
+        String javaType = "int";
+        switch(type.getText())
+        {
+            case "Real_Number": javaType = "double";
+            break;
+            case "String": javaType = "String";
+                break;
+            case "Int_Number": javaType = "int";
+                break;
+        }
+
 
         int i = 1;  // start at first id
         do
@@ -136,14 +151,12 @@ class SemanticEngine
             else
             {
                 idTable.put(id, type);
+                compiledCode += javaType + " " + id + ";\n";
+
             }
             i++;
         }while (!instr.getTokenList().get(i).equals(KeywordToken.SEMI_COLON));
 
-        for (String id : idTable.keySet())
-        {
-            System.out.println(id + " : " + idTable.get(id).getText());
-        }
     }
 
     private void logError(String error)
@@ -154,11 +167,21 @@ class SemanticEngine
     private void interpretIfStatement()
     {
         Instruction instr = currentInstruction();
+        int i = 2;
+        String cond = "";
+        while (!instr.getTokenList().get(i).equals(SymbolToken.DOUBLE_DASH))
+        {
+            cond += instr.getTokenList().get(i).getText();
+            i++;
+        }
+        compiledCode += "if (" + cond + ") \n";
     }
 
     private void interpretShowMsg()
     {
         Instruction instr = currentInstruction();
+
+        compiledCode += "System.out.println("+instr.getTokenList().get(2).getText()+");\n";
     }
 
     private void interpretAffectVar()
@@ -170,7 +193,7 @@ class SemanticEngine
         if(idTable.containsKey(id1.getText()) && idTable.containsKey(id2.getText())
                 && idTable.get(id1.getText()).getText().equals(idTable.get(id2.getText()).getText()))
         {
-            System.out.println("Affectation true");
+            compiledCode += id1.getText() + "=" + id2.getText() + ";\n";
         }
         else
         {
@@ -188,7 +211,7 @@ class SemanticEngine
         {
             if(idTable.get(id1.getText()).getText().equals(id2.getDataType().getText()))
             {
-                System.out.println("Affectation true");
+                compiledCode += id1.getText() + "=" + id2.getText() + ";\n";
             }
             else
             {
@@ -204,12 +227,14 @@ class SemanticEngine
 
     private void interpretEndProgram()
     {
-        Instruction instr = currentInstruction();
+        compiledCode += "}\n}\n";
     }
 
     private void interpretStartProgram()
     {
-        Instruction instr = currentInstruction();
+        compiledCode += "class Main {" +
+                "\n\n" +
+                "public static void main(String[] args) \n{\n";
     }
 
     public void setInstructionSource(ArrayList<Instruction> instructionSource)

@@ -169,10 +169,12 @@ public class MainFrame extends JFrame
 
     private void showSemanticResult(String result, String errors)
     {
-        logTextArea.setText("Semantic Result : \n");
-
+        logTextArea.setText("");
         if (errors.isEmpty())
-            logTextArea.appendText("No errors found", Theme.FONT_SUCCESS_COLOR, false);
+        {
+            logTextArea.appendText("No errors found\n", Theme.FONT_SUCCESS_COLOR, false);
+            logTextArea.appendText("Console Output : \n" + result, Theme.FONT_INPUT_COLOR, false);
+        }
         else
             logTextArea.appendText("Found errors : \n" + errors, Theme.FONT_WARNING_COLOR, false);
     }
@@ -181,8 +183,6 @@ public class MainFrame extends JFrame
     {
         logTextArea.setVisible(true);
         logTextArea.setText("");
-        logTextArea.appendText("Syntax Analysis result : \n", Theme.FONT_SUCCESS_COLOR, false);
-
         // print instr :
         //logTextArea.appendText(s, Color.BLACK, false);
 

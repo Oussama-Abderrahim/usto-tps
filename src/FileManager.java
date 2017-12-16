@@ -100,4 +100,22 @@ public class FileManager
 
         return text;
     }
+    public static void writeToFile(File file, String str) throws IOException
+    {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+        writer.write(str);
+        writer.close();
+    }
+
+    public static File createTempFile(String filename) throws IOException
+    {
+        File tmp = new File(filename);
+
+        return tmp;
+    }
+
+    public static void deleteFile(String filename)
+    {
+        new File(filename).delete();
+    }
 }

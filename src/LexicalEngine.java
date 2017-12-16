@@ -1,15 +1,10 @@
 import token.*;
 
 import java.util.ArrayList;
-import java.util.regex.Pattern;
 
 
 class LexicalEngine
 {
-    private final Pattern idPattern = Pattern.compile("[a-z]|[A-Z](_?([A-Za-z]|[0-9])+)*");
-    Pattern numberPatter = Pattern.compile("([0-9]+(\\.[0-9]+)?)");
-
-
     private String sourceCode;
     private ArrayList<Token> tokenSource = new ArrayList<>();
     private String errors = "";
@@ -62,7 +57,7 @@ class LexicalEngine
         return errors;
     }
 
-    void clear()
+    private void clear()
     {
         lineCount = 1;
         tokenSource.clear();
@@ -83,7 +78,7 @@ class LexicalEngine
             boolean proceed = true; // si vrai lire le prochain char à la fin
 
             // verifier commentaires
-            if(!skipComments())
+            if (!skipComments())
                 return false;
             c = currentChar();
             // lecture
@@ -144,7 +139,7 @@ class LexicalEngine
                         if (c == '-')
                             tokenSource.add(new SymbolToken("--", lineCount));
                         else
-                            return logError("Unknown token '-'"+c+" found");
+                            return logError("Unknown token '-'" + c + " found");
                         break;
                     case ',':
                         tokenSource.add(new SymbolToken(",", lineCount));
@@ -175,16 +170,16 @@ class LexicalEngine
     private boolean skipComments()
     {
         char c = currentChar();
-        if(c == '/')
+        if (c == '/')
         {
             c = nextChar();
-            if(c == '/')
+            if (c == '/')
             {
                 c = nextChar();
-                if(c == '.')
+                if (c == '.')
                 {
                     // skip to nextLine
-                    while (nextChar() != '\n');
+                    while (nextChar() != '\n') ;
                     nextChar();
                     buffer = "";
                     lineCount++;
@@ -245,7 +240,34 @@ class LexicalEngine
 
     private boolean isIdentifier(String buffer)
     {
-        return (idPattern.matcher(buffer).matches());
+        // lower case only if one char
+        if (buffer.length() == 1 && TextProcessor.isLowerCaseLetter(buffer.charAt(0)))
+            return true;
+        // must start with an uppercase
+        if(!TextProcessor.isUpperCaseLetter(buffer.charAt(0)))
+            return false;
+
+        int i = 1;
+        boolean underscore = false;
+        while (i < buffer.length())
+        {
+            char c = buffer.charAt(i);
+            // check if letter/digit
+            if (!(TextProcessor.isLowerCaseLetter(c) || TextProcessor.isUpperCaseLetter(c) || TextProcessor.isDigit(c)))
+            {
+                // no more than one underscore
+                if (c == '_' && !underscore)
+                    underscore = true;
+                else
+                    return false;
+            }
+            else
+            {
+                underscore = false;
+            }
+            i++;
+        }
+        return true;
     }
 
     private boolean isVarType(String buffer)
@@ -271,11 +293,6 @@ class LexicalEngine
                 || TextProcessor.compare(buffer, "Finish");
     }
 
-    private boolean isSymbol(String buffer)
-    {
-        return false;
-    }
-
     private boolean isDigit(char c)
     {
         return c == '0' ||
@@ -292,15 +309,20 @@ class LexicalEngine
 
     private boolean isNumber(String buffer)
     {
-        return numberPatter.matcher(buffer).matches();
-//        for (int i = 0; i < buffer.length(); i++)
-//        {
-//            if (!isDigit(buffer.charAt(i)))
-//            {
-//                return false;
-//            }
-//        }
-//        return true;
+        //return numberPatter.matcher(buffer).matches();
+        boolean point = false;
+        for (int i = 0; i < buffer.length() - 1; i++)
+        {
+            if (!isDigit(buffer.charAt(i)))
+            {
+                if (buffer.charAt(i) == '.' && !point)
+                    point = true;
+                else
+                    return false;
+            }
+        }
+        // last char must be digit
+        return isDigit(buffer.charAt(buffer.length() - 1));
     }
 
     private boolean isSeparator(char c)

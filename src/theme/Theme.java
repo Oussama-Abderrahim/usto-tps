@@ -19,7 +19,7 @@ public class Theme
     public static final Color GREEN_EMERALD = new Color(39, 174, 96);
 
 
-    private static final int THEME = 0; // 0 plain, 1 Dracula
+    private static final int THEME = 1; // 0 plain, 1 Dracula
     // Font Colors
     public static final Color FONT_DEFAULT_COLOR = (THEME == 1)? Color.WHITE : Color.WHITE;
     public static final Color FONT_INPUT_COLOR = (THEME == 1)? Color.WHITE : Color.BLACK;

@@ -73,7 +73,20 @@ public class OutputTextArea extends JTextPane
                 @Override
                 public void removeUpdate(DocumentEvent e)
                 {
-
+                    EventQueue.invokeLater(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            if (changed)
+                            {
+                                int pos = getCaretPosition();
+                                highlight();
+                                requestFocus();
+                                setCaretPosition(pos);
+                            }
+                        }
+                    });
                 }
 
                 @Override

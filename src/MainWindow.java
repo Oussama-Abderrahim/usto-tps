@@ -30,7 +30,7 @@ public class MainWindow extends JFrame
         contentPane.setLayout(new BorderLayout());
 
         // Here we add panels to show
-//        showPanel(new GamePanel());
+        showPanel(new GamePanel());
     }
 
     public void showPanel(JPanel panel)

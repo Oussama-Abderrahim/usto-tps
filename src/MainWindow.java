@@ -14,14 +14,15 @@ public class MainWindow extends JFrame
 
     public static MainWindow getInstance()
     {
-        if(MainWindow.instance == null)
+        if (MainWindow.instance == null)
             MainWindow.instance = new MainWindow();
 
         return MainWindow.instance;
     }
+
     public MainWindow()
     {
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         this.setLocationRelativeTo(null); // center in screen
         JPanel contentPane = new JPanel();
@@ -43,20 +44,11 @@ public class MainWindow extends JFrame
 
     public static void main(String[] args)
     {
-        Runnable r = new Runnable() {
-            @Override
-            public void run() {
-                try {
-//                    UIManager.setLookAndFeel(
-//                            UIManager.getSystemLookAndFeelClassName());
-                } catch (Exception e) {
-                    // use default
-                }
+        Runnable r = () ->
+        {
+            MainWindow window = new MainWindow();
 
-                MainWindow window = new MainWindow();
-
-                window.setVisible(true);
-            }
+            window.setVisible(true);
         };
         SwingUtilities.invokeLater(r);
     }

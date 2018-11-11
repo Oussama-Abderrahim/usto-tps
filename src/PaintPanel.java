@@ -19,11 +19,14 @@ public class PaintPanel extends JPanel
     private Color bgColor = Color.white;
 
     private Stroke stroke = new BasicStroke(
-            5,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND,1.7f);
+            5, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1.7f);
 
-    public PaintPanel()
+    private SocketPeerConnection socketPeerConnection;
+
+    public PaintPanel(SocketPeerConnection socketPeerConnection)
     {
         super();
+        this.socketPeerConnection = socketPeerConnection;
 
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
@@ -31,6 +34,7 @@ public class PaintPanel extends JPanel
 
         this.setupMouseListeners();
         this.clear();
+//        this.setEnabled(false);
     }
 
     private void setupMouseListeners()
@@ -74,6 +78,7 @@ public class PaintPanel extends JPanel
             {
 //                selectionEndPoint = e.getPoint();
                 draw(e.getPoint());
+                lastPoint = null;
                 repaint();
             }
 
@@ -103,25 +108,41 @@ public class PaintPanel extends JPanel
         this.repaint();
     }
 
-    public void draw(Point point) {
+    private Point lastPoint = null;
+
+    public void draw(Point point)
+    {
+        if (!this.isEnabled()) return;
+
         Graphics2D g = this.canvasImage.createGraphics();
         g.setColor(this.color);
         g.setStroke(stroke);
-        int n = 0;
 
-        int x = point.x * canvasImage.getWidth()/this.getWidth();
-        int y = point.y * canvasImage.getHeight()/this.getHeight();
+        int x = point.x * canvasImage.getWidth() / this.getWidth();
+        int y = point.y * canvasImage.getHeight() / this.getHeight();
 
-        g.drawLine(x, y, x+n, y+n);
+        int x2 = x;
+        int y2 = y;
+
+        if (lastPoint != null)
+        {
+            x2 = lastPoint.x * canvasImage.getWidth() / this.getWidth();
+            y2 = lastPoint.y * canvasImage.getHeight() / this.getHeight();
+        }
+
+        g.drawLine(x, y, x2, y2);
+
         g.dispose();
         this.repaint();
+
+        this.lastPoint = point;
     }
 
     @Override
     protected void paintComponent(Graphics g)
     {
         super.paintComponent(g);
-        if(canvasImage == null) return;
+        if (canvasImage == null) return;
 
         g.drawImage(canvasImage, 0, 0, getWidth(), getHeight(), null);
 

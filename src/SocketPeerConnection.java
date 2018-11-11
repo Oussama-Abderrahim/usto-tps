@@ -10,13 +10,18 @@ import java.net.Socket;
  */
 public class SocketPeerConnection
 {
-    private static final int PORT = 6789;
+    private static final int PORT = 33000;
     private ObjectOutputStream outputStream;
     private ObjectInputStream inputStream;
     private String serverIP;
     private Socket connection;
     private String name;
     private String message;
+
+    public SocketPeerConnection()
+    {
+        this("127.0.0.1");
+    }
 
     public SocketPeerConnection(String host)
     {
@@ -77,8 +82,9 @@ public class SocketPeerConnection
      */
     public void startListening(MessageHandler messageHandler)
     {
-        Thread listenThread = new Thread(() ->
+        final Thread listenThread = new Thread(() ->
         {
+            String message = "";
             do
             {
                 try
@@ -94,9 +100,10 @@ public class SocketPeerConnection
                 } catch (IOException e)
                 {
                     System.err.println("\nError receiving message " + e.getMessage());
+                    e.printStackTrace();
+                    break;
                 }
             } while (!message.equals("/END"));
-
 
         });
         listenThread.start();

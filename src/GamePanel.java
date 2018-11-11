@@ -21,8 +21,6 @@ public class GamePanel extends SPanel
     {
         super();
 
-        this.socketPeerConnection = new SocketPeerConnection("localhost");
-
         this.setLayout(new BorderLayout(5, 1));
         this.setBorder(BorderFactory.createEmptyBorder(5, 5, 5,5));
 
@@ -55,6 +53,10 @@ public class GamePanel extends SPanel
 
     private void startGame()
     {
+
+        this.socketPeerConnection = new SocketPeerConnection();
+        this.socketPeerConnection.startListening(message -> this.chatWindow.showMessage(message));
+        this.chatWindow.start();
         this.paintPanel.setEnabled(true);
     }
 

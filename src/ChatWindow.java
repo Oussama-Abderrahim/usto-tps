@@ -61,7 +61,7 @@ public class ChatWindow extends JPanel
     }
 
     //change or update chatWindow
-    private void showMessage(final String message)
+    public void showMessage(final String message)
     {
         SwingUtilities.invokeLater(() ->
                 {
@@ -78,5 +78,9 @@ public class ChatWindow extends JPanel
                     userText.setEditable(tof); //make it editable or not
                 }
         );
+    }
+
+    public void start() {
+        ableToType(true);
     }
 }

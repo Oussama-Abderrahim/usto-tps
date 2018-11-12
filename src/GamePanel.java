@@ -29,13 +29,24 @@ public class GamePanel extends SPanel
 
         JPanel gameControls = new JPanel();
         gameControls.setLayout(new FlowLayout());
+
         SButton startGameButton = new SButton("Start Game");
+        SButton joinGameButton = new SButton("Join Game");
 
         startGameButton.addActionListener(e -> {
-            startGame();
+            startGame(true);
+            startGameButton.setEnabled(false);
+            joinGameButton.setEnabled(false);
+        });
+
+        joinGameButton.addActionListener(e -> {
+            startGame(false);
+            startGameButton.setEnabled(false);
+            joinGameButton.setEnabled(false);
         });
 
         gameControls.add(startGameButton);
+        gameControls.add(joinGameButton);
 
         JPanel toolbox = new SPanel();
         toolbox.setLayout(new FlowLayout());
@@ -44,20 +55,21 @@ public class GamePanel extends SPanel
         clearButton.addActionListener(e -> paintPanel.clear());
         toolbox.add(clearButton);
 
-        chatWindow = new ChatWindow(this.socketPeerConnection, "localhost");
+        chatWindow = new ChatWindow("localhost");
 
         this.add(gameControls, BorderLayout.NORTH);
         this.add(toolbox, BorderLayout.EAST);
         this.add(chatWindow, BorderLayout.WEST);
     }
 
-    private void startGame()
+    private void startGame(Boolean isInitiator)
     {
-
-        this.socketPeerConnection = new SocketPeerConnection();
-        this.socketPeerConnection.startListening(message -> this.chatWindow.showMessage(message));
-        this.chatWindow.start();
+        this.socketPeerConnection = new SocketPeerConnection(isInitiator, message -> this.chatWindow.showMessage(message));
+        this.chatWindow.start(this.socketPeerConnection);
         this.paintPanel.setEnabled(true);
+        new Thread(() -> {
+            this.socketPeerConnection.start();
+        }).start();
     }
 
 }

@@ -50,8 +50,9 @@ public class ChatWindow extends JPanel
     //send messages to server
     private void sendMessage(String message)
     {
+        message = name + " : " + message;
         this.socketConnection.send(message);
-        showMessage("User : " + message);
+        showMessage(message);
     }
 
     //change or update chatWindow
@@ -59,7 +60,7 @@ public class ChatWindow extends JPanel
     {
         SwingUtilities.invokeLater(() ->
                 {
-                    chatWindow.append("Guess : " + message + "\n"); //so it can appear at the end of the conversation
+                    chatWindow.append(message + "\n"); //so it can appear at the end of the conversation
                 }
         );
     }

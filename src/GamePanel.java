@@ -13,39 +13,17 @@ public class GamePanel extends SPanel
 
     private SocketPeerConnection socketPeerConnection;
     private boolean gameStarted = false;
+    private String name = "";
 
-    public GamePanel()
+    public GamePanel(String name)
     {
         super();
+        this.name = name;
 
         this.setLayout(new BorderLayout(5, 1));
         this.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         this.paintPanel = new PaintPanel(this.socketPeerConnection);
-        this.add(paintPanel, BorderLayout.CENTER);
-
-        SPanel gameControls = new SPanel();
-        gameControls.setLayout(new FlowLayout());
-
-        SButton startGameButton = new SButton("Start Game");
-        SButton joinGameButton = new SButton("Join Game");
-
-        startGameButton.addActionListener(e ->
-        {
-            startGame();
-            startGameButton.setEnabled(false);
-            joinGameButton.setEnabled(false);
-        });
-
-        joinGameButton.addActionListener(e ->
-        {
-            joinGame();
-            startGameButton.setEnabled(false);
-            joinGameButton.setEnabled(false);
-        });
-
-        gameControls.add(startGameButton);
-        gameControls.add(joinGameButton);
 
         JPanel toolbox = new SPanel();
         toolbox.setLayout(new FlowLayout());
@@ -54,14 +32,14 @@ public class GamePanel extends SPanel
         clearButton.addActionListener(e -> paintPanel.clear());
         toolbox.add(clearButton);
 
-        chatWindow = new ChatWindow("localhost");
+        chatWindow = new ChatWindow(name);
 
-        this.add(gameControls, BorderLayout.NORTH);
-        this.add(toolbox, BorderLayout.EAST);
+        this.add(toolbox, BorderLayout.NORTH);
+        this.add(paintPanel, BorderLayout.CENTER);
         this.add(chatWindow, BorderLayout.WEST);
     }
 
-    private void startGame()
+    public void startGame()
     {
         this.socketPeerConnection = new SocketPeerConnection();
         ///TODO : show here a waiting message
@@ -80,7 +58,7 @@ public class GamePanel extends SPanel
         })).start();
     }
 
-    private void joinGame()
+    public void joinGame()
     {
         this.socketPeerConnection = new SocketPeerConnection();
         socketPeerConnection.startClient();
@@ -115,7 +93,7 @@ public class GamePanel extends SPanel
             }
         } else
         {
-            System.err.println("Unknow message object " + message);
+            System.err.println("Unknown message object " + message);
         }
     }
 }

@@ -1,4 +1,5 @@
 import theme.SPanel;
+import theme.Theme;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -18,14 +19,16 @@ public class MainWindow extends JFrame
     public static final int WINDOW_WIDTH = Theme.WINDOW_WIDTH;
     public static final int WINDOW_HEIGHT = Theme.WINDOW_HEIGHT;
 
-    public static MainWindow getInstance() throws IOException {
+    public static MainWindow getInstance()
+    {
         if (MainWindow.instance == null)
             MainWindow.instance = new MainWindow();
 
         return MainWindow.instance;
     }
 
-    public MainWindow() {
+    public MainWindow()
+    {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         this.setLocationRelativeTo(null); // center in screen
@@ -42,10 +45,12 @@ public class MainWindow extends JFrame
         //background image
         String bg = "bg.jpg";
         File file = new File("res/" + bg);
-        try {
+        try
+        {
             BufferedImage image = ImageIO.read(file);
             contentPane.setBackground(image);
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             e.printStackTrace();
         }
     }
@@ -62,10 +67,26 @@ public class MainWindow extends JFrame
     {
         Runnable r = () ->
         {
-            MainWindow window = new MainWindow();
+            MainWindow window = MainWindow.getInstance();
 
             window.setVisible(true);
         };
         SwingUtilities.invokeLater(r);
+    }
+
+    public void startNewGame(String playerName)
+    {
+        GamePanel gamePanel = new GamePanel(playerName);
+
+        this.showPanel(gamePanel);
+        gamePanel.startGame();
+    }
+
+    public void joinGame(String playerName)
+    {
+        GamePanel gamePanel = new GamePanel(playerName);
+
+        this.showPanel(gamePanel);
+        gamePanel.joinGame();
     }
 }

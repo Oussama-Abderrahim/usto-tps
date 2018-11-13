@@ -8,12 +8,11 @@ import java.awt.event.ActionListener;
 /**
  * Created by pc on 12/11/2018.
  */
-public class MakeNewRoomPanel extends SPanel {
+public class MakeNewRoomPanel extends SPanel
+{
 
-    public MakeNewRoomPanel(){
-
-
-/******************************************************************************/
+    public MakeNewRoomPanel()
+    {
         this.setBackground(theme.Theme.DARKER_MIDNIGHT_BLUE);
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
@@ -36,10 +35,12 @@ public class MakeNewRoomPanel extends SPanel {
         usernamePanel.add(username, BorderLayout.NORTH);
         this.add(addNewPlayerButton);
 
-        addNewPlayerButton.addActionListener(new ActionListener() {
+        addNewPlayerButton.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                //MainWindow.getInstance().startGame();
+            public void actionPerformed(ActionEvent e)
+            {
+                MainWindow.getInstance().startNewGame(username.getText());
             }
         });
     }

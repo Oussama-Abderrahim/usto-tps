@@ -1,5 +1,4 @@
 package theme;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusEvent;
@@ -17,7 +16,7 @@ public class STextField extends JTextField
     {
         setOpaque(false);
         setForeground(Theme.FONT_DEFAULT_COLOR);
-        setFont(Theme.FONT_DEFAULT_MEDIUM);
+        setFont(Theme.FONT_DEFAULT_SMALL);
     }
 
     public void setPlaceHolder(String placeHolder)

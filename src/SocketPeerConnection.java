@@ -11,7 +11,7 @@ import java.net.Socket;
  */
 public class SocketPeerConnection
 {
-    private static final int PORT = 33000;
+    private static final int PORT = 6789;
     private ObjectOutputStream outputStream;
     private ObjectInputStream inputStream;
     private Boolean isInitiator;

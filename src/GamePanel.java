@@ -1,11 +1,7 @@
-import sun.applet.Main;
 import theme.SButton;
 import theme.SPanel;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Created by Oussama on 09/11/2018.
@@ -27,7 +23,7 @@ public class GamePanel extends SPanel
         this.paintPanel = new PaintPanel(this.socketPeerConnection);
         this.add(paintPanel, BorderLayout.CENTER);
 
-        JPanel gameControls = new JPanel();
+        SPanel gameControls = new SPanel();
         gameControls.setLayout(new FlowLayout());
 
         SButton startGameButton = new SButton("Start Game");

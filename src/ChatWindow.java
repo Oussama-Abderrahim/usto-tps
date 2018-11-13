@@ -31,7 +31,7 @@ public class ChatWindow extends JPanel
         /* Add text field */
         userText = new STextField();
         userText.setPlaceHolder("Enter your message");
-        userText.setEditable(false); //not allowed before conntecting to anyone
+        userText.setEditable(false); //not allowed before connecting to anyone
         userText.addActionListener(
                 event ->
                 {

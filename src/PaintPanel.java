@@ -18,10 +18,12 @@ public class PaintPanel extends JPanel
     private Color color = Color.BLUE;
     private Color bgColor = Color.white;
 
+    private Point lastDrawnPoint = null;
+
     private Stroke stroke = new BasicStroke(
             5, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1.7f);
 
-    private SocketPeerConnection socketPeerConnection;
+    private SocketPeerConnection socketPeerConnection = null;
 
     public PaintPanel(SocketPeerConnection socketPeerConnection)
     {
@@ -32,9 +34,15 @@ public class PaintPanel extends JPanel
 
         this.canvasImage = new BufferedImage(PaintPanel.PAINT_WIDTH, PaintPanel.PAINT_HEIGHT, BufferedImage.TYPE_INT_ARGB);
 
-        this.setupMouseListeners();
         this.clear();
-//        this.setEnabled(false);
+        this.setEnabled(false);
+    }
+
+    public void start(SocketPeerConnection socketPeerConnection)
+    {
+        this.socketPeerConnection = socketPeerConnection;
+        this.setEnabled(true);
+        this.setupMouseListeners();
     }
 
     private void setupMouseListeners()
@@ -44,16 +52,12 @@ public class PaintPanel extends JPanel
             @Override
             public void mouseDragged(MouseEvent e)
             {
-//                endPoint = e.getPoint();
-//                repaint();
-                draw(e.getPoint());
+                onDrag(e.getPoint());
+                socketPeerConnection.send(new PaintEvent(PaintEvent.PaintEventType.DRAG, e.getPoint()));
             }
 
             @Override
-            public void mouseMoved(MouseEvent e)
-            {
-
-            }
+            public void mouseMoved(MouseEvent e){}
         });
         this.addMouseListener(new MouseListener()
         {
@@ -66,20 +70,15 @@ public class PaintPanel extends JPanel
             @Override
             public void mousePressed(MouseEvent e)
             {
-//                startPoint = e.getPoint();
-//                endPoint = e.getPoint();
-//                repaint();
-
-                draw(e.getPoint());
+                onPress(e.getPoint());
+                socketPeerConnection.send(new PaintEvent(PaintEvent.PaintEventType.PRESSED, e.getPoint()));
             }
 
             @Override
             public void mouseReleased(MouseEvent e)
             {
-//                selectionEndPoint = e.getPoint();
-                draw(e.getPoint());
-                lastPoint = null;
-                repaint();
+                onRelease(e.getPoint());
+                socketPeerConnection.send(new PaintEvent(PaintEvent.PaintEventType.RELEASED, e.getPoint()));
             }
 
             @Override
@@ -99,6 +98,9 @@ public class PaintPanel extends JPanel
 
     public void clear()
     {
+        if(this.socketPeerConnection != null)
+            socketPeerConnection.send(new PaintEvent(PaintEvent.PaintEventType.CLEAR, null));
+
         Graphics2D g = this.canvasImage.createGraphics();
         g.setColor(this.bgColor);
         g.setStroke(stroke);
@@ -108,12 +110,34 @@ public class PaintPanel extends JPanel
         this.repaint();
     }
 
-    private Point lastPoint = null;
+
+    public void onPress(Point point)
+    {
+        if(point != null)
+        {
+            draw(point);
+        }
+    }
+
+    public void onDrag(Point point)
+    {
+        if(point != null)
+        {
+            draw(point);
+        }
+    }
+
+    public void onRelease(Point point)
+    {
+        if(point != null)
+        {
+            draw(point);
+            lastDrawnPoint = null;
+        }
+    }
 
     public void draw(Point point)
     {
-        if (!this.isEnabled()) return;
-
         Graphics2D g = this.canvasImage.createGraphics();
         g.setColor(this.color);
         g.setStroke(stroke);
@@ -124,10 +148,10 @@ public class PaintPanel extends JPanel
         int x2 = x;
         int y2 = y;
 
-        if (lastPoint != null)
+        if (lastDrawnPoint != null)
         {
-            x2 = lastPoint.x * canvasImage.getWidth() / this.getWidth();
-            y2 = lastPoint.y * canvasImage.getHeight() / this.getHeight();
+            x2 = lastDrawnPoint.x * canvasImage.getWidth() / this.getWidth();
+            y2 = lastDrawnPoint.y * canvasImage.getHeight() / this.getHeight();
         }
 
         g.drawLine(x, y, x2, y2);
@@ -135,7 +159,7 @@ public class PaintPanel extends JPanel
         g.dispose();
         this.repaint();
 
-        this.lastPoint = point;
+        this.lastDrawnPoint = point;
     }
 
     @Override

@@ -3,5 +3,5 @@
  */
 public interface MessageHandler
 {
-    public void handleMessage(String message);
+    public void handleMessage(Object message);
 }

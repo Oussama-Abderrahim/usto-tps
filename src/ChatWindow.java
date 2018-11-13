@@ -50,14 +50,8 @@ public class ChatWindow extends JPanel
     //send messages to server
     private void sendMessage(String message)
     {
-        try
-        {
-            this.socketConnection.send(message);
-            showMessage("User : " + message);
-        } catch (IOException ioException)
-        {
-            chatWindow.append("\n Something messed up sending message");
-        }
+        this.socketConnection.send(message);
+        showMessage("User : " + message);
     }
 
     //change or update chatWindow
@@ -65,7 +59,7 @@ public class ChatWindow extends JPanel
     {
         SwingUtilities.invokeLater(() ->
                 {
-                    chatWindow.append(message + "\n"); //so it can appear at the end of the conversation
+                    chatWindow.append("Guess : " + message + "\n"); //so it can appear at the end of the conversation
                 }
         );
     }
@@ -80,7 +74,8 @@ public class ChatWindow extends JPanel
         );
     }
 
-    public void start(SocketPeerConnection socketPeerConnection) {
+    public void start(SocketPeerConnection socketPeerConnection)
+    {
         this.socketConnection = socketPeerConnection;
         ableToType(true);
     }

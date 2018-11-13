@@ -20,11 +20,10 @@ public class ChatWindow extends JPanel
 
 
     //constructor
-    public ChatWindow(SocketPeerConnection socketConnection, String name)
+    public ChatWindow(String name)
     { //passing the ip address connecting to
         super();
 
-        this.socketConnection = socketConnection;
         this.name = name;
 
         setLayout(new BorderLayout());
@@ -54,6 +53,7 @@ public class ChatWindow extends JPanel
         try
         {
             this.socketConnection.send(message);
+            showMessage("User : " + message);
         } catch (IOException ioException)
         {
             chatWindow.append("\n Something messed up sending message");
@@ -65,7 +65,7 @@ public class ChatWindow extends JPanel
     {
         SwingUtilities.invokeLater(() ->
                 {
-                    chatWindow.append(message); //so it can appear at the end of the conversation
+                    chatWindow.append(message + "\n"); //so it can appear at the end of the conversation
                 }
         );
     }
@@ -80,7 +80,8 @@ public class ChatWindow extends JPanel
         );
     }
 
-    public void start() {
+    public void start(SocketPeerConnection socketPeerConnection) {
+        this.socketConnection = socketPeerConnection;
         ableToType(true);
     }
 }

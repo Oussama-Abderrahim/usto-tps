@@ -15,8 +15,8 @@ public class MainWindow extends JFrame
 {
     private static MainWindow instance = null;
 
-    public static final int WINDOW_WIDTH = 640;
-    public static final int WINDOW_HEIGHT = 480;
+    public static final int WINDOW_WIDTH = Theme.WINDOW_WIDTH;
+    public static final int WINDOW_HEIGHT = Theme.WINDOW_HEIGHT;
 
     public static MainWindow getInstance() throws IOException {
         if (MainWindow.instance == null)

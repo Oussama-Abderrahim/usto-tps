@@ -24,11 +24,11 @@ public class MainMenuPanel extends SPanel{
 
         SLabel adivana = new SLabel("<html>"+"<center>"+"ADIVANA"+"</center>"+"<html>");
         adivana.setForeground(Color.WHITE);
-        adivana.setFont(new Font("Serif", Font.PLAIN, 40));
+        adivana.setFont(Theme.FONT_DEFAULT_BIG);
 
         SLabel optionText = new SLabel("<html>"+"<center>"+"Choose your option"+"</center>"+"<html>");
         optionText.setForeground(Color.WHITE);
-        optionText.setFont(new Font("Serif", Font.PLAIN, 20));
+        optionText.setFont(Theme.FONT_DEFAULT_MEDIUM);
         optionText.setHorizontalTextPosition(SwingConstants.CENTER);
         optionText.setHorizontalAlignment(SwingConstants.CENTER);
 

@@ -7,7 +7,7 @@ import java.awt.*;
 public class Theme
 {
     // Font
-    public static final String FONT_FAMILY           = "Halvetica";
+    public static final String FONT_FAMILY           = "Serif";
     public static final Font FONT_DEFAULT           = new Font(FONT_FAMILY, Font.PLAIN, 18);
     public static final Font FONT_DEFAULT_BOLD      = new Font(FONT_FAMILY, Font.BOLD, 16);
     public static final Font FONT_DEFAULT_SMALL     = new Font(FONT_FAMILY, Font.PLAIN, 12);

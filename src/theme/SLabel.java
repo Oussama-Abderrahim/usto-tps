@@ -11,7 +11,7 @@ public class SLabel extends JLabel
     }
 
     public SLabel(String text) {
-        this(text, Theme.FONT_DEFAULT_BIG);
+        this(text, Theme.FONT_DEFAULT_LARGE);
     }
     public SLabel(String text, Font font) {
         super(text);

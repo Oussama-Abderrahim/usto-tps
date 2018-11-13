@@ -20,10 +20,10 @@ public class MakeNewRoomPanel extends SPanel {
         JLabel enterUsername = new JLabel("Enter your username");
         enterUsername.setHorizontalTextPosition(SwingConstants.CENTER);
         enterUsername.setForeground(Color.WHITE);
-        enterUsername.setFont(new Font("Serif", Font.PLAIN, 30));
+        enterUsername.setFont(Theme.FONT_DEFAULT_LARGE);
 
         STextField username = new STextField();
-        username.setFont(new Font("Serif", Font.PLAIN, 20));
+        username.setFont(Theme.FONT_DEFAULT_MEDIUM);
         SPanel usernamePanel = new SPanel();
 
         usernamePanel.setBackground(theme.Theme.DARKER_MIDNIGHT_BLUE);

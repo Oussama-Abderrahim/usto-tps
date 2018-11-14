@@ -1,10 +1,8 @@
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  * Created by Oussama on 09/11/2018.
@@ -12,16 +10,34 @@ import java.net.Socket;
 public class SocketPeerConnection
 {
     private static final int PORT = 6789;
+    /**
+     *
+     */
     private ObjectOutputStream outputStream;
+
+    /**
+     *
+     */
     private ObjectInputStream inputStream;
+
+    /**
+     * True if the SocketConnection is a server (accepts other connections)
+     */
     private Boolean isInitiator;
+
+    /**
+     * MessageHandler
+     */
     private MessageHandler messageHandler;
+
     private String serverIP;
     private String name;
     private String message;
 
     private Socket connection;
     private ServerSocket server;
+    private ArrayList<ObjectInputStream> inputStreams;
+    private ArrayList<ObjectOutputStream> outputStreams;
 
     public SocketPeerConnection()
     {
@@ -35,8 +51,7 @@ public class SocketPeerConnection
 
     public SocketPeerConnection(String host, String name)
     {
-        this.isInitiator = isInitiator;
-        this.messageHandler = messageHandler;
+        outputStreams = new ArrayList<>();
         this.serverIP = host;
         this.name = name;
     }
@@ -115,6 +130,8 @@ public class SocketPeerConnection
     {
         outputStream = new ObjectOutputStream(connection.getOutputStream()); //the stream that flies from client to server
         outputStream.flush();
+        if(isInitiator)
+            outputStreams.add(outputStream);
         System.out.println("\nYour streams are good to go\n");
     }
 
@@ -145,6 +162,9 @@ public class SocketPeerConnection
                     //wait for messages from others to be received and displayed on the screen
                     message = inputStream.readObject(); //read the object they sent
                     messageHandler.handleMessage(message);
+
+                    /// TODO: send message to others
+
 
                 } catch (EOFException eofException)
                 {
@@ -191,8 +211,18 @@ public class SocketPeerConnection
     {
         try
         {
-            outputStream.writeObject(message);
-            outputStream.flush();
+            if(isInitiator)
+            {
+                for(ObjectOutputStream outputStream: outputStreams)
+                {
+                    outputStream.writeObject(message);
+                    outputStream.flush();
+                }
+            }
+            else {
+                outputStream.writeObject(message);
+                outputStream.flush();
+            }
         } catch (IOException e)
         {
             System.err.println("error sending " + e.getMessage());

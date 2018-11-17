@@ -25,6 +25,7 @@ public class SButton extends JButton{
 
         this.setText(text);
         this.setBgColor(this.bg);
+        this.setFocusPainted(false);
         setFont(Theme.BTN_DEFAULT_FONT);
         this.setBorder(new CompoundBorder(BorderFactory.createLineBorder(borderColor),
                 new EmptyBorder(Theme.LABELED_MARGIN, 0, Theme.LABELED_MARGIN, 0)));

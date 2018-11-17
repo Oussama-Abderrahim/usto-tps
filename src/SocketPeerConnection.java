@@ -9,16 +9,13 @@ import java.util.ArrayList;
  */
 public class SocketPeerConnection
 {
-    private static final int PORT = 6789;
+    public static final int DEFAULT_PORT = 6789;
+    public static final String DEFAULT_HOST = "127.0.0.1";
+    private int port = DEFAULT_PORT;
     /**
      *
      */
     private ObjectOutputStream outputStream;
-
-    /**
-     *
-     */
-    private ObjectInputStream inputStream;
 
     /**
      * True if the SocketConnection is a server (accepts other connections)
@@ -41,44 +38,48 @@ public class SocketPeerConnection
 
     public SocketPeerConnection()
     {
-        this("127.0.0.1");
+        this("Anonymous", DEFAULT_HOST, DEFAULT_PORT);
     }
 
-    public SocketPeerConnection(String host)
-    {
-        this(host, "Anonymous");
-    }
-
-    public SocketPeerConnection(String host, String name)
+    public SocketPeerConnection(String name, String host, int port)
     {
         outputStreams = new ArrayList<>();
+        inputStreams = new ArrayList<>();
         this.serverIP = host;
         this.name = name;
+        this.port = port;
     }
 
-    public void startServer(PlayersHandler playerHandler)
+    public void startServer(Runnable onClientConnection)
     {
         this.isInitiator = true;
-        try
+        new Thread(() ->
         {
-            server = new ServerSocket(PORT, 10); //first random port number, 2nd limited number of people that can connect
-            while (true)
+            try
             {
-                try
+                server = new ServerSocket(DEFAULT_PORT, 10); //first random port number, 2nd limited number of people that can connect
+                while (true)
                 {
-                    waitForConnection();
-                    setupStreams(); //once connect set up a connection /pathway of communication
-                    new Thread(playerHandler).start();
-                } catch (EOFException eofException)
-                {
-                    eofException.printStackTrace();
-                    closeEverything();
+                    try
+                    {
+                        Socket socket = waitForConnection();
+                        setupStreams(socket); //once connect set up a connection /pathway of communication
+                        new Thread(() ->
+                        {
+                            onClientConnection.run();
+                            this.startListening(socket);
+                        }).start();
+                    } catch (EOFException eofException)
+                    {
+                        eofException.printStackTrace();
+                        closeEverything();
+                    }
                 }
+            } catch (IOException ioException)
+            {
+                ioException.printStackTrace();
             }
-        } catch (IOException ioException)
-        {
-            ioException.printStackTrace();
-        }
+        }).start();
     }
 
     public void startClient()
@@ -86,8 +87,9 @@ public class SocketPeerConnection
         this.isInitiator = false;
         try
         {
-            connectToServer();
-            setupStreams();
+            this.connection = connectToServer();
+            setupStreams(this.connection);
+            new Thread(() -> this.startListening(this.connection)).start();
         } catch (EOFException eofException)
         {
             System.err.println("\n" + this.name + " has terminated the connection");
@@ -102,11 +104,16 @@ public class SocketPeerConnection
 
 
     /**
+     * /once someone ask for connection
+     * => accept the connection
+     * => create a new socket for that connection
+     *
      * @throws IOException
      */
-    private void waitForConnection() throws IOException
+    private Socket waitForConnection() throws IOException
     {
-        connection = server.accept(); //once someone ask for connection => accept the connection
+        this.connection = server.accept();
+        return this.connection;
     }
 
     /**
@@ -114,11 +121,12 @@ public class SocketPeerConnection
      *
      * @throws IOException
      */
-    private void connectToServer() throws IOException
+    private Socket connectToServer() throws IOException
     {
         System.out.println("Attempting connection...\n");
-        connection = new Socket(InetAddress.getByName(serverIP), PORT); //once connected, a socket will get made
+        connection = new Socket(InetAddress.getByName(this.serverIP), this.port); //once connected, a socket will get made
         System.out.println("Connected to:" + connection.getInetAddress().getHostName());
+        return connection;
     }
 
     /**
@@ -126,12 +134,11 @@ public class SocketPeerConnection
      *
      * @throws IOException
      */
-    private void setupStreams() throws IOException
+    private void setupStreams(Socket connection) throws IOException
     {
         outputStream = new ObjectOutputStream(connection.getOutputStream()); //the stream that flies from client to server
         outputStream.flush();
-        if(isInitiator)
-            outputStreams.add(outputStream);
+        outputStreams.add(outputStream);
         System.out.println("\nYour streams are good to go\n");
     }
 
@@ -140,20 +147,21 @@ public class SocketPeerConnection
      *
      * @throws IOException
      */
-    public void startListening(MessageHandler messageHandler)
+    public void startListening(Socket clientSocket)
     {
-        this.messageHandler = messageHandler;
         Thread listenThread = new Thread(() ->
         {
             System.out.println("Listen thread started");
             Object message = "";
+            ObjectInputStream inputStream = null;
             try
             {
-                if (isInitiator) send("1");
-                inputStream = new ObjectInputStream(connection.getInputStream()); //to receive messages
+                inputStream = new ObjectInputStream(clientSocket.getInputStream()); //to receive messages
+                inputStreams.add(inputStream);
             } catch (IOException e)
             {
                 e.printStackTrace();
+                return;
             }
             do
             {
@@ -195,7 +203,14 @@ public class SocketPeerConnection
         try
         {
             outputStream.close();
-            inputStream.close();
+            for (ObjectOutputStream objectOutputStream : outputStreams)
+            {
+                objectOutputStream.close();
+            }
+            for (ObjectInputStream inputStream : inputStreams)
+            {
+                inputStream.close();
+            }
             connection.close();
         } catch (IOException ioException)
         {
@@ -211,15 +226,17 @@ public class SocketPeerConnection
     {
         try
         {
-            if(isInitiator)
+            // If server, send to all client
+            if (isInitiator)
             {
-                for(ObjectOutputStream outputStream: outputStreams)
+                for (ObjectOutputStream outputStream : outputStreams)
                 {
                     outputStream.writeObject(message);
                     outputStream.flush();
                 }
             }
-            else {
+            else // if client, send only to server
+            {
                 outputStream.writeObject(message);
                 outputStream.flush();
             }
@@ -230,4 +247,8 @@ public class SocketPeerConnection
     }
 
 
+    public void setMessageHandler(MessageHandler messageHandler)
+    {
+        this.messageHandler = messageHandler;
+    }
 }

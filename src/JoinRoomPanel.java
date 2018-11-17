@@ -35,7 +35,7 @@ public class JoinRoomPanel extends SPanel {
         joinButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MainWindow.getInstance().joinGame(username.getText());
+                MainWindow.getInstance().joinGame(username.getText(), SocketPeerConnection.DEFAULT_HOST, SocketPeerConnection.DEFAULT_PORT);
             }
         });
     }

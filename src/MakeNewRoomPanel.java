@@ -40,7 +40,7 @@ public class MakeNewRoomPanel extends SPanel
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                MainWindow.getInstance().startNewGame(username.getText());
+                MainWindow.getInstance().startNewGame(username.getText(), SocketPeerConnection.DEFAULT_HOST, SocketPeerConnection.DEFAULT_PORT);
             }
         });
     }

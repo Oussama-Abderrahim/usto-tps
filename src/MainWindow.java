@@ -74,19 +74,19 @@ public class MainWindow extends JFrame
         SwingUtilities.invokeLater(r);
     }
 
-    public void startNewGame(String playerName)
+    public void startNewGame(String playerName, String host, int port)
     {
         GamePanel gamePanel = new GamePanel(playerName);
 
         this.showPanel(gamePanel);
-        gamePanel.startGame();
+        gamePanel.startGame(host, port);
     }
 
-    public void joinGame(String playerName)
+    public void joinGame(String playerName, String host, int port)
     {
         GamePanel gamePanel = new GamePanel(playerName);
 
         this.showPanel(gamePanel);
-        gamePanel.joinGame();
+        gamePanel.joinGame(host, port);
     }
 }

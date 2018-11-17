@@ -25,46 +25,34 @@ public class GamePanel extends SPanel
 
         this.paintPanel = new PaintPanel(this.socketPeerConnection);
 
-        JPanel toolbox = new SPanel();
-        toolbox.setLayout(new FlowLayout());
-
-        JButton clearButton = new SButton("clear");
-        clearButton.addActionListener(e -> paintPanel.clear());
-        toolbox.add(clearButton);
-
         chatWindow = new ChatWindow(name);
 
-        this.add(toolbox, BorderLayout.NORTH);
         this.add(paintPanel, BorderLayout.CENTER);
         this.add(chatWindow, BorderLayout.WEST);
     }
 
-    public void startGame()
+    public void startGame(String host, int port)
     {
-        this.socketPeerConnection = new SocketPeerConnection();
-        ///TODO : show here a waiting message
-
-        new Thread(() -> this.socketPeerConnection.startServer(() ->
+        this.socketPeerConnection = new SocketPeerConnection(this.name, host, port);
+        this.socketPeerConnection.setMessageHandler(this::handleMessage);
+        this.socketPeerConnection.startServer(() ->
         {
+            // When client connect :
             if (!gameStarted)
             {
                 this.chatWindow.start(this.socketPeerConnection);
                 this.paintPanel.start(this.socketPeerConnection);
-                this.socketPeerConnection.startListening(this::handleMessage);
             }
-            else
-            {
-            }
-        })).start();
+        });
+        ///TODO : show here a waiting message
     }
 
-    public void joinGame()
+    public void joinGame(String host, int port)
     {
-        this.socketPeerConnection = new SocketPeerConnection();
+        this.socketPeerConnection = new SocketPeerConnection(this.name, host, port);
+        this.socketPeerConnection.setMessageHandler(this::handleMessage);
         socketPeerConnection.startClient();
         this.chatWindow.start(this.socketPeerConnection);
-//        this.paintPanel.start(this.socketPeerConnection);
-        this.socketPeerConnection.startListening(this::handleMessage);
     }
 
 

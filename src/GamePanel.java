@@ -78,6 +78,9 @@ public class GamePanel extends SPanel
                 case CLEAR:
                     this.paintPanel.clear();
                     break;
+                case COLOR_CHANGE:
+                    this.paintPanel.setColor(ev.index);
+                    break;
             }
         } else
         {

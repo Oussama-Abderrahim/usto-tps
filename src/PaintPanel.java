@@ -2,6 +2,7 @@ import theme.SButton;
 import theme.SPanel;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -16,6 +17,13 @@ public class PaintPanel extends JPanel
 
     private BufferedImage canvasImage;
 
+    private static final Color[] availableColors = {
+            Color.BLACK,
+            Color.WHITE,
+            Color.BLUE,
+            Color.RED,
+            Color.GREEN
+    };
     private Color color = Color.BLUE;
     private Color bgColor = Color.white;
 
@@ -67,18 +75,50 @@ public class PaintPanel extends JPanel
 
     private SPanel initToolsPanel()
     {
+        final int TOOLS_WIDTH = 64;
         SPanel toolsPanel = new SPanel();
 
-        toolsPanel.setLayout(new BoxLayout(toolsPanel, BoxLayout.Y_AXIS));
+        toolsPanel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1,1));
+        toolsPanel.setLayout(new BoxLayout(toolsPanel, BoxLayout.PAGE_AXIS));
 
         SButton clearButton = new SButton("C");
         clearButton.addActionListener(e -> clear());
-        clearButton.setSize(8, clearButton.getHeight());
-        clearButton.setPreferredSize(new Dimension(32, clearButton.getHeight()));
-
+        clearButton.setPreferredSize(new Dimension(TOOLS_WIDTH, TOOLS_WIDTH/2));
         toolsPanel.add(clearButton);
 
+        JPanel colorsPanel = initColorPanel(TOOLS_WIDTH-1, TOOLS_WIDTH/2);
+
+        toolsPanel.add(colorsPanel);
+
         return toolsPanel;
+    }
+
+    private JPanel initColorPanel(int width, int height)
+    {
+        JPanel colorsPanel = new JPanel();
+
+        colorsPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+        colorsPanel.setPreferredSize(new Dimension(width, height*3));
+        colorsPanel.setMaximumSize(new Dimension(width, height*3));
+        colorsPanel.setLayout(new GridLayout(3, 2));
+
+        SButton[] colorButtons = new SButton[availableColors.length];
+        for (int i = 0; i < colorButtons.length; i++)
+        {
+            final int index = i;
+            colorButtons[i] = new SButton("");
+            colorButtons[i].addActionListener(e ->
+            {
+                this.color = availableColors[index];
+                this.socketPeerConnection.send(new PaintEvent(PaintEvent.PaintEventType.COLOR_CHANGE, index));
+            });
+            colorButtons[i].setBgColor(availableColors[index]);
+            colorButtons[i].setPreferredSize(new Dimension(width/2, height));
+
+            colorsPanel.add(colorButtons[i]);
+        }
+
+        return colorsPanel;
     }
 
     public void start(SocketPeerConnection socketPeerConnection)
@@ -207,5 +247,10 @@ public class PaintPanel extends JPanel
         canvasPanel.repaint();
 
         this.lastDrawnPoint = point;
+    }
+
+    public void setColor(int colorIndex)
+    {
+        this.color = availableColors[colorIndex];
     }
 }

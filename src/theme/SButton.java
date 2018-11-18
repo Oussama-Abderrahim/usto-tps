@@ -10,17 +10,18 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
 /**
- *
  * @author programmer
  */
-public class SButton extends JButton{
+public class SButton extends JButton
+{
 
     public Color bg = Theme.BTN_DEFAULT_COLOR;
     public Color hoverBg = null;
     public Color borderColor = null;
     public ArrayList<Component> validationComponents = new ArrayList<Component>();
 
-    public SButton(String text) {
+    public SButton(String text)
+    {
         super(text);
 
         this.setText(text);
@@ -37,39 +38,46 @@ public class SButton extends JButton{
                 Theme.BTN_DEFAULT_WIDTH, Theme.BTN_DEFAULT_HEIGHT)
         );
         this.setMaximumSize(new Dimension(
-                Theme.BTN_DEFAULT_WIDTH*2, Theme.BTN_DEFAULT_HEIGHT)
+                Theme.BTN_DEFAULT_WIDTH * 2, Theme.BTN_DEFAULT_HEIGHT)
         );
 
         this.setForeground(Theme.BTN_DEFAULT_TEXT_COLOR);
 
         SButton self = this;
 
-        this.addMouseListener(new MouseListener() {
+        this.addMouseListener(new MouseListener()
+        {
             @Override
-            public void mouseClicked(MouseEvent me) {
+            public void mouseClicked(MouseEvent me)
+            {
             }
 
             @Override
-            public void mousePressed(MouseEvent me) {
+            public void mousePressed(MouseEvent me)
+            {
             }
 
             @Override
-            public void mouseReleased(MouseEvent me) {
+            public void mouseReleased(MouseEvent me)
+            {
             }
 
             @Override
-            public void mouseEntered(MouseEvent me) {
+            public void mouseEntered(MouseEvent me)
+            {
                 self.setBackground(hoverBg);
             }
 
             @Override
-            public void mouseExited(MouseEvent me) {
+            public void mouseExited(MouseEvent me)
+            {
                 self.setBackground(bg);
             }
         });
     }
 
-    public void setBgColor(Color background) {
+    public void setBgColor(Color background)
+    {
         this.bg = background;
         this.hoverBg = calcHoverBgColor(bg);
         this.borderColor = calcHoverBgColor(bg);
@@ -77,23 +85,31 @@ public class SButton extends JButton{
         setBorder(BorderFactory.createLineBorder(borderColor));
     }
 
-    public Color calcHoverBgColor(Color color) {
-        return new Color(color.getRed() - Theme.HOVER_PLUS,color.getGreen() - Theme.HOVER_PLUS,color.getBlue() - Theme.HOVER_PLUS);
+    public Color calcHoverBgColor(Color color)
+    {
+        return new Color(
+                Math.max(0, color.getRed() - Theme.HOVER_PLUS),
+                Math.max(0, color.getGreen() - Theme.HOVER_PLUS),
+                Math.max(0, color.getBlue() - Theme.HOVER_PLUS));
     }
 
-    public Color calcBorderColor(Color color) {
-        return new Color(color.getRed() - Theme.BORDER_PLUS,color.getGreen() - Theme.BORDER_PLUS,color.getBlue() - Theme.BORDER_PLUS);
+    public Color calcBorderColor(Color color)
+    {
+        return new Color(color.getRed() - Theme.BORDER_PLUS, color.getGreen() - Theme.BORDER_PLUS, color.getBlue() - Theme.BORDER_PLUS);
     }
 
-    public void addValidation(Component component) {
+    public void addValidation(Component component)
+    {
         validationComponents.add(component);
     }
 
-    public ArrayList<Component> getValidations() {
+    public ArrayList<Component> getValidations()
+    {
         return validationComponents;
     }
 
-    public void clearValidations() {
+    public void clearValidations()
+    {
         validationComponents.clear();
     }
 

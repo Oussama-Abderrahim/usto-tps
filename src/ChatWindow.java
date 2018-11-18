@@ -66,9 +66,8 @@ public class ChatWindow extends JPanel
         );
     }
 
-    //give user permission to type into the textbox
-    private void ableToType(final boolean tof)
-    { //true or false
+    private void ableToType(final boolean tof) //give user permission to type into the textbox (tof:true or false)
+    {
         SwingUtilities.invokeLater(() ->
                 {
                     userText.setEditable(tof); //make it editable or not

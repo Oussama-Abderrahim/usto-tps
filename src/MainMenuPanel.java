@@ -10,6 +10,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static java.awt.Color.red;
+
 
 public class MainMenuPanel extends SPanel{
 
@@ -48,7 +50,6 @@ public class MainMenuPanel extends SPanel{
         leftSide.add(space);
         leftSide.add(newRoomButton);
         leftSide.add(joinRoomButton);
-
         //newRoomButton -> change panel to MakeNewRoomPanel
         newRoomButton.addActionListener(new ActionListener() {
             @Override

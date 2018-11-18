@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 /**
  * Created by pc on 12/11/2018.
@@ -27,6 +29,10 @@ public class JoinRoomPanel extends SPanel {
 
         SButton joinButton = new SButton("Join");
 
+        //Host and port
+        STextField host = new STextField();
+        STextField port = new STextField();
+
         this.add(enterUsername);
         this.add(usernamePanel);
         usernamePanel.add(username, BorderLayout.NORTH);
@@ -36,6 +42,15 @@ public class JoinRoomPanel extends SPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MainWindow.getInstance().joinGame(username.getText(), SocketPeerConnection.DEFAULT_HOST, SocketPeerConnection.DEFAULT_PORT);
+            }
+        });
+
+        username.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               /// TODO : read from textfiel host and port(int)
+               // MainWindow.getInstance().joinGame(username.getText());
+                //check if all the textField are filled
             }
         });
     }

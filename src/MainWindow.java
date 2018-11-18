@@ -43,7 +43,7 @@ public class MainWindow extends JFrame
         showPanel(new MainMenuPanel());
 
         //background image
-        String bg = "bg.jpg";
+        String bg = "bg4.jpg";
         File file = new File("res/" + bg);
         try
         {

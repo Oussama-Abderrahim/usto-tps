@@ -1,19 +1,29 @@
-import theme.SButton;
+import theme.SLabel;
 import theme.SPanel;
+import theme.Theme;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.Random;
+
 
 /**
  * Created by Oussama on 09/11/2018.
  */
 public class GamePanel extends SPanel
 {
+    //dictionary of random words to draw/guess
+    private static final String[] dictionaryLevelEasy = {"sun","tree","cup","banana","apple","eye","bed","cheese","pen","car","house","clock"};
+    private String name = "";
+    public String wordToGuessString;
+    private boolean gameStarted = false;
+    public boolean wordGuessed = false;
+
     private PaintPanel paintPanel;
     private ChatWindow chatWindow;
 
     private SocketPeerConnection socketPeerConnection;
-    private boolean gameStarted = false;
-    private String name = "";
+    private SLabel wordToGuess;
 
     public GamePanel(String name)
     {
@@ -27,12 +37,20 @@ public class GamePanel extends SPanel
 
         chatWindow = new ChatWindow(name);
 
+        SPanel topBar = new SPanel();
+        wordToGuess = new SLabel();
+        wordToGuess.setFont(Theme.FONT_DEFAULT_MEDIUM);
+        wordToGuess.setText("Waiting for players to connect");
+        topBar.add(wordToGuess);
+        this.add(topBar,BorderLayout.NORTH);
+
         this.add(paintPanel, BorderLayout.CENTER);
         this.add(chatWindow, BorderLayout.WEST);
+
     }
 
     public void startGame(String host, int port)
-    {
+    {//open server
         this.socketPeerConnection = new SocketPeerConnection(this.name, host, port);
         this.socketPeerConnection.setMessageHandler(this::handleMessage);
         this.socketPeerConnection.startServer(() ->
@@ -42,9 +60,19 @@ public class GamePanel extends SPanel
             {
                 this.chatWindow.start(this.socketPeerConnection);
                 this.paintPanel.start(this.socketPeerConnection);
+                startPlaying();
             }
         });
-        ///TODO : show here a waiting message
+    }
+
+    public void startPlaying(){
+        wordToGuessString = randomWord(); //get a random word from the dictionary and put it in the top bar
+        wordToGuess.setText(wordToGuessString);
+    }
+
+    public String randomWord(){ //return random word from the dictionary
+        Random easyWord = new Random();
+        return dictionaryLevelEasy[easyWord.nextInt(dictionaryLevelEasy.length + 1)];
     }
 
     public void joinGame(String host, int port)
@@ -53,6 +81,12 @@ public class GamePanel extends SPanel
         this.socketPeerConnection.setMessageHandler(this::handleMessage);
         socketPeerConnection.startClient();
         this.chatWindow.start(this.socketPeerConnection);
+
+        wordToGuess.setText("Good luck guessing the word!");
+    }
+
+    public void displayWinner(String winner){
+        wordToGuess.setText("Good job " +winner+ ". The word was "+ wordToGuessString);
     }
 
 
@@ -60,7 +94,12 @@ public class GamePanel extends SPanel
     {
         if(message instanceof String)
         {
-            this.chatWindow.showMessage((String) message);
+            this.chatWindow.showMessage((String) message); //display the message on the chatroom
+            String[] messageSplitted = ((String) message).toLowerCase().split(" : "); //get the message and devise in two, one for the username, the other for the guessedWord
+            if(messageSplitted[1].equals(wordToGuessString)) { //if the guessWord = wordToGuess
+                displayWinner(messageSplitted[0]);//the winning message got displayed for the server
+                wordGuessed = true; //so the winning message can be displyed too for the players
+            }
         }
         else if(message instanceof PaintEvent){
             PaintEvent ev = (PaintEvent) message;

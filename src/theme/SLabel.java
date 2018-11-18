@@ -16,7 +16,8 @@ public class SLabel extends JLabel
     public SLabel(String text, Font font) {
         super(text);
         setFont(font);
-        setForeground(Theme.FONT_DEFAULT_COLOR);
+        //setForeground(Theme.FONT_DEFAULT_COLOR);
+        setForeground(Color.WHITE);
         setHorizontalAlignment(JLabel.CENTER);
         setVerticalAlignment(JLabel.CENTER);
         

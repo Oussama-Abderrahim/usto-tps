@@ -20,6 +20,7 @@ public class SPanel extends JPanel
     {
         super();
         setBorder(new EmptyBorder(5, 5, 5, 5));
+        setLayout(new BorderLayout());
         setBackground(bgColor);
         backgroundImage = null;
         this.setOpaque (false);

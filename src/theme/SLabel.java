@@ -20,6 +20,6 @@ public class SLabel extends JLabel
         setForeground(Color.WHITE);
         setHorizontalAlignment(JLabel.CENTER);
         setVerticalAlignment(JLabel.CENTER);
-        
+        setHorizontalTextPosition(SwingConstants.CENTER);
     }
 }

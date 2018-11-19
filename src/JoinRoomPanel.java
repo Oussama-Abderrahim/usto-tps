@@ -10,48 +10,59 @@ import java.awt.event.KeyEvent;
 /**
  * Created by pc on 12/11/2018.
  */
-public class JoinRoomPanel extends SPanel {
-    public JoinRoomPanel(){
+public class JoinRoomPanel extends SPanel
+{
+    public JoinRoomPanel()
+    {
         this.setBackground(theme.Theme.DARKER_MIDNIGHT_BLUE);
-        this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        this.setLayout(new GridLayout(8, 1));
 
-        JLabel enterUsername = new JLabel("Enter your username");
-        enterUsername.setHorizontalTextPosition(SwingConstants.CENTER);
-        enterUsername.setForeground(Color.WHITE);
-        enterUsername.setFont(Theme.FONT_DEFAULT_LARGE);
+        SLabel enterUsernameLabel = new SLabel("Enter your username");
+        SLabel enterPortLabel = new SLabel("Enter Port");
+        SLabel enterHostLabel = new SLabel("Enter Host");
 
-        STextField username = new STextField();
-        username.setFont(Theme.FONT_DEFAULT_MEDIUM);
+        STextField usernameText = new STextField();
+        STextField hostText = new STextField();
+        STextField portText = new STextField();
+
+        hostText.setText(SocketPeerConnection.DEFAULT_HOST);
+        portText.setText("" + SocketPeerConnection.DEFAULT_PORT);
+
+        usernameText.setFont(Theme.FONT_DEFAULT_MEDIUM);
+        hostText.setFont(Theme.FONT_DEFAULT_MEDIUM);
+        portText.setFont(Theme.FONT_DEFAULT_MEDIUM);
 
         SPanel usernamePanel = new SPanel();
-        usernamePanel.setBackground(theme.Theme.DARKER_MIDNIGHT_BLUE);
         usernamePanel.setLayout(new BorderLayout());
+        usernamePanel.add(usernameText, BorderLayout.NORTH);
 
-        SButton joinButton = new SButton("Join");
+        SPanel hostPanel = new SPanel();
+        hostPanel.setLayout(new BorderLayout());
+        hostPanel.add(hostText, BorderLayout.NORTH);
 
-        //Host and port
-        STextField host = new STextField();
-        STextField port = new STextField();
+        SPanel portPanel = new SPanel();
+        portPanel.add(portText, BorderLayout.NORTH);
 
-        this.add(enterUsername);
+        SButton joinButton = new SButton("Join Game");
+        ActionListener joinGameAction = e ->
+        {
+            int port = Integer.parseInt(portText.getText());
+            String host = hostText.getText();
+            MainWindow.getInstance().joinGame(usernameText.getText(), host, port);
+        };
+
+        joinButton.addActionListener(joinGameAction);
+        usernameText.addActionListener(joinGameAction);
+        portText.addActionListener(joinGameAction);
+        hostText.addActionListener(joinGameAction);
+
+        this.add(enterUsernameLabel);
         this.add(usernamePanel);
-        usernamePanel.add(username, BorderLayout.NORTH);
+        this.add(enterHostLabel);
+        this.add(hostPanel);
+        this.add(enterPortLabel);
+        this.add(portPanel);
+        this.add(new SPanel());
         this.add(joinButton);
-
-        joinButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MainWindow.getInstance().joinGame(username.getText(), SocketPeerConnection.DEFAULT_HOST, SocketPeerConnection.DEFAULT_PORT);
-            }
-        });
-
-        username.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-               /// TODO : read from textfiel host and port(int)
-               // MainWindow.getInstance().joinGame(username.getText());
-                //check if all the textField are filled
-            }
-        });
     }
 }

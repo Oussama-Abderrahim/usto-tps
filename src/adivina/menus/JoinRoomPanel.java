@@ -1,20 +1,20 @@
-import theme.*;
+package adivina.menus;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+
+import adivina.MainWindow;
+import adivina.SocketPeerConnection;
+import adivina.theme.*;
 
 /**
  * Created by pc on 12/11/2018.
  */
-public class JoinRoomPanel extends SPanel
+public class JoinRoomPanel extends adivina.theme.SPanel
 {
     public JoinRoomPanel()
     {
-        this.setBackground(theme.Theme.DARKER_MIDNIGHT_BLUE);
+        this.setBackground(adivina.theme.Theme.DARKER_MIDNIGHT_BLUE);
         this.setLayout(new GridLayout(8, 1));
 
         SLabel enterUsernameLabel = new SLabel("Enter your username");
@@ -25,7 +25,7 @@ public class JoinRoomPanel extends SPanel
         STextField hostText = new STextField();
         STextField portText = new STextField();
 
-        hostText.setText(SocketPeerConnection.DEFAULT_HOST);
+        hostText.setText("127.0.0.1");
         portText.setText("" + SocketPeerConnection.DEFAULT_PORT);
 
         usernameText.setFont(Theme.FONT_DEFAULT_MEDIUM);

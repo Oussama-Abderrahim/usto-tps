@@ -1,4 +1,4 @@
-package events;
+package adivina.events;
 
 import java.io.Serializable;
 

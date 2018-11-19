@@ -1,4 +1,4 @@
-package theme;
+package adivina.theme;
 
 
 import java.awt.*;

@@ -1,4 +1,4 @@
-package theme;
+package adivina.theme;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusEvent;

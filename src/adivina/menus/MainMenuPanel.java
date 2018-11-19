@@ -1,16 +1,16 @@
-/**
+package adivina.menus; /**
  * Created by pc on 12/11/2018.
  */
-import theme.SLabel;
-import theme.Theme;
-import theme.SButton;
-import theme.SPanel;
+import adivina.menus.JoinRoomPanel;
+import adivina.menus.MakeNewRoomPanel;
+import adivina.theme.SLabel;
+import adivina.theme.Theme;
+import adivina.theme.SButton;
+import adivina.theme.SPanel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import static java.awt.Color.red;
 
 
 public class MainMenuPanel extends SPanel{

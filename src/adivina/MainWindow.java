@@ -1,5 +1,8 @@
-import theme.SPanel;
-import theme.Theme;
+package adivina;
+
+import adivina.menus.MainMenuPanel;
+import adivina.theme.SPanel;
+import adivina.theme.Theme;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -7,7 +10,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * Created by Oussama on 06/11/2018.

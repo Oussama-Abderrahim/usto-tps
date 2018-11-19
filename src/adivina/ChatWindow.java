@@ -1,13 +1,12 @@
-/**
+package adivina; /**
  * Created by pc on 05/11/2018.
  */
 //responsible of making the GUI and connecting stuffs
 
-import theme.STextField;
+import adivina.theme.STextField;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 
 public class ChatWindow extends JPanel
 {

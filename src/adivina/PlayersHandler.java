@@ -1,3 +1,5 @@
+package adivina;
+
 /**
  * Created by ${} on 12/11/2018.
  */

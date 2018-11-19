@@ -1,4 +1,11 @@
-import theme.*;
+package adivina.menus;
+
+import adivina.MainWindow;
+import adivina.SocketPeerConnection;
+import adivina.theme.SButton;
+import adivina.theme.SPanel;
+import adivina.theme.STextField;
+import adivina.theme.Theme;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +20,7 @@ public class MakeNewRoomPanel extends SPanel
 
     public MakeNewRoomPanel()
     {
-        this.setBackground(theme.Theme.DARKER_MIDNIGHT_BLUE);
+        this.setBackground(adivina.theme.Theme.DARKER_MIDNIGHT_BLUE);
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
         JLabel enterUsername = new JLabel("Enter your username");
@@ -25,7 +32,7 @@ public class MakeNewRoomPanel extends SPanel
         username.setFont(Theme.FONT_DEFAULT_MEDIUM);
         SPanel usernamePanel = new SPanel();
 
-        usernamePanel.setBackground(theme.Theme.DARKER_MIDNIGHT_BLUE);
+        usernamePanel.setBackground(Theme.DARKER_MIDNIGHT_BLUE);
         usernamePanel.setLayout(new BorderLayout());
 
         SButton addNewPlayerButton = new SButton("Add");

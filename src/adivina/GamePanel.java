@@ -1,8 +1,10 @@
-import events.GameEvent;
-import events.PaintEvent;
-import theme.SLabel;
-import theme.SPanel;
-import theme.Theme;
+package adivina;
+
+import adivina.events.GameEvent;
+import adivina.events.PaintEvent;
+import adivina.theme.SLabel;
+import adivina.theme.SPanel;
+import adivina.theme.Theme;
 
 import javax.swing.*;
 import java.awt.*;

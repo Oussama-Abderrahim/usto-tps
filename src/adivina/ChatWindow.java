@@ -4,6 +4,7 @@ package adivina; /**
 //responsible of making the GUI and connecting stuffs
 
 import adivina.theme.STextField;
+import adivina.theme.Theme;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,8 +30,10 @@ public class ChatWindow extends JPanel
 
         /* Add text field */
         userText = new STextField();
+        userText.setFontColor(Color.BLACK);
         userText.setPlaceHolder("Enter your message");
-        userText.setForeground(Color.BLACK);
+        userText.setFont(Theme.FONT_DEFAULT_MEDIUM);
+        userText.setEnabled(false);
         userText.setEditable(false); //not allowed before connecting to anyone
         userText.addActionListener(
                 event ->
@@ -39,12 +42,15 @@ public class ChatWindow extends JPanel
                     userText.setText("");
                 }
         );
-        add(userText, BorderLayout.NORTH);
 
         /* Add Text Area to display messages */
         chatWindow = new JTextArea();
         chatWindow.setEditable(false);
-        add(new JScrollPane(chatWindow), BorderLayout.CENTER); // make it scrollable
+        JScrollPane scrollPane = new JScrollPane(chatWindow);
+        scrollPane.setPreferredSize(new Dimension((int) scrollPane.getPreferredSize().getWidth(), 150));
+        add(scrollPane, BorderLayout.CENTER); // make it scrollable
+
+        add(userText, BorderLayout.SOUTH);
     }
 
     //send messages to server
@@ -77,6 +83,7 @@ public class ChatWindow extends JPanel
     public void start(SocketPeerConnection socketPeerConnection)
     {
         this.socketConnection = socketPeerConnection;
+        userText.setEnabled(true);
         ableToType(true);
     }
 }

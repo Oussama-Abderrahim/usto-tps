@@ -12,12 +12,16 @@ public class STextField extends JTextField
     private String placeHolder = "";
     private boolean edited = false;
 
+    private Color fontColor = Theme.FONT_INPUT_COLOR;
+
     public STextField()
     {
         setOpaque(false);
-        setForeground(Theme.FONT_DEFAULT_COLOR);
+        setForeground(fontColor);
         setFont(Theme.FONT_DEFAULT_SMALL);
     }
+
+
 
     public void setPlaceHolder(String placeHolder)
     {
@@ -31,7 +35,7 @@ public class STextField extends JTextField
                 {
                     edited = true;
                     setText("");
-                    setForeground(Theme.FONT_INPUT_COLOR);
+                    setForeground(fontColor);
                 }
             }
             @Override
@@ -44,5 +48,11 @@ public class STextField extends JTextField
                 }
             }
         });
+    }
+
+    public void setFontColor(Color fontColor)
+    {
+        this.fontColor = fontColor;
+        setForeground(fontColor);
     }
 }

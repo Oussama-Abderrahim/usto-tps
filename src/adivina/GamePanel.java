@@ -48,7 +48,7 @@ public class GamePanel extends SPanel
         this.add(topBar, BorderLayout.NORTH);
 
         this.add(paintPanel, BorderLayout.CENTER);
-        this.add(chatWindow, BorderLayout.WEST);
+        this.add(chatWindow, BorderLayout.SOUTH);
 
     }
 

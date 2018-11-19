@@ -83,9 +83,12 @@ public class PaintPanel extends JPanel
         toolsPanel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1,1));
         toolsPanel.setLayout(new BoxLayout(toolsPanel, BoxLayout.PAGE_AXIS));
 
-        SButton clearButton = new SButton("C");
+        SButton clearButton = new SButton("Clear");
         clearButton.addActionListener(e -> clear());
         clearButton.setPreferredSize(new Dimension(TOOLS_WIDTH, TOOLS_WIDTH/2));
+        clearButton.setSize(new Dimension(TOOLS_WIDTH, TOOLS_WIDTH/2));
+        clearButton.setMinimumSize(new Dimension(TOOLS_WIDTH, TOOLS_WIDTH/2));
+        clearButton.setMaximumSize(new Dimension(TOOLS_WIDTH, TOOLS_WIDTH/2));
         toolsPanel.add(clearButton);
 
         JPanel colorsPanel = initColorPanel(TOOLS_WIDTH-1, TOOLS_WIDTH/2);

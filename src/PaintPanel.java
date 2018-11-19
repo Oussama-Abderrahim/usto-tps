@@ -110,7 +110,7 @@ public class PaintPanel extends JPanel
             colorButtons[i].addActionListener(e ->
             {
                 this.color = availableColors[index];
-                this.socketPeerConnection.send(new PaintEvent(PaintEvent.PaintEventType.COLOR_CHANGE, index));
+                this.socketPeerConnection.send(new events.PaintEvent(events.PaintEvent.PaintEventType.COLOR_CHANGE, index));
             });
             colorButtons[i].setBgColor(availableColors[index]);
             colorButtons[i].setPreferredSize(new Dimension(width/2, height));
@@ -138,7 +138,7 @@ public class PaintPanel extends JPanel
             public void mouseDragged(MouseEvent e)
             {
                 onDrag(e.getPoint());
-                socketPeerConnection.send(new PaintEvent(PaintEvent.PaintEventType.DRAG, e.getPoint()));
+                socketPeerConnection.send(new events.PaintEvent(events.PaintEvent.PaintEventType.DRAG, e.getPoint()));
             }
 
             @Override
@@ -158,14 +158,14 @@ public class PaintPanel extends JPanel
             public void mousePressed(MouseEvent e)
             {
                 onPress(e.getPoint());
-                socketPeerConnection.send(new PaintEvent(PaintEvent.PaintEventType.PRESSED, e.getPoint()));
+                socketPeerConnection.send(new events.PaintEvent(events.PaintEvent.PaintEventType.PRESSED, e.getPoint()));
             }
 
             @Override
             public void mouseReleased(MouseEvent e)
             {
                 onRelease(e.getPoint());
-                socketPeerConnection.send(new PaintEvent(PaintEvent.PaintEventType.RELEASED, e.getPoint()));
+                socketPeerConnection.send(new events.PaintEvent(events.PaintEvent.PaintEventType.RELEASED, e.getPoint()));
             }
 
             @Override
@@ -186,7 +186,7 @@ public class PaintPanel extends JPanel
     public void clear()
     {
         if (this.socketPeerConnection != null)
-            socketPeerConnection.send(new PaintEvent(PaintEvent.PaintEventType.CLEAR, null));
+            socketPeerConnection.send(new events.PaintEvent(events.PaintEvent.PaintEventType.CLEAR, null));
 
         Graphics2D g = this.canvasImage.createGraphics();
         g.setColor(this.bgColor);

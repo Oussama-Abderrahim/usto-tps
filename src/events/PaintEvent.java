@@ -1,3 +1,5 @@
+package events;
+
 import java.awt.*;
 import java.io.Serializable;
 
@@ -7,8 +9,7 @@ import java.io.Serializable;
 public class PaintEvent implements Serializable
 {
 
-
-    enum PaintEventType {
+    public enum PaintEventType {
         PRESSED,
         RELEASED,
         DRAG,

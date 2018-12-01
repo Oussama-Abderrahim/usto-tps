@@ -1,6 +1,8 @@
 # CompilaCompiler
-A basic compiler for an hypothetical langage named Compila
+A basic compiler for a theorical programming langage named Compila
 
+## Preview
+![preview](preview.PNG)
 ## Langage specifications 
 - One and only one instruction per line
 - Program always starts with "Strart_Program" and ends with "End_Program"
@@ -22,3 +24,13 @@ Command | Description | Example
 Affectation of a number (Integer/Real) to a variable | Give <<identifier>> : <<value>> ;; | `Give j : 55 ;;`
 Affectation of the value of a variable to another variable | Affect <<identifier>> to <<identifier>> ;; | `Affect i to j ;;`
 Condition | If -- \<\<condition\>\> -- \<\<action\>\> ;; | `if -- i<j -- Give j : 55 ;;`
+
+
+## Code example
+`Start_Program`  
+  `String` : i ;;  
+  `Give` i : "World";;  
+  `ShowMes` : "Hello ";;  
+  `ShowVal` : i ;;  
+  `ShowMes` : " !\n" ;;  
+`End_Program`  

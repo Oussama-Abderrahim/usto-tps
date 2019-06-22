@@ -4,7 +4,7 @@ import java.util.Scanner;
 /**
  * Created by Oussama on 09/06/2019.
  */
-public class Main
+public class MatrixEngine
 {
     public static void main(String[] args)
     {
@@ -43,14 +43,14 @@ public class Main
         printArr(C, n);
     }
 
-    private static void printArr(int[] A, int n)
+    public static void printArr(int[] A, int n)
     {
         for (int j = 0; j < n; j++) {
             System.out.println(A[j]);
         }
     }
 
-    private static void printMat(int[][] A, int n)
+    public static void printMat(int[][] A, int n)
     {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
@@ -60,7 +60,7 @@ public class Main
         }
     }
 
-    private static int[] solve(int[][] A, int[] B, int n)
+    public static int[] solve(int[][] A, int[] B, int n)
     {
         int detA = det(A, n);
 
@@ -75,7 +75,7 @@ public class Main
         return X;
     }
 
-    private static int det(int[][] A, int n)
+    public static int det(int[][] A, int n)
     {
         if (n == 2) {
             return A[0][0] * A[1][1] - A[1][0] * A[0][1];
@@ -93,7 +93,7 @@ public class Main
         }
     }
 
-    private static int[][] generateSubMatrix(int[][] A, int n, int k)
+    public static int[][] generateSubMatrix(int[][] A, int n, int k)
     {
         int[][] subMat = new int[n - 1][n - 1];
 

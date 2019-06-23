@@ -108,7 +108,7 @@ public class MatrixEngine
         return subMat;
     }
 
-    private static int[][] generateMatrixB(int[][] A, int n, int k, int[] B)
+    public static int[][] generateMatrixB(int[][] A, int n, int k, int[] B)
     {
         int[][] subMat = new int[n][n];
 

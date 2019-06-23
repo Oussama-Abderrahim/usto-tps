@@ -1,3 +1,6 @@
+import eduni.simjava.Sim_event;
+import gridsim.IO_data;
+
 /**
  * Created by Oussama on 22/06/2019.
  */
@@ -22,15 +25,32 @@ public class GridNodeMaster extends GridNode
             GridManager.getInstance().createSlave(this);
         }
 
-        super.gridSimHold(5);
+        super.gridSimHold(1);
 
-        int[] C = MatrixEngine.solve(A, B, n);
+//        SOLVING
+        int detA = MatrixEngine.det(A, n);
 
-        System.out.println("Resultat : ");
-        MatrixEngine.printArr(C, n);
+        int[] X = new int[n];
 
+        // Sending sub matrices to slave to solve
         for (int i = 0; i < n; i++) {
-            sendData("Finished ", i);
+            sendData(MatrixEngine.generateMatrixB(A, n, i, B), i, GridNode.CALC_DET);
         }
+
+        // Receiving determinants of sub matrices
+        for (int i = 0; i < n; i++) {
+            Sim_event obj = receive();
+            int detI = (int) ((IO_data) (obj.get_data())).getData();
+
+            X[i] = detI/detA;
+        }
+        System.out.println("Resultat : ");
+        MatrixEngine.printArr(X, n);
+
+//
+//        for (int i = 0; i < n; i++) {
+//            sendData(A, i, GridNode.CALC_DET);
+//        }
+
     }
 }

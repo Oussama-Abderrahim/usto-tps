@@ -43,6 +43,11 @@ public class MatrixEngine
         printArr(C, n);
     }
 
+    /**
+     * Print an array to the console
+     * @param A {int[]} the array
+     * @param n {int} size of the array
+     */
     public static void printArr(int[] A, int n)
     {
         for (int j = 0; j < n; j++) {
@@ -50,6 +55,11 @@ public class MatrixEngine
         }
     }
 
+    /**
+     * Print a square matrix to the console
+     * @param A {int[][]} the array
+     * @param n {int} size of the array
+     */
     public static void printMat(int[][] A, int n)
     {
         for (int i = 0; i < n; i++) {
@@ -75,6 +85,12 @@ public class MatrixEngine
         return X;
     }
 
+    /**
+     * Compute a matrix determinant
+     * @param A {int[][]} the matrix
+     * @param n (int) size of the matrix
+     * @return {int} the determinant
+     */
     public static int det(int[][] A, int n)
     {
         if (n == 2) {
@@ -93,6 +109,13 @@ public class MatrixEngine
         }
     }
 
+    /**
+     * Generate a square submatrix of a given matrix by deleting the kth column
+     * @param A {int[][]} the matrix
+     * @param n {int} the size of the matrix
+     * @param k {int} index of column to delete
+     * @return {int[][]} result submatrix of size n-1
+     */
     public static int[][] generateSubMatrix(int[][] A, int n, int k)
     {
         int[][] subMat = new int[n - 1][n - 1];
@@ -108,6 +131,14 @@ public class MatrixEngine
         return subMat;
     }
 
+    /**
+     * Replace a matrix column with a given vector and return a copy of the new matrix
+     * @param A [int[][]} the original matrix
+     * @param n {int} size of the matrix
+     * @param k {int} index of column to replace
+     * @param B {int[]} vector to insert
+     * @return {int[][]} result matrix with size n
+     */
     public static int[][] generateMatrixB(int[][] A, int n, int k, int[] B)
     {
         int[][] subMat = new int[n][n];

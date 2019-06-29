@@ -51,11 +51,9 @@ public class GridNode extends GridSim
 
     public Sim_event receive()
     {
-//        obj = super.receiveEventObject();
         Sim_event ev = new Sim_event();
         super.sim_get_next(ev);
 
-//        System.out.println("Got Data with tag " + ev.get_tag());
         return ev;
     }
 
@@ -70,6 +68,16 @@ public class GridNode extends GridSim
 
         // sends through Output buffer of this entity
         super.send(dist.getName(), GridSimTags.SCHEDULE_NOW, tag, data);
+    }
+
+    private void sendToMaster(Object msg, int tag)
+    {
+        IO_data data = new IO_data(msg, PACKET_SIZE, GridSim.getEntityId(masterNode.getName()));
+        System.out.println(getName() + ".body(): Sending " + msg +
+                                   ", at time = " + GridSim.clock() + " to " +
+                                   masterNode.getName());
+        // sends through Output buffer of this entity
+        super.send(masterNode.getName(), GridSimTags.SCHEDULE_NOW, tag, data);
     }
 
     @Override
@@ -94,28 +102,18 @@ public class GridNode extends GridSim
                     end();
                     break;
                 default:
+                    System.out.println(getName() + " has no idea what's the data is");
                     break;
             }
         }
 
     }
 
-    private void sendToMaster(Object msg, int tag)
-    {
-
-        IO_data data = new IO_data(msg, PACKET_SIZE, GridSim.getEntityId(masterNode.getName()));
-        System.out.println(getName() + ".body(): Sending " + msg +
-                                   ", at time = " + GridSim.clock() + " to " +
-                                   masterNode.getName());
-
-        // sends through Output buffer of this entity
-        super.send(masterNode.getName(), GridSimTags.SCHEDULE_NOW, tag, data);
-    }
-
     public void end()
     {
         for (GridNode slave : slaveList)
             slave.end();
+        System.out.println(getName() + " has been stopped");
         // shut down I/O ports
         shutdownUserEntity();
         terminateIOEntities();

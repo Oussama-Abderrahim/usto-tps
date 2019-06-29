@@ -40,9 +40,10 @@ public class GridNodeMaster extends GridNode
         // Receiving determinants of sub matrices
         for (int i = 0; i < n; i++) {
             Sim_event obj = receive();
-            int detI = (int) ((IO_data) (obj.get_data())).getData();
+            IndexedMessage msg = extractMessageFromEvent(obj);
+            int detI = (int) msg.obj;
 
-            X[i] = detI/detA;
+            X[msg.index] = detI/detA;
         }
         System.out.println("Resultat : ");
         MatrixEngine.printArr(X, n);

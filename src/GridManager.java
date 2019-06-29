@@ -18,7 +18,6 @@ public class GridManager
 
     public static GridManager instance = null;
 
-
     private GridNode master;
 
     public static void main(String[] args)
@@ -54,13 +53,13 @@ public class GridManager
 //            System.out.println("Entrer le nombre d'inconnus");
 //            n = sc.nextInt();
 
-            int[][] A = new int[][] {
+            int[][] A = new int[][]{
                     {1, 3, 4},
                     {3, 5, -4},
                     {4, 7, -2}
             };
 
-            int[] B = new int[] {
+            int[] B = new int[]{
                     50, 2, 31
             };
 
@@ -84,13 +83,21 @@ public class GridManager
         }
     }
 
+    /**
+     * Create a new GridNode and attach it with a newly create Link to the given master node.
+     * new node is added to master's slavelist.
+     *
+     * @param master master node of the newly created node
+     * @return
+     */
     public GridNode createSlave(GridNode master)
     {
         Link link = null;
         GridNode slave = null;
         try {
             link = new SimpleLink("link_" + master.getName() + "_" + master.getSlaveCount(), BAUD_RATE,
-                                  PROPAGATION_DELAY, MTU);
+                                  PROPAGATION_DELAY, MTU
+            );
 
             slave = new GridNode(master.getName() + "_slv" + "_" + master.getSlaveCount(), master);
             master.addSlave(slave);
@@ -111,12 +118,6 @@ public class GridManager
 
     private static void initGridSim()
     {
-        //////////////////////////////////////////
-        // First step: Initialize the GridSim package. It should be called
-        // before creating any entities. We can't run this example without
-        // initializing GridSim first. We will get run-time exception
-        // error.
-
         Calendar calendar = Calendar.getInstance();
         boolean trace_flag = true;  // mean trace GridSim events
 

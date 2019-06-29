@@ -14,12 +14,16 @@ import java.util.ArrayList;
 public class GridNode extends GridSim
 {
     public static final int PACKET_SIZE = 500;
+
+    /* Tags */
     public static final int SEND_MSG = 1;
     public static final int CALC_DET = 2;
     public static final int PRINT_MAT = 3;
 
+    /**
+     * Reference to master node
+     */
     private GridNode masterNode = null;
-
     private ArrayList<GridNode> slaveList;
 
     public GridNode(String s) throws Exception
@@ -49,6 +53,11 @@ public class GridNode extends GridSim
         this.slaveList = new ArrayList<>();
     }
 
+    /**
+     * Get an event from the Node's event queue.
+     *
+     * @return {Sim_event} the received event, null if none.
+     */
     public Sim_event receive()
     {
         Sim_event ev = new Sim_event();
@@ -57,11 +66,22 @@ public class GridNode extends GridSim
         return ev;
     }
 
+    /**
+     * Send the msg Object to the selected slave Node, with the given tag
+     * Outputs to the console a message.
+     *
+     * @param msg        {Object} Object to send
+     * @param slaveIndex {int} the index of the slave to send to
+     * @param tag
+     */
     public void sendData(Object msg, int slaveIndex, int tag)
     {
         GridNode dist = this.slaveList.get(slaveIndex);
 
-        IO_data data = new IO_data(msg, PACKET_SIZE, GridSim.getEntityId(dist.getName()));
+        IndexedMessage indexedMessage = new IndexedMessage(msg, slaveIndex);
+
+        IO_data data = new IO_data(indexedMessage, PACKET_SIZE, GridSim.getEntityId(dist.getName()));
+
         System.out.println(getName() + ".body(): Sending " + msg +
                                    ", at time = " + GridSim.clock() + " to " +
                                    dist.getName());
@@ -70,17 +90,36 @@ public class GridNode extends GridSim
         super.send(dist.getName(), GridSimTags.SCHEDULE_NOW, tag, data);
     }
 
-    private void sendToMaster(Object msg, int tag)
+    /**
+     * Send the msg data to master node with the given tag
+     *
+     * @param msg Object to send
+     * @param tag Tag to attach
+     */
+    private void sendToMaster(Object msg, int index, int tag)
     {
-        IO_data data = new IO_data(msg, PACKET_SIZE, GridSim.getEntityId(masterNode.getName()));
-        System.out.println(getName() + ".body(): Sending " + msg +
+        IO_data data = new IO_data(
+                new IndexedMessage(msg, index),
+                PACKET_SIZE,
+                GridSim.getEntityId(masterNode.getName())
+        );
+
+        System.out.println(getName() + ".body(): Sending (" + msg + ", " + index + ")" +
                                    ", at time = " + GridSim.clock() + " to " +
                                    masterNode.getName());
         // sends through Output buffer of this entity
         super.send(masterNode.getName(), GridSimTags.SCHEDULE_NOW, tag, data);
     }
 
+    public static IndexedMessage extractMessageFromEvent(Sim_event ev)
+    {
+        return (IndexedMessage) ((IO_data) (ev.get_data())).getData();
+    }
+
     @Override
+    /**
+     * Instructions to be run by the node when the simulation starts.
+     */
     public void body()
     {
         while (Sim_system.running()) {
@@ -88,15 +127,13 @@ public class GridNode extends GridSim
 
             switch (ev.get_tag()) {
                 case GridNode.SEND_MSG:
-                    System.out.println("Received " + ev.get_data());
+                    System.out.println("Received " + extractMessageFromEvent(ev).obj);
                     break;
                 case GridNode.CALC_DET:
-                    int[][] A = (int[][]) ((IO_data) (ev.get_data())).getData();
-                    System.out.println("Slave " + getName() + " has received a matrix : ");
-                    int det = MatrixEngine.det(A, A.length);
-                    sendToMaster(det, GridNode.SEND_MSG);
+                    computeDeterminant(ev);
                     break;
                 case GridNode.PRINT_MAT:
+                    printMatrix(ev);
                     break;
                 case GridSimTags.END_OF_SIMULATION:
                     end();
@@ -109,6 +146,29 @@ public class GridNode extends GridSim
 
     }
 
+    private void printMatrix(Sim_event ev)
+    {
+        int[][] A = (int[][]) extractMessageFromEvent(ev).obj;
+        System.out.println("Slave " + getName() + " has received a matrix : ");
+        MatrixEngine.printMat(A);
+    }
+
+    private void computeDeterminant(Sim_event ev)
+    {
+        IndexedMessage msg = extractMessageFromEvent(ev);
+        int[][] A = (int[][]) msg.obj;
+        int index = msg.index;
+
+        System.out.println("Slave " + getName() + " has received a matrix : ");
+        int det = MatrixEngine.det(A, A.length);
+
+        sendToMaster(det, index, GridNode.SEND_MSG);
+    }
+
+    /**
+     * Terminates node entity and ports.
+     * Ends all slave nodes first.
+     */
     public void end()
     {
         for (GridNode slave : slaveList)

@@ -70,6 +70,20 @@ public class MatrixEngine
         }
     }
 
+    /**
+     * Print a square matrix to the console
+     * @param A {int[][]} the array
+     */
+    public static void printMat(int[][] A)
+    {
+        for (int i = 0; i < A.length; i++) {
+            for (int j = 0; j < A[i].length; j++) {
+                System.out.print(A[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
     public static int[] solve(int[][] A, int[] B, int n)
     {
         int detA = det(A, n);

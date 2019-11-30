@@ -10,5 +10,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="jfreechart" level="project" />
     <orderEntry type="library" name="sqlite-jdbc-3.23.1" level="project" />
+    <orderEntry type="library" name="material-ui-swing-0.9.6" level="project" />
   </component>
 </module>

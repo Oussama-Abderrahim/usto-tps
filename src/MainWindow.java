@@ -1,3 +1,4 @@
+import mdlaf.MaterialLookAndFeel;
 import theme.SPanel;
 import theme.Theme;
 
@@ -25,6 +26,7 @@ public class MainWindow extends JFrame {
     }
 
     public MainWindow() {
+        setTitle("Image Indexer v0.3");
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         this.setLocationRelativeTo(null); // center in screen
@@ -49,6 +51,13 @@ public class MainWindow extends JFrame {
     }
 
     public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel (new MaterialLookAndFeel());
+        }
+        catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace ();
+        }
+
         Runnable r = () ->
         {
             MainWindow window = MainWindow.getInstance();

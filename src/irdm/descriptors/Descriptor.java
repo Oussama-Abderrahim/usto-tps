@@ -1,3 +1,5 @@
+package irdm.descriptors;
+
 public interface Descriptor {
 
 

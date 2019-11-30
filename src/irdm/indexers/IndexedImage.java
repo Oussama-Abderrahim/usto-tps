@@ -1,3 +1,10 @@
+package irdm.indexers;
+
+import irdm.DatabaseManager;
+import irdm.FileManager;
+import irdm.descriptors.ColorDescriptor;
+import irdm.descriptors.Descriptor;
+
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 

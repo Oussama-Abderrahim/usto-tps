@@ -1,14 +1,16 @@
+package irdm.ui;
+
+import irdm.indexers.ColorIndexerEngine;
+import irdm.indexers.IndexedImage;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import theme.SButton;
-import theme.SLabel;
-import theme.SPanel;
+import irdm.ui.theme.SButton;
+import irdm.ui.theme.SLabel;
+import irdm.ui.theme.SPanel;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
 
 public class MainMenuPanel extends SPanel {
 
@@ -34,7 +36,7 @@ public class MainMenuPanel extends SPanel {
 
         importedImageLabel = new SLabel("Put Your Image Here");
         importedImageLabel.setOpaque(false);
-//        importedImageLabel.setIcon(FileManager.loadImage("placeholder", 400, 400));
+//        importedImageLabel.setIcon(irdm.FileManager.loadImage("placeholder", 400, 400));
         importedImagePanel.add(importedImageLabel, BorderLayout.CENTER);
 
         importedImagePanel.repaint();

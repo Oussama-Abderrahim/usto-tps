@@ -1,3 +1,7 @@
+package irdm;
+
+import irdm.indexers.IndexedImage;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -41,30 +45,30 @@ public class FileManager {
             return resizeImage(img, type, iWidth, iHeight);
 
         } catch (IOException e) {
-            System.err.println("Can't load image" + fileName);
+            System.err.println("Can't load irdm.image" + fileName);
             return null;
         }
 
     }
 
     /**
-     * Resize image
+     * Resize irdm.image
      *
-     * @param originalImage (BufferedImage) image to resize
-     * @param type          type of image, use ARGB for tranparancy
+     * @param originalImage (BufferedImage) irdm.image to resize
+     * @param type          type of irdm.image, use ARGB for tranparancy
      * @param IMG_WIDTH     (int)
      * @param IMG_HEIGHT    (int)
-     * @return (BufferedImage) the resize image
+     * @return (BufferedImage) the resize irdm.image
      */
     static BufferedImage resizeImage(BufferedImage originalImage, int type, int IMG_WIDTH, int IMG_HEIGHT) {
         Image resizedImage = originalImage.getScaledInstance(IMG_WIDTH, IMG_HEIGHT, Image.SCALE_SMOOTH);
-        // Create a buffered image with transparency
+        // Create a buffered irdm.image with transparency
         BufferedImage bimage = new BufferedImage(IMG_WIDTH, IMG_HEIGHT, type);
-        // Draw the image on to the buffered image
+        // Draw the irdm.image on to the buffered irdm.image
         Graphics2D bGr = bimage.createGraphics();
         bGr.drawImage(resizedImage, 0, 0, null);
         bGr.dispose();
-        // Return the buffered image
+        // Return the buffered irdm.image
         return bimage;
     }
 
@@ -89,7 +93,7 @@ public class FileManager {
     }
 
     public static BufferedImage loadImageFromChooser(int width, int height, IndexedImage indexedImage) {
-        File file = loadFileFromChooser("Select your image", "png");
+        File file = loadFileFromChooser("Select your irdm.image", "png");
         if (indexedImage != null)
             indexedImage.setFilePath(file.getPath());
         try {

@@ -1,4 +1,4 @@
-package theme;
+package irdm.ui.theme;
 
 import java.awt.*;
 

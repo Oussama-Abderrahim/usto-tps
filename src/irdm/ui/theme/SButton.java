@@ -1,15 +1,10 @@
-package theme;
+package irdm.ui.theme;
 
 
 import mdlaf.animation.MaterialUIMovement;
-import mdlaf.utils.MaterialColors;
 
 import javax.swing.*;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 /**

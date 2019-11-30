@@ -1,4 +1,6 @@
+package irdm.descriptors;
 
+import irdm.indexers.ColorIndexerEngine;
 
 public class ColorDescriptor implements Descriptor {
 

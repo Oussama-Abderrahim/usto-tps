@@ -1,13 +1,12 @@
-import mdlaf.MaterialLookAndFeel;
-import theme.SPanel;
-import theme.Theme;
+package irdm;
 
-import javax.imageio.ImageIO;
+import mdlaf.MaterialLookAndFeel;
+import irdm.ui.theme.SPanel;
+import irdm.ui.theme.Theme;
+import irdm.ui.MainMenuPanel;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 /**
  * Created by Oussama on 06/11/2018.

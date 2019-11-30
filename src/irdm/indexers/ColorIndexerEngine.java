@@ -1,3 +1,6 @@
+package irdm.indexers;
+
+import irdm.descriptors.ColorDescriptor;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
@@ -10,7 +13,6 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
-import java.util.stream.Stream;
 
 public class ColorIndexerEngine implements IndexerEngine {
 

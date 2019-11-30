@@ -8,46 +8,39 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class FileManager
-{
-    public static File getResourceFile(String fileName) throws IOException
-    {
+public class FileManager {
+    public static File getResourceFile(String fileName) throws IOException {
         return new File("res/" + fileName);
     }
 
-    public static File loadFile(String desc, String ext)
-    {
+    public static File loadFileFromChooser(String desc, String ext) {
         File file = null;
 
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File("./res"));
         FileNameExtensionFilter filter = new FileNameExtensionFilter(desc, ext);
         fileChooser.setFileFilter(filter);
 
         int returnVal = fileChooser.showOpenDialog(null);
 
-        if (returnVal == JFileChooser.APPROVE_OPTION)
-        {
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
             file = fileChooser.getSelectedFile();
         }
 
         return file;
     }
 
-    public static ImageIcon loadImage(String fileName, int iWidth, int iHeight)
-    {
-        try
-        {
+    public static BufferedImage loadImage(String fileName, int iWidth, int iHeight) {
+        try {
             File spriteFile = FileManager.getResourceFile(fileName + ".png");
             BufferedImage img = ImageIO.read(spriteFile);
 
             // resize
             int type = img.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : img.getType();
 
-            return new ImageIcon(
-                    resizeImage(img, type, iWidth, iHeight)
-            );
-        } catch (IOException e)
-        {
+            return resizeImage(img, type, iWidth, iHeight);
+
+        } catch (IOException e) {
             System.err.println("Can't load image" + fileName);
             return null;
         }
@@ -63,8 +56,7 @@ public class FileManager
      * @param IMG_HEIGHT    (int)
      * @return (BufferedImage) the resize image
      */
-    static BufferedImage resizeImage(BufferedImage originalImage, int type, int IMG_WIDTH, int IMG_HEIGHT)
-    {
+    static BufferedImage resizeImage(BufferedImage originalImage, int type, int IMG_WIDTH, int IMG_HEIGHT) {
         Image resizedImage = originalImage.getScaledInstance(IMG_WIDTH, IMG_HEIGHT, Image.SCALE_SMOOTH);
         // Create a buffered image with transparency
         BufferedImage bimage = new BufferedImage(IMG_WIDTH, IMG_HEIGHT, type);
@@ -76,41 +68,43 @@ public class FileManager
         return bimage;
     }
 
-    public static String getLoadedFileText()
-    {
-        File file = loadFile("Compila source files", "Compila");
+    public static String getLoadedFileText() {
+        File file = loadFileFromChooser("Compila source files", "Compila");
 
         if (file == null)
             return "";
 
         String text = "";
 
-        try (BufferedReader br = new BufferedReader(new FileReader(file)))
-        {
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
-            while ((line = br.readLine()) != null)
-            {
+            while ((line = br.readLine()) != null) {
                 text += line + "\n";
             }
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
 
         }
 
         return text;
     }
 
-    public static ImageIcon loadImageFromChooser(int width, int height)
-    {
-        File file = loadFile("Image file", "png");
-        try
-        {
+    public static BufferedImage loadImageFromChooser(int width, int height, IndexedImage indexedImage) {
+        File file = loadFileFromChooser("Select your image", "png");
+        if (indexedImage != null)
+            indexedImage.setFilePath(file.getPath());
+        try {
             BufferedImage img = ImageIO.read(file);
-            return new ImageIcon(
-                    resizeImage(img, img.getType(), width, height)
-            );
-        } catch (Exception e)
-        {
+            return resizeImage(img, img.getType(), width, height);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static BufferedImage fileTOImage(File file) {
+        try {
+            BufferedImage img = ImageIO.read(file);
+            return img;
+        } catch (Exception e) {
             return null;
         }
     }

@@ -1,9 +1,11 @@
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
 import theme.SButton;
 import theme.SLabel;
 import theme.SPanel;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -14,36 +16,52 @@ public class MainMenuPanel extends SPanel {
     private SPanel rightPanel;
     private SPanel leftPanel;
     private SPanel bottomButtonsPanel;
-    private SPanel importedImagePanel;
+    private SLabel importedImageLabel;
+
+    private IndexedImage importedImage;
 
     public MainMenuPanel() {
         super(new BorderLayout());
 
         containerPanel = new SPanel(new GridLayout(1, 2));
+        containerPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
         rightPanel = new SPanel(new GridLayout(2, 1));
         leftPanel = new SPanel(new BorderLayout());
+        leftPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
         bottomButtonsPanel = new SPanel(new FlowLayout());
-        importedImagePanel = new SPanel();
+        SPanel importedImagePanel = new SPanel(new BorderLayout());
+        importedImagePanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
 
-        FileManager.loadImage("placeholder", 400, 400);
+        importedImageLabel = new SLabel("Put Your Image Here");
+        importedImageLabel.setOpaque(false);
+//        importedImageLabel.setIcon(FileManager.loadImage("placeholder", 400, 400));
+        importedImagePanel.add(importedImageLabel, BorderLayout.CENTER);
 
-        BufferedImage placeHolderImg = (BufferedImage) FileManager.loadImage("placeholder", 400, 400).getImage();
-        importedImagePanel.setBackground(placeHolderImg);
+        importedImagePanel.repaint();
 
         SPanel buttonsPanel = new SPanel();
 
         buttonsPanel.setLayout(new GridLayout(3, 1, 10, 10));
 
-        SButton importImageButton = new SButton("Import a new Image");
-        importImageButton.addActionListener(e -> onUploadImageButtonClick());
-        buttonsPanel.add(SPanel.createContainerPanel(importImageButton));
-        buttonsPanel.add(SPanel.createContainerPanel(new SButton("Comparaison couleur")));
-        buttonsPanel.add(SPanel.createContainerPanel(new SButton("Comparaison texture")));
+        SButton saveImageButton = new SButton("Save Image to DB");
+        SButton compareColorsButton = new SButton("Comparaison couleur");
+        SButton compareTextureButton = new SButton("Comparaison texture");
+
+        saveImageButton.addActionListener(e -> saveImage());
+        compareColorsButton.addActionListener(e -> compareColors());
+        compareTextureButton.addActionListener(e -> compareTexture());
+
+
+        buttonsPanel.add(SPanel.createContainerPanel(saveImageButton));
+        buttonsPanel.add(SPanel.createContainerPanel(compareColorsButton));
+        buttonsPanel.add(SPanel.createContainerPanel(compareTextureButton));
 
         rightPanel.add(importedImagePanel, BorderLayout.NORTH);
         rightPanel.add(buttonsPanel, BorderLayout.SOUTH);
 
-        bottomButtonsPanel.add(new SButton("Import A new Image"));
+        SButton importImageButton = new SButton("Import a new Image");
+        importImageButton.addActionListener(e -> onUploadImageButtonClick());
+        bottomButtonsPanel.add(importImageButton);
         bottomButtonsPanel.add(new SButton("Visualise Database"));
 
         containerPanel.add(leftPanel);
@@ -55,12 +73,35 @@ public class MainMenuPanel extends SPanel {
 
     }
 
+    private void compareTexture() {
+
+    }
+
+    private void compareColors() {
+
+    }
+
+    private void saveImage() {
+        if(importedImage.saveToDB()) {
+            JOptionPane.showMessageDialog(this, "Image successfully saved");
+        } else {
+            JOptionPane.showMessageDialog(this, "Image existe déja ou erreur.", "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+
     private void onUploadImageButtonClick() {
-        BufferedImage image = (BufferedImage) FileManager.loadImageFromChooser(400, 400).getImage();
+        importedImage = new IndexedImage();
+        importedImage.loadImageFromChooser();
 
-        importedImagePanel.setBackground(image);
+        System.out.println(importedImage.getFilePath());
 
-        leftPanel.add(IndexerEngine.getChartFromImage(image), BorderLayout.CENTER);
+        importedImageLabel.setText("");
+        importedImageLabel.setIcon(importedImage.getImageIcon());
+
+        JFreeChart chart = ColorIndexerEngine.createChart(ColorIndexerEngine.getChartFromImage(importedImage.getImage()));
+        leftPanel.add(new ChartPanel(chart));
+        leftPanel.repaint();
     }
 
 }

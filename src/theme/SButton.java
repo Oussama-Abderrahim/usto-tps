@@ -1,6 +1,9 @@
 package theme;
 
 
+import mdlaf.animation.MaterialUIMovement;
+import mdlaf.utils.MaterialColors;
+
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -17,6 +20,7 @@ public class SButton extends JButton
 
     public Color bg = Theme.BTN_DEFAULT_COLOR;
     public Color hoverBg = null;
+    private Color hoverFg = Theme.BTN_DEFAULT_TEXT_HOVER_COLOR;
     public Color borderColor = null;
     public ArrayList<Component> validationComponents = new ArrayList<Component>();
 
@@ -25,15 +29,8 @@ public class SButton extends JButton
         super(text);
 
         this.setText(text);
-        this.setBgColor(this.bg);
-        this.setFocusPainted(false);
-        setFont(Theme.BTN_DEFAULT_FONT);
-        this.setBorder(new CompoundBorder(BorderFactory.createLineBorder(borderColor),
-                new EmptyBorder(Theme.LABELED_MARGIN, 0, Theme.LABELED_MARGIN, 0)));
+//        this.setFocusPainted(false);
 
-        this.setPreferredSize(new Dimension(
-                Theme.BTN_DEFAULT_WIDTH, Theme.BTN_DEFAULT_HEIGHT)
-        );
         this.setMinimumSize(new Dimension(
                 Theme.BTN_DEFAULT_WIDTH, Theme.BTN_DEFAULT_HEIGHT)
         );
@@ -41,39 +38,11 @@ public class SButton extends JButton
                 Theme.BTN_DEFAULT_WIDTH * 2, Theme.BTN_DEFAULT_HEIGHT)
         );
 
+        setFont(Theme.BTN_DEFAULT_FONT);
         this.setForeground(Theme.BTN_DEFAULT_TEXT_COLOR);
+        this.setBgColor(this.bg);
+        MaterialUIMovement.add (this, this.hoverBg);
 
-        SButton self = this;
-
-        this.addMouseListener(new MouseListener()
-        {
-            @Override
-            public void mouseClicked(MouseEvent me)
-            {
-            }
-
-            @Override
-            public void mousePressed(MouseEvent me)
-            {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent me)
-            {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent me)
-            {
-                self.setBackground(hoverBg);
-            }
-
-            @Override
-            public void mouseExited(MouseEvent me)
-            {
-                self.setBackground(bg);
-            }
-        });
     }
 
     public void setBgColor(Color background)
@@ -82,7 +51,7 @@ public class SButton extends JButton
         this.hoverBg = calcHoverBgColor(bg);
         this.borderColor = calcHoverBgColor(bg);
         setBackground(bg);
-        setBorder(BorderFactory.createLineBorder(borderColor));
+//        setBorder(BorderFactory.createLineBorder(borderColor));
     }
 
     public Color calcHoverBgColor(Color color)

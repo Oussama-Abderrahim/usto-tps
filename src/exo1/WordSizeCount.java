@@ -15,19 +15,22 @@ import org.apache.hadoop.util.GenericOptionsParser;
 
 import java.io.IOException;
 
+/**
+ * Lancer un Job MapReduce pour calculer le nombre d'occurence des tailles des mots dans un texte.
+ * @input Texte (mots séparés par des espaces/ponctuation)
+ * @output { key: taille(mot), value: nbr_occ((taille_mot)) }
+ */
 public class WordSizeCount {
 
-    public static class Map
-            extends Mapper<LongWritable, Text, Text, IntWritable> {
+    public static class Map extends Mapper<LongWritable, Text, Text, IntWritable> {
 
         private final static IntWritable one = new IntWritable(1); // type of output value
-
         private Text keyText = new Text("");
 
-        //private String separatorsRegex = "[\.,\";\s]+";
         public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 
             String[] words = value.toString().split("[-?!:,;\\s\\.\n\"\']+");
+
             for (String word : words) {
                 keyText.set(String.valueOf(word.length()));
                 context.write(keyText, one);     // create a pair <keyword, 1>
@@ -35,19 +38,19 @@ public class WordSizeCount {
         }
     }
 
-    public static class Reduce
-            extends Reducer<Text, IntWritable, Text, IntWritable> {
+    public static class Reduce extends Reducer<Text, IntWritable, Text, IntWritable> {
 
         private IntWritable result = new IntWritable();
 
         public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
-            int sum = 0; // initialize the sum for each keyword
+            int sum = 0;
+
             for (IntWritable val : values) {
                 sum += val.get();
             }
             result.set(sum);
 
-            context.write(key, result); // create a pair <keyword, number of occurences>
+            context.write(key, result);
         }
     }
 
@@ -56,11 +59,10 @@ public class WordSizeCount {
         Configuration conf = new Configuration();
         String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs(); // get all args
         if (otherArgs.length != 2) {
-            System.err.println("Usage: exo1.WordCount <in> <out>");
+            System.err.println("Usage: exo1.WordSizeCount <in> <out>");
             System.exit(2);
         }
 
-        // create a job with name "wordcount"
         final String JOB_NAME = WordSizeCount.class.getSimpleName();
         Job job = new Job(conf, JOB_NAME);
         job.setJarByClass(WordSizeCount.class);

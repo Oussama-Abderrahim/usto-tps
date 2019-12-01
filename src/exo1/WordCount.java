@@ -13,10 +13,19 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 
+/**
+ * Lancer un Job MapReduce pour calculer le nombre d'occurence de chaque mot dans un texte.
+ * @input Texte (mots séparés par des espaces/ponctuation)
+ * @output { key: mot, value: nbr_occ(mot) }
+ */
 public class WordCount {
 
-    public static class Map
-            extends Mapper<LongWritable, Text, Text, IntWritable> {
+    /**
+     * Map Extrait les mots de chaque ligne
+     * @inout Texte
+     * @output { key: mot, value: 1 }
+     */
+    public static class Map extends Mapper<LongWritable, Text, Text, IntWritable> {
 
         private final static IntWritable one = new IntWritable(1); // type of output value
 
@@ -33,8 +42,12 @@ public class WordCount {
         }
     }
 
-    public static class Reduce
-            extends Reducer<Text, IntWritable, Text, IntWritable> {
+    /**
+     * Reduce fait la somme après le shuffle de chaque mot, pour avoir le total des occurences
+     * @inout { key: mot, value: 1 }
+     * @output { key: mot, value: nbr_occ(mot) }
+     */
+    public static class Reduce extends Reducer<Text, IntWritable, Text, IntWritable> {
 
         private IntWritable result = new IntWritable();
 
@@ -83,6 +96,7 @@ public class WordCount {
         // set the HDFS path for the output
         Path outputPath = new Path(otherArgs[1] + "/" + JOB_NAME);
         fs.delete(outputPath, true);
+
         FileOutputFormat.setOutputPath(job, outputPath);
 
         //Wait till job completion

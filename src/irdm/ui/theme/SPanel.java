@@ -14,7 +14,6 @@ public class SPanel extends JPanel
 
     public SPanel(LayoutManager layout, Color bgColor) {
         super(layout);
-        System.out.println("Opaque false");
         setBorder(new EmptyBorder(5, 5, 5, 5));
         setLayout(layout);
         setBackground(bgColor);

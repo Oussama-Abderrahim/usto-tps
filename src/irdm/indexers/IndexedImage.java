@@ -31,6 +31,13 @@ public class IndexedImage {
         this.colorDescriptor = null;
     }
 
+    public IndexedImage(String path, String colorDescriptor, String textureDescriptor) {
+        this();
+        setFilePath(path);
+        this.colorDescriptor = new ColorDescriptor(colorDescriptor);
+        this.textureDescriptor = null;
+    }
+
     public void setFilePath(String path) {
         this.filePath = path;
         this.image = FileManager.loadImage(filePath, DEFAULT_WIDTH, DEFAULT_HEIGHT);

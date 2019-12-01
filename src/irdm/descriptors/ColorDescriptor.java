@@ -2,6 +2,8 @@ package irdm.descriptors;
 
 import irdm.indexers.ColorIndexerEngine;
 
+import java.awt.*;
+
 public class ColorDescriptor implements Descriptor {
 
     private static final int DESCRIPTOR_MAX_SIZE = ColorIndexerEngine.M*3;
@@ -45,7 +47,14 @@ public class ColorDescriptor implements Descriptor {
     }
 
     @Override
-    public double distance(Descriptor o2) {
-        return 0;
+    public int distance(Descriptor o2) {
+        double sum = 0;
+        int[] histogram2 = ((ColorDescriptor) o2).histogram;
+        for(int i = 0; i < histogram.length && i < histogram2.length; i++)
+        {
+            sum += Math.abs(histogram[i] - histogram2[i]);
+        }
+        System.out.println("Distance " + sum/histogram.length);
+        return (int) sum/histogram.length;
     }
 }

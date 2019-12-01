@@ -6,7 +6,7 @@ import java.awt.*;
 
 public class ColorDescriptor implements Descriptor {
 
-    private static final int DESCRIPTOR_MAX_SIZE = ColorIndexerEngine.M*3;
+    private static final int DESCRIPTOR_MAX_SIZE = ColorIndexerEngine.M*3+3;
     private int[] histogram;
 
     public ColorDescriptor(String descriptor) {
@@ -37,7 +37,7 @@ public class ColorDescriptor implements Descriptor {
 
         String[] values = descriptor.split(",");
 
-        for(int i = 0; i < array.length; i++)
+        for(int i = 0; i < values.length; i++)
         {
             array[i] = Integer.parseInt(values[i]);
         }
@@ -47,14 +47,62 @@ public class ColorDescriptor implements Descriptor {
     }
 
     @Override
-    public int distance(Descriptor o2) {
+    public double distance(Descriptor o2) {
+        return distanceJeffrey(o2);
+    }
+
+    public double distanceS(Descriptor o2) {
+        int[] histogram2 = ((ColorDescriptor) o2).histogram;
+
+        double sum = 0;
+        double sumMin = 0;
+        for(int i = 0; i < histogram.length && i < histogram2.length; i++)
+        {
+            sumMin += Math.min(histogram[i], histogram2[i]);
+            sum += histogram[i];
+        }
+        return (sumMin/sum);
+    }
+
+
+    public double distanceJeffrey(Descriptor o2) {
+        int[] histogram2 = ((ColorDescriptor) o2).histogram;
+
+        double sum = 0;
+
+        for(int i = 0; i < histogram.length && i < histogram2.length; i++)
+        {
+            double h1 = histogram[i] == 0? 0.00001: histogram[i];
+            double h2 = histogram2[i] == 0? 0.00001: histogram2[i];
+
+            sum += h1 * Math.log((2 * h1) / (h1 + h2)) + h2 * Math.log((2 * h2) / (h1 + h2));
+        }
+
+        return (sum);
+    }
+
+    public double distanceS2(Descriptor o2) {
+        int[] histogram2 = ((ColorDescriptor) o2).histogram;
+
+        double sum = 0;
+        double sum2 = 0;
+        double sumMin = 0;
+        for(int i = 0; i < histogram.length && i < histogram2.length; i++)
+        {
+            sumMin += Math.min(histogram[i], histogram2[i]);
+            sum += histogram[i];
+            sum2 += histogram2[i];
+        }
+        return (sumMin/Math.min(sum, sum2));
+    }
+
+    public double distanceMean(Descriptor o2) {
         double sum = 0;
         int[] histogram2 = ((ColorDescriptor) o2).histogram;
         for(int i = 0; i < histogram.length && i < histogram2.length; i++)
         {
             sum += Math.abs(histogram[i] - histogram2[i]);
         }
-        System.out.println("Distance " + sum/histogram.length);
-        return (int) sum/histogram.length;
+        return sum/histogram.length;
     }
 }

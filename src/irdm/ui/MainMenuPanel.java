@@ -96,7 +96,7 @@ public class MainMenuPanel extends SPanel {
             e.printStackTrace();
         }
 
-        indexedImages.sort(Comparator.comparingInt(o -> importedImage.getColorDescriptor().distance(o.getColorDescriptor())));
+        indexedImages.sort(Comparator.comparingDouble(o -> importedImage.getColorDescriptor().distance(o.getColorDescriptor())));
 
         JFrame outputFrame = new JFrame("result");
 

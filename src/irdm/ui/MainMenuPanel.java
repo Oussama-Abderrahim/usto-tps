@@ -1,7 +1,9 @@
 package irdm.ui;
 
+import irdm.DatabaseManager;
 import irdm.indexers.ColorIndexerEngine;
 import irdm.indexers.IndexedImage;
+import irdm.ui.theme.Theme;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import irdm.ui.theme.SButton;
@@ -11,6 +13,10 @@ import irdm.ui.theme.SPanel;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class MainMenuPanel extends SPanel {
 
@@ -18,7 +24,7 @@ public class MainMenuPanel extends SPanel {
     private SPanel rightPanel;
     private SPanel leftPanel;
     private SPanel bottomButtonsPanel;
-    private SLabel importedImageLabel;
+    private ImageViewerPanel imageViewerPanel;
 
     private IndexedImage importedImage;
 
@@ -31,15 +37,8 @@ public class MainMenuPanel extends SPanel {
         leftPanel = new SPanel(new BorderLayout());
         leftPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
         bottomButtonsPanel = new SPanel(new FlowLayout());
-        SPanel importedImagePanel = new SPanel(new BorderLayout());
-        importedImagePanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
 
-        importedImageLabel = new SLabel("Put Your Image Here");
-        importedImageLabel.setOpaque(false);
-//        importedImageLabel.setIcon(irdm.FileManager.loadImage("placeholder", 400, 400));
-        importedImagePanel.add(importedImageLabel, BorderLayout.CENTER);
-
-        importedImagePanel.repaint();
+        imageViewerPanel = new ImageViewerPanel();
 
         SPanel buttonsPanel = new SPanel();
 
@@ -58,7 +57,7 @@ public class MainMenuPanel extends SPanel {
         buttonsPanel.add(SPanel.createContainerPanel(compareColorsButton));
         buttonsPanel.add(SPanel.createContainerPanel(compareTextureButton));
 
-        rightPanel.add(importedImagePanel, BorderLayout.NORTH);
+        rightPanel.add(imageViewerPanel, BorderLayout.NORTH);
         rightPanel.add(buttonsPanel, BorderLayout.SOUTH);
 
         SButton importImageButton = new SButton("Import a new Image");
@@ -80,11 +79,44 @@ public class MainMenuPanel extends SPanel {
     }
 
     private void compareColors() {
+        ResultSet resultSet = DatabaseManager.getInstance().fetchAllImages();
+
+        ArrayList<IndexedImage> indexedImages = new ArrayList<>();
+
+        try {
+            while (resultSet.next()) {
+                indexedImages.add(
+                        new IndexedImage(
+                                resultSet.getString("path"),
+                                resultSet.getString("COLOR_DESCRIPTOR"),
+                                "")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        indexedImages.sort(Comparator.comparingInt(o -> importedImage.getColorDescriptor().distance(o.getColorDescriptor())));
+
+        JFrame outputFrame = new JFrame("result");
+
+        JPanel contentPane = new JPanel();
+
+        contentPane.setLayout(new GridLayout(2, 3, 30, 30));
+
+        for (int i = 0; i < 6 && i < indexedImages.size(); i++) {
+            contentPane.add(new ImageViewerPanel(indexedImages.get(i).getImageIcon()));
+        }
+
+        outputFrame.setSize(Theme.WINDOW_WIDTH, Theme.WINDOW_HEIGHT);
+        outputFrame.setLocationRelativeTo(null);
+        outputFrame.setContentPane(contentPane);
+        outputFrame.setVisible(true);
 
     }
 
     private void saveImage() {
-        if(importedImage.saveToDB()) {
+        if (importedImage.saveToDB()) {
             JOptionPane.showMessageDialog(this, "Image successfully saved");
         } else {
             JOptionPane.showMessageDialog(this, "Image existe déja ou erreur.", "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -98,8 +130,7 @@ public class MainMenuPanel extends SPanel {
 
         System.out.println(importedImage.getFilePath());
 
-        importedImageLabel.setText("");
-        importedImageLabel.setIcon(importedImage.getImageIcon());
+        imageViewerPanel.showImage(importedImage.getImageIcon());
 
         JFreeChart chart = ColorIndexerEngine.createChart(ColorIndexerEngine.getChartFromImage(importedImage.getImage()));
         leftPanel.add(new ChartPanel(chart));

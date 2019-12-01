@@ -36,16 +36,15 @@ public class FileManager {
 
     public static BufferedImage loadImage(String fileName, int iWidth, int iHeight) {
         try {
-            File spriteFile = FileManager.getResourceFile(fileName + ".png");
+            File spriteFile = new File(fileName);
             BufferedImage img = ImageIO.read(spriteFile);
-
             // resize
             int type = img.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : img.getType();
 
             return resizeImage(img, type, iWidth, iHeight);
 
         } catch (IOException e) {
-            System.err.println("Can't load irdm.image" + fileName);
+            System.err.println("Can't load image " + fileName + " " + e.getMessage());
             return null;
         }
 

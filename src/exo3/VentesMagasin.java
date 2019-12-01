@@ -15,17 +15,20 @@ import org.apache.hadoop.util.GenericOptionsParser;
 
 import java.io.IOException;
 
+/**
+ * Lancer un Job MapReduce pour calculer le total des ventes par magasin
+ * @input ligne (date | temps | magasin | produit | count | paiement )
+ * @output { key: magasin, value: sum(paiement) }
+ */
 public class VentesMagasin {
 
-    public static class Map
-            extends Mapper<LongWritable, Text, Text, IntWritable> {
+    public static class Map extends Mapper<LongWritable, Text, Text, IntWritable> {
 
         private final static IntWritable one = new IntWritable(1); // type of output value
 
         private Text keyText = new Text("");
         private IntWritable valueText = new IntWritable(0);
 
-        //private String separatorsRegex = "[\.,\";\s]+";
         public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 
             String[] words = value.toString().split(" \\| ");
@@ -66,7 +69,7 @@ public class VentesMagasin {
         Configuration conf = new Configuration();
         String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs(); // get all args
         if (otherArgs.length != 2) {
-            System.err.println("Usage: exo1.WordCount <in> <out>");
+            System.err.println("Usage: exo3.VentesMagasin <in> <out>");
             System.exit(2);
         }
 

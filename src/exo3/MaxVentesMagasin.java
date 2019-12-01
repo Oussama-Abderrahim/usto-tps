@@ -15,6 +15,11 @@ import org.apache.hadoop.util.GenericOptionsParser;
 
 import java.io.IOException;
 
+/**
+ * Lancer un Job MapReduce pour calculer le montant maximum de paiement pour chaque magasin.
+ * @input ligne (date | temps | magasin | produit | count | paiement )
+ * @output { key: magasin, value: max(magasin.paiement) }
+ */
 public class MaxVentesMagasin {
 
     public static class Map

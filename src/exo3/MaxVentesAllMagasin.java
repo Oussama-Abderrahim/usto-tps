@@ -15,17 +15,25 @@ import org.apache.hadoop.util.GenericOptionsParser;
 
 import java.io.IOException;
 
+/**
+ * Lancer un Job MapReduce pour calculer le montant maximum de paiement et le le nombre de paiement
+ * Tout magasin confendu.
+ * @input ligne (date | temps | magasin | produit | count | paiement )
+ * @output { key: "TotalVentes", value: sum(paiement) }, { key: "TotalValeurs", value: sum(count) },
+ */
 public class MaxVentesAllMagasin {
 
-    public static class Map
-            extends Mapper<LongWritable, Text, Text, IntWritable> {
 
-        private final static IntWritable one = new IntWritable(1); // type of output value
+    /**
+     * Génère deux clés pour chaque ligne, une pour le count et une pour la somme des paiements
+     * @input ligne (date | temps | magasin | produit | count | paiement )
+     * @output { key: "TotalVentes", value: paiement }, { key: "TotalValeurs", value: 1 },
+     */
+    public static class Map extends Mapper<LongWritable, Text, Text, IntWritable> {
 
         private Text keyText = new Text("");
         private IntWritable valueText = new IntWritable(0);
 
-        //private String separatorsRegex = "[\.,\";\s]+";
         public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 
             String[] words = value.toString().split(" \\| ");

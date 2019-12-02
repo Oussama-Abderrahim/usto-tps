@@ -1,6 +1,8 @@
 package cours;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
@@ -13,6 +15,10 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.stream.StreamSupport;
@@ -31,29 +37,33 @@ public class ProfondeurGraphe {
 
         public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 
-            String[] node = value.toString().split(" ");
+            String[] node = value.toString().split("\\s");
 
-            String id = node[0];
-            String[] children = node[1].substring(1, node[1].length() - 1).split(",");
-            String couleur = node[2];
-            int profondeur = Integer.parseInt(node[3]);
+
+            int n = node.length;
+            String id = node[n - 4];
+            String[] children = node[n - 3].replace("[", "").replace("]", "").split(",");
+            String couleur = node[n - 2];
+            int profondeur = Integer.parseInt(node[n - 1]);
+
 
             if (couleur.equals("GRIS")) {
 
                 for (String child : children) {
-                    keyText.set(child);
-                    resultValue.set("() " + "GRIS" + " " + profondeur + 1);
-                    context.write(keyText, resultValue);
+                    if (!child.isEmpty()) {
+                        keyText.set("" + child);
+                        resultValue.set(child + " [] " + "GRIS" + " " + (profondeur + 1));
+                        context.write(keyText, resultValue);
+                    }
                 }
 
-                keyText.set(id);
-                resultValue.set(node[1] + " NOIR " + profondeur);
-                context.write(keyText, resultValue);
-            } else {
-                keyText.set(id);
-                resultValue.set(node[1] + " " + couleur + " " + profondeur);
+                keyText.set("" + id);
+                resultValue.set(id + " " + node[n - 3] + " NOIR " + profondeur);
                 context.write(keyText, resultValue);
             }
+            keyText.set("" + id);
+            resultValue.set(value);
+            context.write(keyText, resultValue);
         }
     }
 
@@ -61,23 +71,28 @@ public class ProfondeurGraphe {
 
         public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
 
-            Text[] valuesArray = StreamSupport.stream(values.spliterator(), false).toArray(Text[]::new);
 
-            String children = "()";
+            String children = "[]";
             int profondeur = -1;
             String couleur = "BLANC";
 
-            for (Text value : valuesArray) {
-                String[] node = value.toString().split(" ");
+            for (Text value : values) {
+                String[] node = value.toString().split("\\s");
 
-                if (node[0].length() > children.length()) children = node[0];
+                int n = node.length;
 
-                if (node[1].equals("NOIR") || (node[1].equals("GRIS") && couleur.equals("BLANC"))) couleur = node[1];
+                if (node[n - 3].length() > children.length()) {
+                    children = node[n - 3];
+                }
 
-                profondeur = Math.max(profondeur, Integer.parseInt(node[2]));
+                if (node[n - 2].contains("NOIR") || (node[2].contains("GRIS") && couleur.contains("BLANC"))) {
+                    couleur = node[n - 2];
+                }
+
+                profondeur = Math.max(profondeur, Integer.parseInt(node[n - 1]));
             }
 
-            context.write(key, new Text("" + children + " " + couleur + " " + profondeur));
+            context.write(key, new Text(key.toString() + " " + children + " " + couleur + " " + profondeur));
 
         }
     }
@@ -96,10 +111,15 @@ public class ProfondeurGraphe {
         boolean done = false;
 
         Path inputPath = new Path(otherArgs[0] + "/" + JOB_NAME + ".txt");
+        Path outputPath = new Path(otherArgs[1] + "/" + JOB_NAME);
 
-        for(int i = 5; i > 0; i--)
-        {
-            Path outputPath = new Path(otherArgs[1] + "/" + JOB_NAME + i);
+        /**
+         * Simuler X iterations
+         */
+        final int MAX_ITERATIONS = 2;
+        int i;
+        for (i = MAX_ITERATIONS; i >= 0; i--) {
+            outputPath = new Path(otherArgs[1] + "/" + JOB_NAME + i);
             Job job = new Job(conf, JOB_NAME);
             job.setJarByClass(ProfondeurGraphe.class);
             job.setMapperClass(Map.class);
@@ -112,9 +132,45 @@ public class ProfondeurGraphe {
             FileOutputFormat.setOutputPath(job, outputPath);
             job.waitForCompletion(true);
 
-            inputPath = outputPath;
+            inputPath = new Path(otherArgs[1] + "/" + JOB_NAME + i + "/part-r-00000");
+
+            String outputContent = readFile(inputPath, fs);
+
+            if (outputContent.contains("BLANC") || outputContent.contains("GRIS")) {
+                // continuer
+            } else {
+                break;
+            }
         }
 
+        /**
+         * Dernier job pour avoir une sortie dans les dossiers output usuels :
+         */
+        inputPath = new Path(otherArgs[1] + "/" + JOB_NAME + (i + 1) + "/part-r-00000");
+        outputPath = new Path(otherArgs[1] + "/" + JOB_NAME);
+
+        Job job = new Job(conf, JOB_NAME);
+        job.setJarByClass(ProfondeurGraphe.class);
+        job.setMapperClass(Map.class);
+        job.setReducerClass(Reduce.class);
+        job.setOutputKeyClass(Text.class);
+        job.setOutputValueClass(Text.class);
+        FileSystem fs = FileSystem.get(new Configuration());
+        FileInputFormat.addInputPath(job, inputPath);
+        fs.delete(outputPath, true);
+        FileOutputFormat.setOutputPath(job, outputPath);
+
+        System.exit(job.waitForCompletion(true) ? 0 : 1);
+
         //Wait till job completion
+    }
+
+    static String readFile(Path path, FileSystem fs) throws IOException {
+        //Init input stream
+        FSDataInputStream inputStream = fs.open(path);
+//Classical input stream usage
+        String out = IOUtils.toString(inputStream, "UTF-8");
+        inputStream.close();
+        return out;
     }
 }

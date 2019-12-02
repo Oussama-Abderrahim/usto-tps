@@ -13,6 +13,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.StreamSupport;
 
@@ -42,6 +43,10 @@ public class SocialNetwork {
                     keyText.set(friend + "-" + user);
 
                 String[] others = Arrays.stream(users).filter(s -> !s.equals(user) && !s.equals(friend)).toArray(String[]::new);
+//                ArrayList<String> others = new ArrayList<>();
+//                for(String x: users)
+//                    if(!x.equals(user) && !x.equals(friend))
+//                        others.add(x);
                 resultValue.set(String.join(" ", others));
 
                 context.write(keyText, resultValue);
@@ -56,20 +61,20 @@ public class SocialNetwork {
 
         public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
 
-            Text[] valuesArray = StreamSupport.stream(values.spliterator(), false).toArray(Text[]::new);
+            ArrayList<String> arrayValues = new ArrayList<>();
+
+            for (Text value : values) {
+                arrayValues.add(value.toString());
+            }
 
 
             StringBuilder listeAmis = new StringBuilder();
 
-            if(valuesArray.length != 2)
-            {
+            if (arrayValues.size() != 2) {
                 // Ne doit pas arriver
-            }
-            else {
-                for(String ami : valuesArray[0].toString().split(" "))
-                {
-                    if(valuesArray[1].toString().contains(ami))
-                    {
+            } else {
+                for (String ami : arrayValues.get(0).split(" ")) {
+                    if (arrayValues.get(1).contains(ami)) {
                         listeAmis.append(ami).append(" ");
                     }
                 }

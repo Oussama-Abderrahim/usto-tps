@@ -76,11 +76,11 @@ public class RelationnalMapReduce6 {
         Configuration conf = new Configuration();
         String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs(); // get all args
         if (otherArgs.length != 2) {
-            System.err.println("Usage: exo7.RelationnalMapReduce4 <in> <out>");
+            System.err.println("Usage: exo7.RelationnalMapReduce6 <in> <out>");
             System.exit(2);
         }
 
-        // create a job with name "exo7.RelationnalMapReduce"
+        // create a job with name "exo7.RelationnalMapReduce6"
         final String JOB_NAME = RelationnalMapReduce6.class.getSimpleName();
         Job job = new Job(conf, JOB_NAME);
         job.setJarByClass(RelationnalMapReduce6.class);

@@ -8,5 +8,12 @@ hadoop jar ./MapReduce.jar %1.%2 /bdms/inputs/%1 /bdms/outputs/%1 &&^
 echo "Clearning local output folder" && ^
 rmdir /s /q "./outputs/%1/%2" &^
 echo "Copy results from HDFS" && ^
-hadoop fs -get /bdms/outputs/%1/%2 ./outputs/%1 &&^
-code ./outputs/%1/%2^
+mkdir outputs\%1 & ^
+hadoop fs -get /bdms/outputs/%1/%2 ./outputs/%1 && ^
+echo "Renaming output file ./outputs/%1/%2/part-r-00000" &&^
+cd outputs/%1/%2/ && ren part-r-00000 out.txt &&^
+echo "Deleting SUCCESS" &&^
+del _SUCCESS &&^
+echo "Open In VSCode" &&^
+code out.txt &&^
+cd ../../..

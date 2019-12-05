@@ -39,7 +39,7 @@ public class IndexedImage {
     }
 
     public void setFilePath(String path) {
-        this.filePath = path;
+        this.filePath = FileManager.IMAGE_FOLDER_PATH + path;
         this.image = FileManager.loadImage(filePath, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
 

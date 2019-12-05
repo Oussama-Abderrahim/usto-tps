@@ -13,6 +13,8 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class FileManager {
+    public static final String IMAGE_FOLDER_PATH = ".\\res\\img\\";
+
     public static File getResourceFile(String fileName) throws IOException {
         return new File("res/" + fileName);
     }
@@ -21,7 +23,7 @@ public class FileManager {
         File file = null;
 
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setCurrentDirectory(new File("./res"));
+        fileChooser.setCurrentDirectory(new File(IMAGE_FOLDER_PATH));
         FileNameExtensionFilter filter = new FileNameExtensionFilter(desc, ext);
         fileChooser.setFileFilter(filter);
 
@@ -94,7 +96,7 @@ public class FileManager {
     public static BufferedImage loadImageFromChooser(int width, int height, IndexedImage indexedImage) {
         File file = loadFileFromChooser("Select your irdm.image", "png");
         if (indexedImage != null)
-            indexedImage.setFilePath(file.getPath());
+            indexedImage.setFilePath(file.getName());
         try {
             BufferedImage img = ImageIO.read(file);
             return resizeImage(img, img.getType(), width, height);

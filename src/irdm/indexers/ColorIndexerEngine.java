@@ -1,5 +1,6 @@
 package irdm.indexers;
 
+import irdm.DatabaseManager;
 import irdm.descriptors.ColorDescriptor;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -12,7 +13,10 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 
 public class ColorIndexerEngine implements IndexerEngine {
 
@@ -26,9 +30,13 @@ public class ColorIndexerEngine implements IndexerEngine {
     }
 
     public ColorIndexerEngine() {
-
     }
 
+
+    /**
+     * =================================
+     * JFreeChart part, to be moved
+     */
     private static DefaultCategoryDataset createDataset(int[] arr, int[] arr2, int[] arr3) {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
@@ -68,10 +76,9 @@ public class ColorIndexerEngine implements IndexerEngine {
 
     }
 
-
     public static JFreeChart createChart(CategoryDataset dataset) {
         JFreeChart chart = ChartFactory.createBarChart(
-                "Image Color here", null /* x-axis label*/,
+                "Histogramme de Couleurs RGB", null /* x-axis label*/,
                 "Occurences" /* y-axis label */, dataset);
 //        chart.addSubtitle(new TextTitle("Time to generate 1000 charts in SVG "
 //                + "format (lower bars = better performance)"));
@@ -94,6 +101,35 @@ public class ColorIndexerEngine implements IndexerEngine {
         return chart;
     }
 
+    /**
+     * JFreeChart part END
+     * =================================
+     */
+
+    public ArrayList<IndexedImage> fetchImagesBySimilarity(IndexedImage queryImage)
+    {
+        ResultSet resultSet = DatabaseManager.getInstance().fetchAllImages();
+
+        ArrayList<IndexedImage> indexedImages = new ArrayList<>();
+
+        try {
+            while (resultSet.next()) {
+                indexedImages.add(
+                        new IndexedImage(
+                                resultSet.getString("path"),
+                                resultSet.getString("COLOR_DESCRIPTOR"),
+                                "")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        indexedImages.sort(Comparator.comparingDouble(o -> queryImage.getColorDescriptor().distance(o.getColorDescriptor())));
+
+        return indexedImages;
+    }
+
     @Override
     public ColorDescriptor getDescriptor(BufferedImage image) {
         int[] reds = new int[M + 1];
@@ -112,11 +148,10 @@ public class ColorIndexerEngine implements IndexerEngine {
             }
         }
 
-
         return new ColorDescriptor(concatArrays(reds, greens, blues));
     }
 
-    public int[] concatArrays(int[] a, int[] b, int[] c) {
+    public static int[] concatArrays(int[] a, int[] b, int[] c) {
         int[] r = new int[a.length + b.length + c.length];
         int i = 0;
         for (int x : a) {
@@ -131,7 +166,6 @@ public class ColorIndexerEngine implements IndexerEngine {
             r[i] = x;
             i++;
         }
-
         return r;
     }
 }

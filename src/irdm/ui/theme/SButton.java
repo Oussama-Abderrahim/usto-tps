@@ -5,6 +5,7 @@ import mdlaf.animation.MaterialUIMovement;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 /**
@@ -19,9 +20,18 @@ public class SButton extends JButton
     public Color borderColor = null;
     public ArrayList<Component> validationComponents = new ArrayList<Component>();
 
+
     public SButton(String text)
     {
+        this(text, null);
+    }
+
+    public SButton(String text, ActionListener listener)
+    {
         super(text);
+
+
+        this.addActionListener(listener);
 
         this.setText(text);
 //        this.setFocusPainted(false);

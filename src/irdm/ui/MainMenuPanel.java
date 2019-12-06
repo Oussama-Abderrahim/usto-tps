@@ -1,42 +1,27 @@
 package irdm.ui;
 
-import irdm.DatabaseManager;
 import irdm.indexers.ColorIndexerEngine;
 import irdm.indexers.IndexedImage;
-import irdm.ui.theme.Theme;
+import irdm.indexers.TextureIndexerEngine;
+import irdm.ui.theme.SButton;
+import irdm.ui.theme.SPanel;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import irdm.ui.theme.SButton;
-import irdm.ui.theme.SLabel;
-import irdm.ui.theme.SPanel;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
-import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 
 public class MainMenuPanel extends SPanel {
 
-    private SPanel containerPanel;
-    private SPanel rightPanel;
     private SPanel leftPanel;
-    private SPanel bottomButtonsPanel;
     private ImageViewerPanel imageViewerPanel;
-
     private IndexedImage importedImage;
 
-    public MainMenuPanel() {
-        super(new BorderLayout());
 
-        containerPanel = new SPanel(new GridLayout(1, 2));
-        containerPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
-        rightPanel = new SPanel(new GridLayout(2, 1));
-        leftPanel = new SPanel(new BorderLayout());
-        leftPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
-        bottomButtonsPanel = new SPanel(new FlowLayout());
+    private SPanel initRightPanel() {
+        SPanel rightPanel = new SPanel(new GridLayout(2, 1));
 
         imageViewerPanel = new ImageViewerPanel();
 
@@ -44,14 +29,9 @@ public class MainMenuPanel extends SPanel {
 
         buttonsPanel.setLayout(new GridLayout(3, 1, 10, 10));
 
-        SButton saveImageButton = new SButton("Save Image to DB");
-        SButton compareColorsButton = new SButton("Comparaison couleur");
-        SButton compareTextureButton = new SButton("Comparaison texture");
-
-        saveImageButton.addActionListener(e -> saveImage());
-        compareColorsButton.addActionListener(e -> compareColors());
-        compareTextureButton.addActionListener(e -> compareTexture());
-
+        SButton saveImageButton = new SButton("Save Image to DB", e -> saveImage());
+        SButton compareColorsButton = new SButton("Comparaison couleur", e -> compareColors());
+        SButton compareTextureButton = new SButton("Comparaison texture", e -> compareTexture());
 
         buttonsPanel.add(SPanel.createContainerPanel(saveImageButton));
         buttonsPanel.add(SPanel.createContainerPanel(compareColorsButton));
@@ -60,59 +40,48 @@ public class MainMenuPanel extends SPanel {
         rightPanel.add(imageViewerPanel, BorderLayout.NORTH);
         rightPanel.add(buttonsPanel, BorderLayout.SOUTH);
 
-        SButton importImageButton = new SButton("Import a new Image");
-        importImageButton.addActionListener(e -> onUploadImageButtonClick());
-        bottomButtonsPanel.add(importImageButton);
+        return rightPanel;
+    }
+
+    private SPanel initLeftPanel() {
+        SPanel leftPanel = new SPanel(new BorderLayout());
+        leftPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+
+        return leftPanel;
+    }
+
+    public MainMenuPanel() {
+        super(new BorderLayout());
+
+        SPanel containerPanel = new SPanel(new GridLayout(1, 2));
+        containerPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+
+        this.leftPanel = initLeftPanel();
+        SPanel rightPanel = initRightPanel();
+        SPanel bottomButtonsPanel = new SPanel(new FlowLayout());
+
+        bottomButtonsPanel.add(new SButton("Import a new Image", e -> onUploadImageButtonClick()));
         bottomButtonsPanel.add(new SButton("Visualise Database"));
 
         containerPanel.add(leftPanel);
         containerPanel.add(rightPanel);
 
-
         this.add(containerPanel, BorderLayout.CENTER);
         this.add(bottomButtonsPanel, BorderLayout.SOUTH);
-
     }
 
     private void compareTexture() {
+        ArrayList<IndexedImage> indexedImages = TextureIndexerEngine.getInstance().fetchImagesBySimilarity(this.importedImage);
 
+        (new BatchImagesViewerFrame(indexedImages)).setVisible(true);
     }
 
+
     private void compareColors() {
-        ResultSet resultSet = DatabaseManager.getInstance().fetchAllImages();
 
-        ArrayList<IndexedImage> indexedImages = new ArrayList<>();
+        ArrayList<IndexedImage> indexedImages = ColorIndexerEngine.getInstance().fetchImagesBySimilarity(this.importedImage);
 
-        try {
-            while (resultSet.next()) {
-                indexedImages.add(
-                        new IndexedImage(
-                                resultSet.getString("path"),
-                                resultSet.getString("COLOR_DESCRIPTOR"),
-                                "")
-                );
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        indexedImages.sort(Comparator.comparingDouble(o -> importedImage.getColorDescriptor().distance(o.getColorDescriptor())));
-
-        JFrame outputFrame = new JFrame("result");
-
-        JPanel contentPane = new JPanel();
-
-        contentPane.setLayout(new GridLayout(2, 3, 30, 30));
-
-        for (int i = 0; i < 6 && i < indexedImages.size(); i++) {
-            contentPane.add(new ImageViewerPanel(indexedImages.get(i).getImageIcon()));
-        }
-
-        outputFrame.setSize(Theme.WINDOW_WIDTH, Theme.WINDOW_HEIGHT);
-        outputFrame.setLocationRelativeTo(null);
-        outputFrame.setContentPane(contentPane);
-        outputFrame.setVisible(true);
-
+        (new BatchImagesViewerFrame(indexedImages)).setVisible(true);
     }
 
     private void saveImage() {

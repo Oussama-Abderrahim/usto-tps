@@ -15,6 +15,7 @@ public class ImageViewerPanel extends SPanel {
 
     public ImageViewerPanel() {
         super(new BorderLayout());
+        setOpaque(false);
         setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
 
         imageLabel = new SLabel("Put Your Image Here");

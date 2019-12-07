@@ -9,19 +9,26 @@ import java.util.ArrayList;
 
 public class BatchImagesViewerFrame extends JFrame {
 
-    public BatchImagesViewerFrame(ArrayList<IndexedImage> images)
-    {
+    public BatchImagesViewerFrame(ArrayList<IndexedImage> images) {
+        this(images, images.size()+1);
+    }
+
+    public BatchImagesViewerFrame(ArrayList<IndexedImage> images, int limit) {
         super("Result");
         JPanel contentPane = new JPanel();
+        this.setSize(Theme.WINDOW_WIDTH + 60, Theme.WINDOW_HEIGHT);
 
-        contentPane.setLayout(new GridLayout(2, 3, 30, 30));
+        JScrollPane scrollPane = new JScrollPane(contentPane, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-        for (int i = 0; i < 6 && i < images.size(); i++) {
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+
+        contentPane.setLayout(new GridLayout(limit / 3, 3, 30, 30));
+
+        for (int i = 0; i < images.size() && i < limit; i++) {
             contentPane.add(new ImageViewerPanel(images.get(i).getImageIcon()));
         }
 
-        this.setSize(Theme.WINDOW_WIDTH, Theme.WINDOW_HEIGHT);
         this.setLocationRelativeTo(null);
-        this.setContentPane(contentPane);
+        this.setContentPane(scrollPane);
     }
 }

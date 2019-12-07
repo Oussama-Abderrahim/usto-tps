@@ -87,7 +87,7 @@ public class MainMenuPanel extends SPanel {
     private void compareTexture() {
         ArrayList<IndexedImage> indexedImages = TextureIndexerEngine.getInstance().fetchImagesBySimilarity(this.importedImage);
 
-        (new BatchImagesViewerFrame(indexedImages)).setVisible(true);
+        (new BatchImagesViewerFrame(indexedImages, 6)).setVisible(true);
     }
 
 
@@ -95,7 +95,7 @@ public class MainMenuPanel extends SPanel {
 
         ArrayList<IndexedImage> indexedImages = ColorIndexerEngine.getInstance().fetchImagesBySimilarity(this.importedImage);
 
-        (new BatchImagesViewerFrame(indexedImages)).setVisible(true);
+        (new BatchImagesViewerFrame(indexedImages, 6)).setVisible(true);
     }
 
     private void saveImage() {

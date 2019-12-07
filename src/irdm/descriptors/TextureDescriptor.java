@@ -3,6 +3,10 @@ package irdm.descriptors;
 public class TextureDescriptor implements Descriptor {
 
 
+    public TextureDescriptor() {
+
+    }
+
     public static void parseDescriptor(String descriptor) {
 
     }
@@ -14,6 +18,7 @@ public class TextureDescriptor implements Descriptor {
 
     @Override
     public double distance(Descriptor o2) {
+        /// TODO: Aya.
         return 0;
     }
 }

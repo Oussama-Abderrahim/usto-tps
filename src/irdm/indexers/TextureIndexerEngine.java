@@ -3,6 +3,7 @@ package irdm.indexers;
 import irdm.descriptors.TextureDescriptor;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class TextureIndexerEngine implements IndexerEngine {
 
@@ -21,6 +22,10 @@ public class TextureIndexerEngine implements IndexerEngine {
 
     @Override
     public ArrayList<IndexedImage> fetchImagesBySimilarity(IndexedImage queryImage) {
-        return null;
+        ArrayList<IndexedImage> indexedImages = IndexedImage.fetchAllImages();
+
+        indexedImages.sort(Comparator.comparingDouble(o -> queryImage.getTextureDescriptor().distance(o.getTextureDescriptor())));
+
+        return indexedImages;
     }
 }

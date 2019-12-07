@@ -108,22 +108,7 @@ public class ColorIndexerEngine implements IndexerEngine {
 
     public ArrayList<IndexedImage> fetchImagesBySimilarity(IndexedImage queryImage)
     {
-        ResultSet resultSet = DatabaseManager.getInstance().fetchAllImages();
-
-        ArrayList<IndexedImage> indexedImages = new ArrayList<>();
-
-        try {
-            while (resultSet.next()) {
-                indexedImages.add(
-                        new IndexedImage(
-                                resultSet.getString("path"),
-                                resultSet.getString("COLOR_DESCRIPTOR"),
-                                "")
-                );
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        ArrayList<IndexedImage> indexedImages = IndexedImage.fetchAllImages();
 
         indexedImages.sort(Comparator.comparingDouble(o -> queryImage.getColorDescriptor().distance(o.getColorDescriptor())));
 

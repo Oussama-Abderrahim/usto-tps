@@ -4,9 +4,12 @@ import irdm.DatabaseManager;
 import irdm.FileManager;
 import irdm.descriptors.ColorDescriptor;
 import irdm.descriptors.Descriptor;
+import irdm.descriptors.TextureDescriptor;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class IndexedImage {
 
@@ -18,6 +21,7 @@ public class IndexedImage {
     private Descriptor textureDescriptor;
     private ColorDescriptor colorDescriptor;
     private String filePath;
+    private String fileName;
 
     public IndexedImage(String filePath) {
         this();
@@ -35,16 +39,37 @@ public class IndexedImage {
         this();
         setFilePath(path);
         this.colorDescriptor = new ColorDescriptor(colorDescriptor);
-        this.textureDescriptor = null;
+        this.textureDescriptor = new TextureDescriptor();
+    }
+
+    public static ArrayList<IndexedImage> fetchAllImages() {
+        ResultSet resultSet = DatabaseManager.getInstance().fetchAllImages();
+
+        ArrayList<IndexedImage> indexedImages = new ArrayList<>();
+
+        try {
+            while (resultSet.next()) {
+                indexedImages.add(
+                        new IndexedImage(
+                                resultSet.getString("path"),
+                                resultSet.getString("COLOR_DESCRIPTOR"),
+                                "")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return indexedImages;
     }
 
     public void setFilePath(String path) {
+        this.fileName = path;
         this.filePath = FileManager.IMAGE_FOLDER_PATH + path;
         this.image = FileManager.loadImage(filePath, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
 
     public boolean saveToDB() {
-        int b = DatabaseManager.getInstance().insertImage(this.filePath, this.colorDescriptor.toString(), "");
+        int b = DatabaseManager.getInstance().insertImage(this.fileName, this.colorDescriptor.toString(), this.textureDescriptor.toString());
         return b != 0;
     }
 
@@ -55,6 +80,7 @@ public class IndexedImage {
 
     private void computeDescriptors() {
         this.colorDescriptor = ColorIndexerEngine.getInstance().getDescriptor(this.image);
+        this.textureDescriptor = TextureIndexerEngine.getInstance().getDescriptor(this.image);
     }
 
     public ImageIcon getImageIcon() {
@@ -63,6 +89,10 @@ public class IndexedImage {
 
     public Descriptor getColorDescriptor() {
         return colorDescriptor;
+    }
+
+    public Descriptor getTextureDescriptor() {
+        return textureDescriptor;
     }
 
     public String getFilePath() {

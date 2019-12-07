@@ -19,6 +19,10 @@ public class MainMenuPanel extends SPanel {
     private ImageViewerPanel imageViewerPanel;
     private IndexedImage importedImage;
 
+    private SButton saveImageButton;
+    private SButton compareColorsButton;
+    private SButton compareTextureButton;
+
 
     private SPanel initRightPanel() {
         SPanel rightPanel = new SPanel(new GridLayout(2, 1));
@@ -29,9 +33,13 @@ public class MainMenuPanel extends SPanel {
 
         buttonsPanel.setLayout(new GridLayout(3, 1, 10, 10));
 
-        SButton saveImageButton = new SButton("Save Image to DB", e -> saveImage());
-        SButton compareColorsButton = new SButton("Comparaison couleur", e -> compareColors());
-        SButton compareTextureButton = new SButton("Comparaison texture", e -> compareTexture());
+        saveImageButton = new SButton("Save Image to DB", e -> saveImage());
+        compareColorsButton = new SButton("Comparaison couleur", e -> compareColors());
+        compareTextureButton = new SButton("Comparaison texture", e -> compareTexture());
+
+        saveImageButton.setEnabled(false);
+        compareColorsButton.setEnabled(false);
+        compareTextureButton.setEnabled(false);
 
         buttonsPanel.add(SPanel.createContainerPanel(saveImageButton));
         buttonsPanel.add(SPanel.createContainerPanel(compareColorsButton));
@@ -61,13 +69,19 @@ public class MainMenuPanel extends SPanel {
         SPanel bottomButtonsPanel = new SPanel(new FlowLayout());
 
         bottomButtonsPanel.add(new SButton("Import a new Image", e -> onUploadImageButtonClick()));
-        bottomButtonsPanel.add(new SButton("Visualise Database"));
+        bottomButtonsPanel.add(new SButton("Visualise Database", e -> visualizeDatabase()));
 
         containerPanel.add(leftPanel);
         containerPanel.add(rightPanel);
 
         this.add(containerPanel, BorderLayout.CENTER);
         this.add(bottomButtonsPanel, BorderLayout.SOUTH);
+    }
+
+    private void visualizeDatabase() {
+        ArrayList<IndexedImage> indexedImages = IndexedImage.fetchAllImages();
+
+        (new BatchImagesViewerFrame(indexedImages)).setVisible(true);
     }
 
     private void compareTexture() {
@@ -101,9 +115,14 @@ public class MainMenuPanel extends SPanel {
 
         imageViewerPanel.showImage(importedImage.getImageIcon());
 
+        saveImageButton.setEnabled(true);
+        compareColorsButton.setEnabled(true);
+        compareTextureButton.setEnabled(true);
+
         JFreeChart chart = ColorIndexerEngine.createChart(ColorIndexerEngine.getChartFromImage(importedImage.getImage()));
         leftPanel.add(new ChartPanel(chart));
         leftPanel.repaint();
+
     }
 
 }

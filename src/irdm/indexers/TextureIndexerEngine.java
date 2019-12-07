@@ -15,8 +15,14 @@ public class TextureIndexerEngine implements IndexerEngine {
         return instance;
     }
 
+    /**
+     * Compute the TextureDescriptor of an image
+     * @param image bufferedImage, can iterate on pixels
+     * @return
+     */
     @Override
     public TextureDescriptor getDescriptor(BufferedImage image) {
+        /// TODO: Aya.
         return new TextureDescriptor();
     }
 

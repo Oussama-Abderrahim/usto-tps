@@ -39,7 +39,7 @@ public class IndexedImage {
         this();
         setFilePath(path);
         this.colorDescriptor = new ColorDescriptor(colorDescriptor);
-        this.textureDescriptor = new TextureDescriptor();
+        this.textureDescriptor = new TextureDescriptor(textureDescriptor);
     }
 
     public static ArrayList<IndexedImage> fetchAllImages() {

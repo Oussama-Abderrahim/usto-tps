@@ -54,7 +54,7 @@ public class TextureIndexerEngine implements IndexerEngine {
 
         for (int x = 0 ; x < L ; x++){
             for (int i = 0 ; i < grays.length ; i++){
-                for (int j = 0 ; j < grays[0].length ; j++) {
+                for (int j = 0 ; j < grays[0].length - 1; j++) {
                     if (grays[i][j] == x && grays[i][j] == grays[i + 1][j])
                         cGrays[i][j]++;
                 }
@@ -68,10 +68,40 @@ public class TextureIndexerEngine implements IndexerEngine {
         Arrays.fill(cGrays, 0);
 
         for (int x = 0 ; x < L ; x++){
-            for (int i = 0 ; i < grays.length ; i++){
+            for (int i = 1 ; i < grays.length ; i++){
+                for (int j = 0 ; j < grays[0].length - 1 ; j++) {
+                    if (grays[i][j] == x && grays[i][j] == grays[i-1][j+1])
+                        cGrays[x][x]++;
+                }
+            }
+        }
+        return cGrays;
+    }
+
+    public double[][] cMatrix90 (double grays[][]){
+        double [][] cGrays = new double[grays.length][grays[0].length];
+        Arrays.fill(cGrays, 0);
+
+        for (int x = 0 ; x < L ; x++){
+            for (int i = 1 ; i < grays.length ; i++){
                 for (int j = 0 ; j < grays[0].length ; j++) {
-                    if (grays[i][j] == x && grays[i][j] == grays[i + 1][j])
-                        cGrays[i][j]++;
+                    if (grays[i][j] == x && grays[i][j] == grays[i-1][j])
+                        cGrays[x][x]++;
+                }
+            }
+        }
+        return cGrays;
+    }
+
+    public double[][] cMatrix135 (double grays[][]){
+        double [][] cGrays = new double[grays.length][grays[0].length];
+        Arrays.fill(cGrays, 0);
+
+        for (int x = 0 ; x < L ; x++){
+            for (int i = 1 ; i < grays.length ; i++){
+                for (int j = 1 ; j < grays[0].length ; j++) {
+                    if (grays[i][j] == x && grays[i][j] == grays[i-1][j-1])
+                        cGrays[x][x]++;
                 }
             }
         }

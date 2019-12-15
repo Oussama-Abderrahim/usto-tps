@@ -3,6 +3,7 @@ package irdm.indexers;
 import irdm.DatabaseManager;
 import irdm.FileManager;
 import irdm.descriptors.ColorDescriptor;
+import irdm.descriptors.CompoundDescriptor;
 import irdm.descriptors.Descriptor;
 import irdm.descriptors.TextureDescriptor;
 
@@ -101,5 +102,9 @@ public class IndexedImage {
 
     public BufferedImage getImage() {
         return this.image;
+    }
+
+    public Descriptor getCompoundDescriptor() {
+        return new CompoundDescriptor((ColorDescriptor) this.getColorDescriptor(), (TextureDescriptor) this.getTextureDescriptor());
     }
 }

@@ -14,7 +14,11 @@ public class BatchImagesViewerFrame extends JFrame {
     }
 
     public BatchImagesViewerFrame(ArrayList<IndexedImage> images, int limit) {
-        super("Result");
+        this(images, limit, "Result");
+    }
+
+    public BatchImagesViewerFrame(ArrayList<IndexedImage> images, int limit, String windowName) {
+        super(windowName);
         JPanel contentPane = new JPanel();
         this.setSize(Theme.WINDOW_WIDTH + 60, Theme.WINDOW_HEIGHT);
 

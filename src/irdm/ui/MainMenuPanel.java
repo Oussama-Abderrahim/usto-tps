@@ -1,6 +1,7 @@
 package irdm.ui;
 
 import irdm.indexers.ColorIndexerEngine;
+import irdm.indexers.CompoundIndexerEngine;
 import irdm.indexers.IndexedImage;
 import irdm.indexers.TextureIndexerEngine;
 import irdm.ui.theme.SButton;
@@ -22,6 +23,7 @@ public class MainMenuPanel extends SPanel {
     private SButton saveImageButton;
     private SButton compareColorsButton;
     private SButton compareTextureButton;
+    private SButton compareBothButton;
 
 
     private SPanel initRightPanel() {
@@ -31,19 +33,22 @@ public class MainMenuPanel extends SPanel {
 
         SPanel buttonsPanel = new SPanel();
 
-        buttonsPanel.setLayout(new GridLayout(3, 1, 10, 10));
+        buttonsPanel.setLayout(new GridLayout(4, 1, 10, 10));
 
         saveImageButton = new SButton("Save Image to DB", e -> saveImage());
         compareColorsButton = new SButton("Comparaison couleur", e -> compareColors());
         compareTextureButton = new SButton("Comparaison texture", e -> compareTexture());
+        compareBothButton = new SButton("Comparaison mixte", e -> compareBoth());
 
         saveImageButton.setEnabled(false);
         compareColorsButton.setEnabled(false);
         compareTextureButton.setEnabled(false);
+        compareBothButton.setEnabled(false);
 
         buttonsPanel.add(SPanel.createContainerPanel(saveImageButton));
         buttonsPanel.add(SPanel.createContainerPanel(compareColorsButton));
         buttonsPanel.add(SPanel.createContainerPanel(compareTextureButton));
+        buttonsPanel.add(SPanel.createContainerPanel(compareBothButton));
 
         rightPanel.add(imageViewerPanel, BorderLayout.NORTH);
         rightPanel.add(buttonsPanel, BorderLayout.SOUTH);
@@ -87,15 +92,20 @@ public class MainMenuPanel extends SPanel {
     private void compareTexture() {
         ArrayList<IndexedImage> indexedImages = TextureIndexerEngine.getInstance().fetchImagesBySimilarity(this.importedImage);
 
-        (new BatchImagesViewerFrame(indexedImages, 6)).setVisible(true);
+        (new BatchImagesViewerFrame(indexedImages, 6, "Result with texture")).setVisible(true);
     }
 
+    private void compareBoth() {
+        ArrayList<IndexedImage> indexedImages = CompoundIndexerEngine.getInstance().fetchImagesBySimilarity(this.importedImage);
+
+        (new BatchImagesViewerFrame(indexedImages, 6, "Result with mixte")).setVisible(true);
+    }
 
     private void compareColors() {
 
         ArrayList<IndexedImage> indexedImages = ColorIndexerEngine.getInstance().fetchImagesBySimilarity(this.importedImage);
 
-        (new BatchImagesViewerFrame(indexedImages, 6)).setVisible(true);
+        (new BatchImagesViewerFrame(indexedImages, 6, "Result with Colors")).setVisible(true);
     }
 
     private void saveImage() {
@@ -118,6 +128,7 @@ public class MainMenuPanel extends SPanel {
         saveImageButton.setEnabled(true);
         compareColorsButton.setEnabled(true);
         compareTextureButton.setEnabled(true);
+        compareBothButton.setEnabled(true);
 
         JFreeChart chart = ColorIndexerEngine.createChart(ColorIndexerEngine.getChartFromImage(importedImage.getImage()));
         leftPanel.add(new ChartPanel(chart));

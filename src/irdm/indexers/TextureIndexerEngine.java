@@ -41,18 +41,18 @@ public class TextureIndexerEngine implements IndexerEngine {
 
         // matrices de cooccurence :
         double[][] coMat0 = cMatrix0(grays);
-        double[][] coMat45 = cMatrix0(grays);
-        double[][] coMat90 = cMatrix0(grays);
-        double[][] coMat135 = cMatrix0(grays);
+        double[][] coMat45 = cMatrix45(grays);
+        double[][] coMat90 = cMatrix90(grays);
+        double[][] coMat135 = cMatrix135(grays);
 
         // calcul de parametres
 
         double energy = (energie(coMat0) + energie(coMat45) + energie(coMat90) + energie(coMat135)) / 4;
-        double intertie = (inertie(coMat0) + inertie(coMat45) + inertie(coMat90) + inertie(coMat135)) / 4;
+        double inertia = (inertie(coMat0) + inertie(coMat45) + inertie(coMat90) + inertie(coMat135)) / 4;
         double entropie = (entropie(coMat0) + entropie(coMat45) + entropie(coMat90) + entropie(coMat135)) / 4;
         double moment = (mdi(coMat0) + mdi(coMat45) + mdi(coMat90) + mdi(coMat135)) / 4;
 
-        return new TextureDescriptor(energy, intertie, entropie, moment);
+        return new TextureDescriptor(energy, inertia, entropie, moment);
     }
 
     @Override
@@ -66,72 +66,71 @@ public class TextureIndexerEngine implements IndexerEngine {
 
     //Co-occurence matrix
     public double[][] cMatrix0(double[][] grays) {
-        double[][] cGrays = new double[grays.length][grays[0].length];
-        for(int i = 0; i < cGrays.length; i++) {
-            Arrays.fill(cGrays[i], 0);
+        double[][] cMat = new double[T][T];
+        for (int i = 0; i < cMat.length; i++) {
+            Arrays.fill(cMat[i], 0);
         }
 
-
-        for (int x = 0; x < T; x++) {
-            for (int i = 0; i < grays.length; i++) {
-                for (int j = 0; j < grays[0].length - 1; j++) {
-                    if (grays[i][j] == x && grays[i][j] == grays[i][j+1])
-                        cGrays[i][j]++;
-                }
+        for (int i = 0; i < grays.length; i++) {
+            for (int j = 0; j < grays[0].length - 1; j++) {
+                int x = (int) grays[i][j];
+                int y = (int) grays[i][j + 1];
+                cMat[x][y]++;
             }
         }
-        return cGrays;
+
+        return cMat;
     }
 
     public double[][] cMatrix45(double[][] grays) {
-        double[][] cGrays = new double[grays.length][grays[0].length];
-        for(int i = 0; i < cGrays.length; i++) {
-            Arrays.fill(cGrays[i], 0);
+        double[][] cMat = new double[T][T];
+        for (int i = 0; i < cMat.length; i++) {
+            Arrays.fill(cMat[i], 0);
         }
 
-        for (int x = 0; x < T; x++) {
-            for (int i = 1; i < grays.length; i++) {
-                for (int j = 0; j < grays[0].length - 1; j++) {
-                    if (grays[i][j] == x && grays[i][j] == grays[i - 1][j + 1])
-                        cGrays[x][x]++;
-                }
+        for (int i = 1; i < grays.length; i++) {
+            for (int j = 0; j < grays[0].length - 1; j++) {
+                int x = (int) grays[i][j];
+                int y = (int) grays[i - 1][j + 1];
+                cMat[x][y]++;
             }
         }
-        return cGrays;
+
+        return cMat;
     }
 
     public double[][] cMatrix90(double[][] grays) {
-        double[][] cGrays = new double[grays.length][grays[0].length];
-        for(int i = 0; i < cGrays.length; i++) {
-            Arrays.fill(cGrays[i], 0);
+        double[][] cMat = new double[T][T];
+        for (int i = 0; i < cMat.length; i++) {
+            Arrays.fill(cMat[i], 0);
         }
 
-        for (int x = 0; x < T; x++) {
-            for (int i = 1; i < grays.length; i++) {
-                for (int j = 0; j < grays[0].length; j++) {
-                    if (grays[i][j] == x && grays[i][j] == grays[i - 1][j])
-                        cGrays[x][x]++;
-                }
+        for (int i = 1; i < grays.length; i++) {
+            for (int j = 0; j < grays[0].length; j++) {
+                int x = (int) grays[i][j];
+                int y = (int) grays[i - 1][j];
+                cMat[x][y]++;
             }
         }
-        return cGrays;
+
+        return cMat;
     }
 
     public double[][] cMatrix135(double[][] grays) {
-        double[][] cGrays = new double[grays.length][grays[0].length];
-        for(int i = 0; i < cGrays.length; i++) {
-            Arrays.fill(cGrays[i], 0);
+        double[][] cMat = new double[T][T];
+        for (int i = 0; i < cMat.length; i++) {
+            Arrays.fill(cMat[i], 0);
         }
 
-        for (int x = 0; x < T; x++) {
-            for (int i = 1; i < grays.length; i++) {
-                for (int j = 1; j < grays[0].length; j++) {
-                    if (grays[i][j] == x && grays[i][j] == grays[i - 1][j - 1])
-                        cGrays[x][x]++;
-                }
+        for (int i = 1; i < grays.length; i++) {
+            for (int j = 1; j < grays[0].length; j++) {
+                int x = (int) grays[i][j];
+                int y = (int) grays[i - 1][j - 1];
+                cMat[x][y]++;
             }
         }
-        return cGrays;
+
+        return cMat;
     }
 
     //Matrix's parameters
@@ -147,8 +146,9 @@ public class TextureIndexerEngine implements IndexerEngine {
 
     public static double inertie(double[][] grays) {
         double sum = 0;
-        for (int i = 0; i < grays.length; i++) {
-            for (int j = 0; j < grays.length; j++) {
+
+        for (int j = 0; j < T; j++) {
+            for (int i = 0; i < T; i++) {
                 sum += (i - j) * (i - j) * grays[i][j];
             }
         }
@@ -157,19 +157,21 @@ public class TextureIndexerEngine implements IndexerEngine {
 
     public static double entropie(double[][] grays) {
         double sum = 0;
-        for (int i = 0; i < grays.length; i++) {
-            for (int j = 0; j < grays.length; j++) {
-                sum += grays[i][j] * Math.log(grays[i][j]);
+        for (int i = 0; i < T; i++) {
+            for (int j = 0; j < T; j++) {
+                double p = grays[i][j] == 0? 0.00001 : grays[i][j];
+                sum += grays[i][j] * Math.log(p);
             }
         }
-        return sum;
+        return -1 * sum;
     }
 
     public static double mdi(double[][] grays) {
         double sum = 0;
-        for (int i = 0; i < grays.length; i++) {
-            for (int j = 0; j < grays.length; j++) {
-                sum += 1 / ((1 + (i - j) * (i - j)) * grays[i][j]);
+        for (int i = 0; i < T; i++) {
+            for (int j = 0; j < T; j++) {
+                double p = grays[i][j] == 0? 0.00001 : grays[i][j];
+                sum += 1 / ((1 + (i - j) * (i - j)) * p);
             }
         }
         return sum;

@@ -53,7 +53,7 @@ public class IndexedImage {
                         new IndexedImage(
                                 resultSet.getString("path"),
                                 resultSet.getString("COLOR_DESCRIPTOR"),
-                                "")
+                                resultSet.getString("TEXTURE_DESCRIPTOR"))
                 );
             }
         } catch (Exception e) {

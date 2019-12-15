@@ -4,7 +4,7 @@ public class TextureDescriptor implements Descriptor {
 
 
     private double energy;
-    private double intertie;
+    private double inertia;
     private double entropie;
     private double moment;
 
@@ -12,11 +12,13 @@ public class TextureDescriptor implements Descriptor {
         this.parseDescriptor(descriptor);
     }
 
-    public TextureDescriptor(double energy, double intertie, double entropie, double moment) {
+    public TextureDescriptor(double energy, double inertia, double entropie, double moment) {
         this.energy = energy;
-        this.intertie = intertie;
+        this.inertia = inertia;
         this.entropie = entropie;
         this.moment = moment;
+
+        System.out.println(this.toString());
     }
 
     /**
@@ -27,7 +29,7 @@ public class TextureDescriptor implements Descriptor {
     public void parseDescriptor(String descriptor) {
         String[] values = descriptor.split(" ");
         this.energy = Double.parseDouble(values[0]);
-        this.intertie = Double.parseDouble(values[1]);
+        this.inertia = Double.parseDouble(values[1]);
         this.entropie = Double.parseDouble(values[2]);
         this.moment = Double.parseDouble(values[3]);
     }
@@ -39,7 +41,7 @@ public class TextureDescriptor implements Descriptor {
      */
     @Override
     public String toString() {
-        return "" + energy + " " + intertie + " " + entropie + " " + moment;
+        return "" + energy + " " + inertia + " " + entropie + " " + moment;
     }
 
     /**
@@ -52,7 +54,7 @@ public class TextureDescriptor implements Descriptor {
 
         return (
                 paramsDistance(this.energy, o.energy)
-                + paramsDistance(this.intertie, o.intertie)
+                + paramsDistance(this.inertia, o.inertia)
                 + paramsDistance(this.entropie, o.entropie)
                 + paramsDistance(this.moment, o.moment)
                 ) / 4;

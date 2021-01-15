@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Main-Class: irdm.MainWindow
+Class-Path: sqlite-jdbc-3.23.1.jar material-ui-swing-1.0.6.jar jfreechar
+ t-1.5.0.jar
+

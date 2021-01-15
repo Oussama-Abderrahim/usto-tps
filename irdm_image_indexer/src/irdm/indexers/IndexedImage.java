@@ -70,6 +70,7 @@ public class IndexedImage {
     }
 
     public boolean saveToDB() {
+        /// TODO: save to folder
         int b = DatabaseManager.getInstance().insertImage(this.fileName, this.colorDescriptor.toString(), this.textureDescriptor.toString());
         return b != 0;
     }
